@@ -1,0 +1,12 @@
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Core.Swagger\bin\Debug\net8.0\Bredinin.MyPetProject.Core.Swagger.deps.json
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Core.Swagger\bin\Debug\net8.0\Bredinin.MyPetProject.Core.Swagger.dll
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Core.Swagger\bin\Debug\net8.0\Bredinin.MyPetProject.Core.Swagger.pdb
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Core.Swagger\obj\Debug\net8.0\Bredinin.MyPetProject.Core.Swagger.csproj.AssemblyReference.cache
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Core.Swagger\obj\Debug\net8.0\Bredinin.MyPetProject.Core.Swagger.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Core.Swagger\obj\Debug\net8.0\Bredinin.MyPetProject.Core.Swagger.AssemblyInfoInputs.cache
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Core.Swagger\obj\Debug\net8.0\Bredinin.MyPetProject.Core.Swagger.AssemblyInfo.cs
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Core.Swagger\obj\Debug\net8.0\Bredinin.MyPetProject.Core.Swagger.csproj.CoreCompileInputs.cache
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Core.Swagger\obj\Debug\net8.0\Bredinin.MyPetProject.Core.Swagger.dll
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Core.Swagger\obj\Debug\net8.0\refint\Bredinin.MyPetProject.Core.Swagger.dll
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Core.Swagger\obj\Debug\net8.0\Bredinin.MyPetProject.Core.Swagger.pdb
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Core.Swagger\obj\Debug\net8.0\ref\Bredinin.MyPetProject.Core.Swagger.dll

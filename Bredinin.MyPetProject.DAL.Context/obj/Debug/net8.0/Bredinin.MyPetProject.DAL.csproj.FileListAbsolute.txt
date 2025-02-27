@@ -1,0 +1,15 @@
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\bin\Debug\net8.0\Bredinin.MyPetProject.DAL.deps.json
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\bin\Debug\net8.0\Bredinin.MyPetProject.DAL.dll
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\bin\Debug\net8.0\Bredinin.MyPetProject.DAL.pdb
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\bin\Debug\net8.0\Bredinin.MyPetProject.Domain.dll
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\bin\Debug\net8.0\Bredinin.MyPetProject.Domain.pdb
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\obj\Debug\net8.0\Bredinin.MyPetProject.DAL.csproj.AssemblyReference.cache
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\obj\Debug\net8.0\Bredinin.MyPetProject.DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\obj\Debug\net8.0\Bredinin.MyPetProject.DAL.AssemblyInfoInputs.cache
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\obj\Debug\net8.0\Bredinin.MyPetProject.DAL.AssemblyInfo.cs
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\obj\Debug\net8.0\Bredinin.MyPetProject.DAL.csproj.CoreCompileInputs.cache
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\obj\Debug\net8.0\Bredinin.637AA325.Up2Date
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\obj\Debug\net8.0\Bredinin.MyPetProject.DAL.dll
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\obj\Debug\net8.0\refint\Bredinin.MyPetProject.DAL.dll
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\obj\Debug\net8.0\Bredinin.MyPetProject.DAL.pdb
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.DAL\obj\Debug\net8.0\ref\Bredinin.MyPetProject.DAL.dll

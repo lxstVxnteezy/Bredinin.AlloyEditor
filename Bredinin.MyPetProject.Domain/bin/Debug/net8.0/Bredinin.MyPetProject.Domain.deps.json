@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Bredinin.MyPetProject.Domain/1.0.0": {
+        "runtime": {
+          "Bredinin.MyPetProject.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Bredinin.MyPetProject.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

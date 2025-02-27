@@ -1,0 +1,11 @@
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Domain\bin\Debug\net8.0\Bredinin.MyPetProject.Domain.deps.json
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Domain\bin\Debug\net8.0\Bredinin.MyPetProject.Domain.dll
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Domain\bin\Debug\net8.0\Bredinin.MyPetProject.Domain.pdb
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Domain\obj\Debug\net8.0\Bredinin.MyPetProject.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Domain\obj\Debug\net8.0\Bredinin.MyPetProject.Domain.AssemblyInfoInputs.cache
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Domain\obj\Debug\net8.0\Bredinin.MyPetProject.Domain.AssemblyInfo.cs
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Domain\obj\Debug\net8.0\Bredinin.MyPetProject.Domain.csproj.CoreCompileInputs.cache
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Domain\obj\Debug\net8.0\Bredinin.MyPetProject.Domain.dll
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Domain\obj\Debug\net8.0\refint\Bredinin.MyPetProject.Domain.dll
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Domain\obj\Debug\net8.0\Bredinin.MyPetProject.Domain.pdb
+C:\Users\dev\RiderProjects\Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.Domain\obj\Debug\net8.0\ref\Bredinin.MyPetProject.Domain.dll
