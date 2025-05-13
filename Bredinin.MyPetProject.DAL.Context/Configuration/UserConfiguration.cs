@@ -15,5 +15,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.LastName).HasColumnName("last_name");
         builder.Property(x => x.SecondName).HasColumnName("second_name");
         builder.Property(x => x.Age).HasColumnName("age");
+        builder.Property(x => x.Hash).HasColumnName("hash");
     }
 }

@@ -13,8 +13,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Bredinin.MyPetProject.Core.Authentication\Bredinin.MyPetProject.Core.Authentication.csproj" />
       <ProjectReference Include="..\Bredinin.MyPetProject.Core.Swagger\Bredinin.MyPetProject.Core.Swagger.csproj" />
       <ProjectReference Include="..\Bredinin.MyPetProject.DAL.Context\Bredinin.MyPetProject.DAL.Context.csproj" />
+      <ProjectReference Include="..\Bredinin.MyPetProject.DAL.Migration\Bredinin.MyPetProject.DAL.Migration.csproj" />
     </ItemGroup>
 
     <ItemGroup>
