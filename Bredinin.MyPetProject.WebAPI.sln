@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96 d17.13
+VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.MyPetProject.WebAPI", "Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.WebAPI.csproj", "{4097DBEF-6ABF-495F-85F5-03E6712CDC6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bredinin.MyPetProject.WebAPI", "Bredinin.MyPetProject.WebAPI\Bredinin.MyPetProject.WebAPI.csproj", "{4097DBEF-6ABF-495F-85F5-03E6712CDC6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.MyPetProject.Core.Swagger", "Bredinin.MyPetProject.Core.Swagger\Bredinin.MyPetProject.Core.Swagger.csproj", "{3F5D5B9D-C4CB-4D65-B9AD-A7730E6D62E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bredinin.MyPetProject.Core.Swagger", "Bredinin.MyPetProject.Core.Swagger\Bredinin.MyPetProject.Core.Swagger.csproj", "{3F5D5B9D-C4CB-4D65-B9AD-A7730E6D62E3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{02425232-BB73-42C4-9D5D-30D4F64E795C}"
 EndProject
@@ -13,13 +13,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{C41931
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccess", "DataAccess", "{6A2D4017-9718-478E-B526-626643E0FBF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.MyPetProject.Domain", "Bredinin.MyPetProject.Domain\Bredinin.MyPetProject.Domain.csproj", "{FA169E6B-E0B8-4888-94C4-29C6E666FE8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bredinin.MyPetProject.Domain", "Bredinin.MyPetProject.Domain\Bredinin.MyPetProject.Domain.csproj", "{FA169E6B-E0B8-4888-94C4-29C6E666FE8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.MyPetProject.DAL.Context", "Bredinin.MyPetProject.DAL.Context\Bredinin.MyPetProject.DAL.Context.csproj", "{8F661B97-2CC3-4771-A757-4C0123E05B18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bredinin.MyPetProject.DAL.Context", "Bredinin.MyPetProject.DAL.Context\Bredinin.MyPetProject.DAL.Context.csproj", "{8F661B97-2CC3-4771-A757-4C0123E05B18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.MyPetProject.DAL.Migration", "Bredinin.MyPetProject.DAL.Migration\Bredinin.MyPetProject.DAL.Migration.csproj", "{2D934F72-6E8A-4ECC-9BE1-23352B7F92A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bredinin.MyPetProject.DAL.Migration", "Bredinin.MyPetProject.DAL.Migration\Bredinin.MyPetProject.DAL.Migration.csproj", "{2D934F72-6E8A-4ECC-9BE1-23352B7F92A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.MyPetProject.Core.Authentication", "Bredinin.MyPetProject.Core.Authentication\Bredinin.MyPetProject.Core.Authentication.csproj", "{4D5F770D-8035-4463-A654-F63A2FFD77BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bredinin.MyPetProject.Core.Authentication", "Bredinin.MyPetProject.Core.Authentication\Bredinin.MyPetProject.Core.Authentication.csproj", "{4D5F770D-8035-4463-A654-F63A2FFD77BF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Handlers", "Handlers", "{B6BDA5EF-7C08-43B3-A43D-48F9E07B4725}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.MyPetProject.Handlers", "Bredinin.MyPetProject.Handlers\Bredinin.MyPetProject.Handlers.csproj", "{E915E027-CD3A-42FB-A347-354443FC079A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +55,10 @@ Global
 		{4D5F770D-8035-4463-A654-F63A2FFD77BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D5F770D-8035-4463-A654-F63A2FFD77BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D5F770D-8035-4463-A654-F63A2FFD77BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E915E027-CD3A-42FB-A347-354443FC079A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E915E027-CD3A-42FB-A347-354443FC079A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E915E027-CD3A-42FB-A347-354443FC079A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E915E027-CD3A-42FB-A347-354443FC079A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,5 +69,9 @@ Global
 		{8F661B97-2CC3-4771-A757-4C0123E05B18} = {6A2D4017-9718-478E-B526-626643E0FBF4}
 		{2D934F72-6E8A-4ECC-9BE1-23352B7F92A4} = {6A2D4017-9718-478E-B526-626643E0FBF4}
 		{4D5F770D-8035-4463-A654-F63A2FFD77BF} = {02425232-BB73-42C4-9D5D-30D4F64E795C}
+		{E915E027-CD3A-42FB-A347-354443FC079A} = {B6BDA5EF-7C08-43B3-A43D-48F9E07B4725}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C26E2A09-E1AD-476E-B186-078798D09813}
 	EndGlobalSection
 EndGlobal

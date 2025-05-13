@@ -3,12 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.MyPetProject.DAL;
 
-public class ServiceContext : DbContext
-{ 
-    public ServiceContext(DbContextOptions options) : base(options)
-    {
-    }
-    
+public class ServiceContext(DbContextOptions options) : DbContext(options)
+{
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ServiceContext).Assembly);

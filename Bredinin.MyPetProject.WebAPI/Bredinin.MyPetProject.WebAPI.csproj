@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -17,6 +17,7 @@
       <ProjectReference Include="..\Bredinin.MyPetProject.Core.Swagger\Bredinin.MyPetProject.Core.Swagger.csproj" />
       <ProjectReference Include="..\Bredinin.MyPetProject.DAL.Context\Bredinin.MyPetProject.DAL.Context.csproj" />
       <ProjectReference Include="..\Bredinin.MyPetProject.DAL.Migration\Bredinin.MyPetProject.DAL.Migration.csproj" />
+      <ProjectReference Include="..\Bredinin.MyPetProject.Handlers\Bredinin.MyPetProject.Handlers.csproj" />
     </ItemGroup>
 
     <ItemGroup>

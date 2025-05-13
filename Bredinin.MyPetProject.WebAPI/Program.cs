@@ -1,6 +1,7 @@
 using Bredinin.MyPetProject.Core.Authentication;
 using Bredinin.MyPetProject.DAL;
 using Bredinin.MyPetProject.DAL.Migration;
+using Bredinin.MyPetProject.Handlers;
 using Bredinin.MyPetProject.Swagger;
 using Bredinin.MyPetProject.WebAPI;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +16,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCustomSwagger();
 builder.Services.AddDatabaseMigrations(builder.Configuration);
 builder.Services.AddAddAuthenticationCustom();
+builder.Services.AddHandlersScopedServices();
 
 #endregion
-
 
 var app = builder.Build();
 
@@ -35,6 +36,5 @@ app.UseCustomSwagger();
 app.UseDatabaseMigrations();
 
 #endregion
-
 
 app.Run();
