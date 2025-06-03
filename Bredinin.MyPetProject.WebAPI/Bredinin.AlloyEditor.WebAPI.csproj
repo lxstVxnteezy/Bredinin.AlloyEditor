@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Bredinin.AlloyEditor.Core.Authentication\Bredinin.AlloyEditor.Core.Authentication.csproj" />
+      <ProjectReference Include="..\Bredinin.AlloyEditor.Core.Swagger\Bredinin.AlloyEditor.Core.Swagger.csproj" />
+      <ProjectReference Include="..\Bredinin.AlloyEditor.DAL.Context\Bredinin.AlloyEditor.DAL.Context.csproj" />
+      <ProjectReference Include="..\Bredinin.AlloyEditor.DAL.Migration\Bredinin.AlloyEditor.DAL.Migration.csproj" />
+      <ProjectReference Include="..\Bredinin.AlloyEditor.Handlers\Bredinin.AlloyEditor.Handlers.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Controllers" />
+    </ItemGroup>
+
+</Project>

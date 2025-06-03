@@ -10,7 +10,7 @@ public static class SwaggerServiceExtensions
     {
         services.AddSwaggerGen(swaggerOptions => 
         { 
-            swaggerOptions.SwaggerDoc("v1", new OpenApiInfo { Title = "MyPetProject", Version = "v1" });
+            swaggerOptions.SwaggerDoc("v1", new OpenApiInfo { Title = "AlloyEditor", Version = "v1" });
             swaggerOptions.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme 
             { 
                 Description = "JWT Authorization header using the Bearer scheme.", 
