@@ -25,6 +25,8 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+[Bb]in/[Dd]ebug/
+
 
 # Visual Studio files
 *.aps

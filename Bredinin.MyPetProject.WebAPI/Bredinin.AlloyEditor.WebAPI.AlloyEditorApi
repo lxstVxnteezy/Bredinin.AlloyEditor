@@ -1,6 +1,0 @@
-@Bredinin.MyPetProject.WebAPI_HostAddress = http://localhost:5271
-
-GET {{Bredinin.MyPetProject.WebAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
