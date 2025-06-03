@@ -5,7 +5,7 @@ namespace Bredinin.MyPetProject.Handlers
 {
     public static class DependenciesExtensions
     {
-        public static IServiceCollection AddHandlersScopedServices(this IServiceCollection services)
+        public static IServiceCollection AddHandlers(this IServiceCollection services)
         {
             var assembly = Assembly.GetExecutingAssembly();
 
@@ -15,9 +15,8 @@ namespace Bredinin.MyPetProject.Handlers
                             && !t.IsAbstract);
 
             foreach (var type in handlerTypes)
-            {
                 services.AddScoped(typeof(IHandler), type);
-            }
+            
             return services;
         }
     }

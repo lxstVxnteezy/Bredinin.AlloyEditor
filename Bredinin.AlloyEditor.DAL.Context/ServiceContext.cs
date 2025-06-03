@@ -1,4 +1,6 @@
 ﻿using Bredinin.MyPetProject.Domain;
+using Bredinin.MyPetProject.Domain.Alloys;
+using Bredinin.MyPetProject.Domain.Dictionaries;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.MyPetProject.DAL;
@@ -9,6 +11,10 @@ public class ServiceContext(DbContextOptions options) : DbContext(options)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ServiceContext).Assembly);
     }
-    
+
     public DbSet<User> Users { get; set; }
+    public DbSet<AlloyGrade> AlloyGrades { get; set; }
+    public DbSet<AlloyChemicalCompositions> AlloyChemicalCompositions { get; set; }
+    public DbSet<DictChemicalElement> DictChemicalElements { get; set; }
+    public DbSet<AlloySystem> AlloySystems { get; set; }
 }

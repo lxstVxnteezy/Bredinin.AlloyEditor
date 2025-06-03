@@ -1,9 +1,9 @@
+using Bredinin.AlloyEditor.WebAPI;
 using Bredinin.MyPetProject.Core.Authentication;
 using Bredinin.MyPetProject.DAL;
 using Bredinin.MyPetProject.DAL.Migration;
 using Bredinin.MyPetProject.Handlers;
 using Bredinin.MyPetProject.Swagger;
-using Bredinin.MyPetProject.WebAPI;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCustomSwagger();
 builder.Services.AddDatabaseMigrations(builder.Configuration);
 builder.Services.AddAddAuthenticationCustom();
-builder.Services.AddHandlersScopedServices();
+builder.Services.AddHandlers();
 
 #endregion
 

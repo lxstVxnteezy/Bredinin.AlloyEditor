@@ -8,9 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Methods\**" />
-    <EmbeddedResource Remove="Methods\**" />
-    <None Remove="Methods\**" />
+
   </ItemGroup>
 
   <ItemGroup>

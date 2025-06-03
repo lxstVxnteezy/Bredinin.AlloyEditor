@@ -10,9 +10,9 @@ namespace Bredinin.MyPetProject.DAL.Configuration
         {
             builder.ToTable("dictionaries_chemical_element");
 
+            builder.Property(x => x.Id).HasColumnName("id");
             builder.Property(x => x.IsBaseForAlloySystem).HasColumnName("isBaseForAlloySystem");
             builder.Property(x => x.Symbol).HasColumnName("symbol");
-            builder.Property(x => x.Id).HasColumnName("id");
             builder.Property(x => x.Name).HasColumnName("name");
             builder.Property(x => x.Description).HasColumnName("description");
         }

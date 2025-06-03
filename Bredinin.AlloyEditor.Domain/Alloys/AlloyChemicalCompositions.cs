@@ -12,6 +12,6 @@ namespace Bredinin.MyPetProject.Domain.Alloys
         public Guid ChemicalElementId { get; set; }
 
         public AlloyGrade AlloyGrade { get; set; } = null!;
-        public DictChemicalElement ChemicalElement = null!;
+        public DictChemicalElement ChemicalElement { get; set; } = null!;
     }
 }

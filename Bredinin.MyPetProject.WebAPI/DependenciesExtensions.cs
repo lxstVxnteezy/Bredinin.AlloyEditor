@@ -1,6 +1,6 @@
 ﻿using FluentMigrator.Runner;
 
-namespace Bredinin.MyPetProject.WebAPI
+namespace Bredinin.AlloyEditor.WebAPI
 {
     public static class DependenciesExtensions
     {
