@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-
+      <None Remove="Resources\Dictionaries\ChemicalElements.xlsx" />
     </ItemGroup>
 
     <ItemGroup>
@@ -22,6 +22,12 @@
       <ProjectReference Include="..\Bredinin.AlloyEditor.DAL.Context\Bredinin.AlloyEditor.DAL.Context.csproj" />
       <ProjectReference Include="..\Bredinin.AlloyEditor.DAL.Migration\Bredinin.AlloyEditor.DAL.Migration.csproj" />
       <ProjectReference Include="..\Bredinin.AlloyEditor.Handlers\Bredinin.AlloyEditor.Handlers.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Resources\Dictionaries\ChemicalElements.xlsx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

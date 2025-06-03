@@ -19,14 +19,14 @@ public static class DependenciesExtensions
     private static void ConfigureRunner(IMigrationRunnerBuilder runnerBuilder, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-      
+
         if (connectionString == null)
             throw new Exception("Not found connectionString ");
-        
+
         EnsureDatabaseExists(connectionString);
 
         runnerBuilder
-            .AddPostgres() 
+            .AddPostgres()
             .WithGlobalConnectionString(configuration.GetConnectionString("DefaultConnection"))
             .ScanIn(typeof(DependenciesExtensions).Assembly).For.Migrations();
     }

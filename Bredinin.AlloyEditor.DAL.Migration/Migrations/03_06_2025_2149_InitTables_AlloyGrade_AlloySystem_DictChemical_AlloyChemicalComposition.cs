@@ -1,4 +1,5 @@
-﻿using FluentMigrator;
+﻿using System.Data;
+using FluentMigrator;
 
 namespace Bredinin.MyPetProject.DAL.Migration.Mirgations
 {
@@ -30,6 +31,7 @@ namespace Bredinin.MyPetProject.DAL.Migration.Mirgations
                 .WithColumn("id").AsGuid().PrimaryKey()
                 .WithColumn("alloy_grade_id").AsGuid().NotNullable()
                     .ForeignKey("fk_compositions_alloy_grades", "alloy_grades", "id")
+                     .OnDelete(Rule.Cascade)
                 .WithColumn("chemical_element_id").AsGuid().NotNullable()
                     .ForeignKey("fk_compositions_chemical_elements", "dict_chemical_elements", "id")
                 .WithColumn("min_value").AsDecimal().Nullable()

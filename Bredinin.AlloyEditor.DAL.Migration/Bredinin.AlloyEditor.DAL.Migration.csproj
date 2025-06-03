@@ -8,10 +8,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="EPPlus" Version="8.0.5" />
       <PackageReference Include="FluentMigrator" Version="7.1.0" />
       <PackageReference Include="FluentMigrator.Extensions.Postgres" Version="7.1.0" />
       <PackageReference Include="FluentMigrator.Runner.Postgres" Version="7.1.0" />
       <PackageReference Include="Npgsql" Version="9.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Bredinin.AlloyEditor.Domain\Bredinin.AlloyEditor.Domain.csproj" />
     </ItemGroup>
 
 </Project>
