@@ -1,8 +1,9 @@
-﻿using FluentMigrator;
+﻿using Bredinin.MyPetProject.DAL.Migration.Parsers;
+using FluentMigrator;
 
 namespace Bredinin.MyPetProject.DAL.Migration.Mirgations
 {
-    [Migration(20250406)]
+    [Migration(202504060146)]
     public class AddDataForChemicalDict_04_06_2025_0146 : ForwardOnlyMigration
     {
         public override void Up()

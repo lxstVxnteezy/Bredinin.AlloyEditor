@@ -3,7 +3,7 @@ using FluentMigrator;
 
 namespace Bredinin.MyPetProject.DAL.Migration.Mirgations
 {
-    [Migration(20250306)]
+    [Migration(202503062307)]
     public class AddCascadeDeleteForAlloyGrades_03_06_2025_2307 : ForwardOnlyMigration
     {
         public override void Up()

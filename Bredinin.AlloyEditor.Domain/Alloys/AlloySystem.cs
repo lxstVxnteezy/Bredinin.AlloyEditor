@@ -6,9 +6,9 @@ namespace Bredinin.MyPetProject.Domain.Alloys
     {
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
-        public Guid BaseElementId { get; set; }  // Основной элемент системы (Fe, Al, Cu и т.д.)
+        public Guid BaseElementId { get; set; }  
 
-        public DictChemicalElement BaseElement { get; set; } = null!;
-        public ICollection<AlloyGrade> Grades { get; set; } = new List<AlloyGrade>();
+        public virtual DictChemicalElement BaseElement { get; set; } = null!;
+        public virtual ICollection<AlloyGrade> Grades { get; set; } = new List<AlloyGrade>();
     }
 }
