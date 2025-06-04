@@ -8,7 +8,6 @@ namespace Bredinin.AlloyEditor.WebAPI.Controllers.Dictionaries
     [Microsoft.AspNetCore.Components.Route("api/dictionary")]
     public class DictionaryController : BaseApiController
     {
-
         [HttpGet("chemical_elements")]
         public Task<DictChemicalElementResponse[]> GetChemicalElements(
             [FromServices] IInfoDictChemicalElementsHandler handler,
