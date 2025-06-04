@@ -12,7 +12,6 @@ namespace Bredinin.MyPetProject.DAL.Migration.Migrations
             Create.ForeignKey("fk_alloy_systems")
                 .FromTable("alloy_systems").ForeignColumn("base_element_id")
                 .ToTable("dict_chemical_elements").PrimaryColumn("id");
-
         }
     }
 }

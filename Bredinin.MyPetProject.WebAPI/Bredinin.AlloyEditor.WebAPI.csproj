@@ -20,6 +20,7 @@
       <ProjectReference Include="..\Bredinin.AlloyEditor.Core.Authentication\Bredinin.AlloyEditor.Core.Authentication.csproj" />
       <ProjectReference Include="..\Bredinin.AlloyEditor.Core.Swagger\Bredinin.AlloyEditor.Core.Swagger.csproj" />
       <ProjectReference Include="..\Bredinin.AlloyEditor.DAL.Context\Bredinin.AlloyEditor.DAL.Context.csproj" />
+      <ProjectReference Include="..\Bredinin.AlloyEditor.DAL.Core\Bredinin.AlloyEditor.DAL.Core.csproj" />
       <ProjectReference Include="..\Bredinin.AlloyEditor.DAL.Migration\Bredinin.AlloyEditor.DAL.Migration.csproj" />
       <ProjectReference Include="..\Bredinin.AlloyEditor.Handlers\Bredinin.AlloyEditor.Handlers.csproj" />
     </ItemGroup>

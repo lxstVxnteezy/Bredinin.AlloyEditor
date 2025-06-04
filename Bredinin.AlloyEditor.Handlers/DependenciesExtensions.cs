@@ -9,14 +9,15 @@ namespace Bredinin.MyPetProject.Handlers
         {
             var assembly = Assembly.GetExecutingAssembly();
 
-            var handlerTypes = assembly.GetTypes()
-                .Where(t => typeof(IHandler).IsAssignableFrom(t)
-                            && t.IsClass
-                            && !t.IsAbstract);
+            var serviceType = typeof(IHandler);
 
-            foreach (var type in handlerTypes)
-                services.AddScoped(typeof(IHandler), type);
-            
+            foreach (var implementationType in assembly.GetTypes()
+                         .Where(type => serviceType.IsAssignableFrom(type) && !type.GetTypeInfo().IsAbstract))
+            {
+                var handlerInterface = implementationType.GetInterfaces().Single(x => x != serviceType);
+                services.AddTransient(handlerInterface, implementationType);
+            }
+
             return services;
         }
     }
