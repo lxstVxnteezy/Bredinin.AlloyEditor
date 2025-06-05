@@ -20,7 +20,6 @@ namespace Bredinin.MyPetProject.Handlers.Methods.Alloy.AlloyGrade
                 .Include(x => x.ChemicalCompositions)
                 .ToArrayAsync(ctn);
 
-
             return alloys.Select(MapToResponse).ToArray();
         }
 

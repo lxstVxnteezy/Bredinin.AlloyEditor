@@ -5,15 +5,24 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Bredinin.AlloyEditor.WebAPI.Controllers.Alloy
 {
-    [Microsoft.AspNetCore.Components.Route("api/alloys")]
+    [Route("api/alloys")]
     public class AlloyController : BaseApiController
     {
-        [HttpGet("/alloy-info")]
+        [HttpGet]
         public Task<AlloyGradeResponse[]> GetGrades(
             [FromServices] ISearchAlloyGradeHandler handler,
             CancellationToken ctn)
         {
             return handler.Handle(ctn);
+        }
+
+        [HttpPost]
+        public Task<Guid> CreateAlloyGrade(
+            [FromServices] ICreateAlloyGradeHandler handler,
+            [FromBody] CreateAlloyGradeRequest request,
+            CancellationToken ctn)
+        {
+          return handler.Handle(request, ctn);
         }
     }
 }
