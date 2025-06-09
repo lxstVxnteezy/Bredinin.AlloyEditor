@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bredinin.AlloyEditor.WebAPI", "Bredinin.MyPetProject.WebAPI\Bredinin.AlloyEditor.WebAPI.csproj", "{4097DBEF-6ABF-495F-85F5-03E6712CDC6D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bredinin.AlloyEditor.Core.Swagger", "Bredinin.AlloyEditor.Core.Swagger\Bredinin.AlloyEditor.Core.Swagger.csproj", "{3F5D5B9D-C4CB-4D65-B9AD-A7730E6D62E3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{02425232-BB73-42C4-9D5D-30D4F64E795C}"
@@ -37,16 +35,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Contra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Core.Http", "Bredinin.AlloyEditor.Core.Http\Bredinin.AlloyEditor.Core.Http.csproj", "{31D238B0-CF69-44D7-ACA8-17A5008F59C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.WebApi", "Bredinin.AlloyEditor.WebAPI\Bredinin.AlloyEditor.WebApi.csproj", "{711C1505-F849-F6C8-FC65-E826035BBFAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4097DBEF-6ABF-495F-85F5-03E6712CDC6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4097DBEF-6ABF-495F-85F5-03E6712CDC6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4097DBEF-6ABF-495F-85F5-03E6712CDC6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4097DBEF-6ABF-495F-85F5-03E6712CDC6D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3F5D5B9D-C4CB-4D65-B9AD-A7730E6D62E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3F5D5B9D-C4CB-4D65-B9AD-A7730E6D62E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F5D5B9D-C4CB-4D65-B9AD-A7730E6D62E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -83,12 +79,15 @@ Global
 		{31D238B0-CF69-44D7-ACA8-17A5008F59C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31D238B0-CF69-44D7-ACA8-17A5008F59C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31D238B0-CF69-44D7-ACA8-17A5008F59C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{711C1505-F849-F6C8-FC65-E826035BBFAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{711C1505-F849-F6C8-FC65-E826035BBFAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{711C1505-F849-F6C8-FC65-E826035BBFAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{711C1505-F849-F6C8-FC65-E826035BBFAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{4097DBEF-6ABF-495F-85F5-03E6712CDC6D} = {C71B13DF-A656-4965-A84F-FD08C8A763A0}
 		{3F5D5B9D-C4CB-4D65-B9AD-A7730E6D62E3} = {02425232-BB73-42C4-9D5D-30D4F64E795C}
 		{02425232-BB73-42C4-9D5D-30D4F64E795C} = {C71B13DF-A656-4965-A84F-FD08C8A763A0}
 		{C419319E-F2E3-409D-B0ED-438217FC71F5} = {C71B13DF-A656-4965-A84F-FD08C8A763A0}
@@ -104,6 +103,7 @@ Global
 		{E9657657-7A3D-408E-AD66-444FE53D713C} = {6A2D4017-9718-478E-B526-626643E0FBF4}
 		{C6C700B9-49EE-4FD6-AD26-1D6FDB6D0E26} = {FBD94AC7-767B-41A9-AD62-E4DAE14D8AAA}
 		{31D238B0-CF69-44D7-ACA8-17A5008F59C1} = {02425232-BB73-42C4-9D5D-30D4F64E795C}
+		{711C1505-F849-F6C8-FC65-E826035BBFAF} = {C71B13DF-A656-4965-A84F-FD08C8A763A0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C26E2A09-E1AD-476E-B186-078798D09813}

@@ -1,7 +1,7 @@
-﻿using Bredinin.MyPetProject.DAL.Migration.Parsers;
+﻿using Bredinin.AlloyEditor.DAL.Migration.Parsers;
 using FluentMigrator;
 
-namespace Bredinin.MyPetProject.DAL.Migration.Mirgations
+namespace Bredinin.AlloyEditor.DAL.Migration.Migrations
 {
     [Migration(202504060146)]
     public class AddDataForChemicalDict_04_06_2025_0146 : ForwardOnlyMigration

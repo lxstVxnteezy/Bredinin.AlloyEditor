@@ -1,4 +1,4 @@
-﻿namespace Bredinin.MyPetProject.Handlers
+﻿namespace Bredinin.AlloyEditor.Handlers
 {
     public interface IHandler
     {

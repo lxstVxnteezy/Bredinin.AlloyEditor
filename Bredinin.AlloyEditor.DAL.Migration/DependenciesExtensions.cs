@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 
-namespace Bredinin.MyPetProject.DAL.Migration;
+namespace Bredinin.AlloyEditor.DAL.Migration;
 
 public static class DependenciesExtensions
 {

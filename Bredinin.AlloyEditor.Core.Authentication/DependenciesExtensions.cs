@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Bredinin.MyPetProject.Core.Authentication
+namespace Bredinin.AlloyEditor.Core.Authentication
 {
     public static class DependenciesExtensions
     {

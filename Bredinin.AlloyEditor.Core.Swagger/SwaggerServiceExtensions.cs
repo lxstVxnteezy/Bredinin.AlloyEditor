@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-namespace Bredinin.MyPetProject.Swagger;
+namespace Bredinin.AlloyEditor.Core.Swagger;
 
 public static class SwaggerServiceExtensions
 {

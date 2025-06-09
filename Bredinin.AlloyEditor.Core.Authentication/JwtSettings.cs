@@ -1,4 +1,4 @@
-﻿namespace Bredinin.MyPetProject.Core.Authentication
+﻿namespace Bredinin.AlloyEditor.Core.Authentication
 {
     public static class JwtSettings
     {

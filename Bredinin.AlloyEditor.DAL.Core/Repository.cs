@@ -1,5 +1,4 @@
-﻿using Bredinin.MyPetProject.DAL;
-using Bredinin.MyPetProject.Domain;
+﻿using Bredinin.MyPetProject.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.DAL.Core

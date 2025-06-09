@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Bredinin.MyPetProject.DAL.Configuration
+namespace Bredinin.AlloyEditor.DAL.Configuration
 {
     internal class AlloyChemicalCompositionConfiguration:IEntityTypeConfiguration<AlloyChemicalCompositions>
     {

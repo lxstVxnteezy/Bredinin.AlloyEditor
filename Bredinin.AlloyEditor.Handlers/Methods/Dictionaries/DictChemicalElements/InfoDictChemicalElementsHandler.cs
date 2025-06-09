@@ -3,7 +3,7 @@ using Bredinin.AlloyEditor.DAL.Core;
 using Bredinin.MyPetProject.Domain.Dictionaries;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bredinin.MyPetProject.Handlers.Methods.Dictionaries.DictChemicalElements
+namespace Bredinin.AlloyEditor.Handlers.Methods.Dictionaries.DictChemicalElements
 {
     public interface IInfoDictChemicalElementsHandler : IHandler
     {

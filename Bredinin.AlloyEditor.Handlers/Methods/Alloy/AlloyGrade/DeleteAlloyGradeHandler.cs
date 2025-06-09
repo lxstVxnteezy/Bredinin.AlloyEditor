@@ -2,13 +2,13 @@
 using Bredinin.AlloyEditor.DAL.Core;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Bredinin.MyPetProject.Handlers.Methods.Alloy.AlloyGrade
+namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
 {
     public interface IDeleteAlloyGradeHandler : IHandler
     {
         public Task<ActionResult> Handle(Guid id, CancellationToken ctn);
     }
-    internal class DeleteAlloyGradeHandler(IRepository<Domain.Alloys.AlloyGrade> alloyGradeRepository) : IDeleteAlloyGradeHandler
+    internal class DeleteAlloyGradeHandler(IRepository<MyPetProject.Domain.Alloys.AlloyGrade> alloyGradeRepository) : IDeleteAlloyGradeHandler
     {
         public async Task<ActionResult> Handle(Guid id, CancellationToken ctn)
         {

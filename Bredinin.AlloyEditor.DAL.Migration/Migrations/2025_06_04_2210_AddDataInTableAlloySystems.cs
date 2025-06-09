@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace Bredinin.MyPetProject.DAL.Migration.Migrations
+namespace Bredinin.AlloyEditor.DAL.Migration.Migrations
 {
     [Migration(202504062210)]
     public class AddDataInTableAlloySystems_2025_06_04_2210 : ForwardOnlyMigration

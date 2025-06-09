@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace Bredinin.MyPetProject.DAL.Migration.Mirgations;
+namespace Bredinin.AlloyEditor.DAL.Migration.Migrations;
 
 [Migration(202503062249)]
 public class AddFieldToTableDictChemicalElement_03_06_2025_2249 : ForwardOnlyMigration

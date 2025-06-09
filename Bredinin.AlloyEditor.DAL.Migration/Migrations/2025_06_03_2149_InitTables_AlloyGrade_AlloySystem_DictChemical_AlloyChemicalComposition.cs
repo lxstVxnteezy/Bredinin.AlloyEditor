@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using FluentMigrator;
 
-namespace Bredinin.MyPetProject.DAL.Migration.Mirgations
+namespace Bredinin.AlloyEditor.DAL.Migration.Migrations
 {
     [Migration(202503062149)]
     public class InitTables_AlloyGrade_AlloySystem_DictChemical_AlloyChemicalComposition_03_06_2025_2149 : ForwardOnlyMigration

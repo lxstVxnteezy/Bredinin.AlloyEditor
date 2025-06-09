@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+﻿using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Bredinin.MyPetProject.Handlers
+namespace Bredinin.AlloyEditor.Handlers
 {
     public static class DependenciesExtensions
     {

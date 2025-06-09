@@ -4,7 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>Bredinin.MyPetProject.DAL.Migration</RootNamespace>
+        <RootNamespace>Bredinin.AlloyEditor.DAL.Migration</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

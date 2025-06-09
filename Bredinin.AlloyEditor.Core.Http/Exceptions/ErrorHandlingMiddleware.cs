@@ -2,7 +2,7 @@
 
 namespace Bredinin.AlloyEditor.Core.Http.Exceptions
 {
-    public class ErrorHandlingMiddleware    
+    public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate _next;
 
@@ -37,12 +37,12 @@ namespace Bredinin.AlloyEditor.Core.Http.Exceptions
                 Message = ex.Message
             };
             return context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(response));
-
         }
         private Task HandleUnexpectedExceptionAsync(HttpContext context, Exception ex)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
             return context.Response.WriteAsync(new
             {
                 StatusCode = context.Response.StatusCode,

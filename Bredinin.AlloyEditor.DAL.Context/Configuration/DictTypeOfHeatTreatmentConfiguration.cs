@@ -1,19 +1,18 @@
-﻿using Bredinin.MyPetProject.Domain.Alloys;
+﻿using Bredinin.MyPetProject.Domain.Dictionaries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Bredinin.AlloyEditor.DAL.Configuration
 {
-    internal class AlloyGradeConfiguration: IEntityTypeConfiguration<AlloyGrade>
+    internal class DictTypeOfHeatTreatmentConfiguration : IEntityTypeConfiguration<DictTypeOfHeatTreatment>
     {
-        public void Configure(EntityTypeBuilder<AlloyGrade> builder)
+        public void Configure(EntityTypeBuilder<DictTypeOfHeatTreatment> builder)
         {
-            builder.ToTable("alloy_grades");
+            builder.ToTable("dict_types_of_heat_treatments");
 
             builder.Property(x => x.Id).HasColumnName("id");
             builder.Property(x => x.Name).HasColumnName("name");
             builder.Property(x => x.Description).HasColumnName("description");
-            builder.Property(x => x.AlloySystemId).HasColumnName("alloy_system_id");
         }
     }
 }

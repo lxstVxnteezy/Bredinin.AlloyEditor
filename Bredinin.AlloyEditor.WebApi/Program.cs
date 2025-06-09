@@ -1,11 +1,10 @@
+using Bredinin.AlloyEditor.Core.Authentication;
 using Bredinin.AlloyEditor.Core.Http.Exceptions;
+using Bredinin.AlloyEditor.Core.Swagger;
 using Bredinin.AlloyEditor.DAL.Core;
+using Bredinin.AlloyEditor.DAL.Migration;
+using Bredinin.AlloyEditor.Handlers;
 using Bredinin.AlloyEditor.WebAPI;
-using Bredinin.MyPetProject.Core.Authentication;
-using Bredinin.MyPetProject.DAL.Migration;
-using Bredinin.MyPetProject.Handlers;
-using Bredinin.MyPetProject.Swagger;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 
 

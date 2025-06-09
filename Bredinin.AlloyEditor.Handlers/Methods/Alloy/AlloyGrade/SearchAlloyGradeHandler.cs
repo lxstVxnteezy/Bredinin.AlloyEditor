@@ -4,14 +4,14 @@ using Bredinin.AlloyEditor.DAL.Core;
 using Bredinin.MyPetProject.Domain.Alloys;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bredinin.MyPetProject.Handlers.Methods.Alloy.AlloyGrade
+namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
 {
     public interface ISearchAlloyGradeHandler : IHandler
     {
         public Task<AlloyGradeResponse[]> Handle(CancellationToken ctn);
     }
 
-    internal class SearchAlloyGradeHandler(IRepository<Domain.Alloys.AlloyGrade> alloyGradeRepository)
+    internal class SearchAlloyGradeHandler(IRepository<MyPetProject.Domain.Alloys.AlloyGrade> alloyGradeRepository)
         : ISearchAlloyGradeHandler
     {
         public async Task<AlloyGradeResponse[]> Handle(CancellationToken ctn)
@@ -23,7 +23,7 @@ namespace Bredinin.MyPetProject.Handlers.Methods.Alloy.AlloyGrade
             return alloys.Select(MapToResponse).ToArray();
         }
 
-        private static AlloyGradeResponse MapToResponse(Domain.Alloys.AlloyGrade alloyGrade)
+        private static AlloyGradeResponse MapToResponse(MyPetProject.Domain.Alloys.AlloyGrade alloyGrade)
         {
             return new AlloyGradeResponse(
                 Id: alloyGrade.Id,

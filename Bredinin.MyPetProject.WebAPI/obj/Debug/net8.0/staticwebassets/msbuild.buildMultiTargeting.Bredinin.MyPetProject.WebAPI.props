@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\Bredinin.MyPetProject.WebAPI.props" />
-</Project>

@@ -1,0 +1,22 @@
+﻿services:
+  alloyeditor_webapi:
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "5019:5019"
+    container_name: alloyeditor_web_api
+    depends_on:
+      - db
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    container_name: db_postgresql_container
+
+volumes:
+  db_data:

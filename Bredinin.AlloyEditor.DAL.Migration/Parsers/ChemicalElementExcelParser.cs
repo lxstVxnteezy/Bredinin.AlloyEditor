@@ -1,7 +1,7 @@
 ﻿using Bredinin.MyPetProject.Domain.Dictionaries;
 using OfficeOpenXml;
 
-namespace Bredinin.MyPetProject.DAL.Migration.Parsers
+namespace Bredinin.AlloyEditor.DAL.Migration.Parsers
 {
     internal static class ChemicalElementExcelParser
     {
