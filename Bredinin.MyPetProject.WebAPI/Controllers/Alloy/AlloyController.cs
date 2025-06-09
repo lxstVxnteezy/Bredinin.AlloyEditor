@@ -24,5 +24,14 @@ namespace Bredinin.AlloyEditor.WebAPI.Controllers.Alloy
         {
           return handler.Handle(request, ctn);
         }
+
+        [HttpDelete("{id}")]
+        public Task<ActionResult> Delete(
+            [FromServices] IDeleteAlloyGradeHandler handler,
+            [FromRoute] Guid id,
+            CancellationToken ctn)
+        {
+            return handler.Handle(id,ctn);
+        }
     }
 }

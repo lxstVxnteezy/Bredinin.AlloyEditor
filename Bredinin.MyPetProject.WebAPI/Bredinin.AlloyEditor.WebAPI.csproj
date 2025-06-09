@@ -14,10 +14,12 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
+        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Bredinin.AlloyEditor.Core.Authentication\Bredinin.AlloyEditor.Core.Authentication.csproj" />
+      <ProjectReference Include="..\Bredinin.AlloyEditor.Core.Http\Bredinin.AlloyEditor.Core.Http.csproj" />
       <ProjectReference Include="..\Bredinin.AlloyEditor.Core.Swagger\Bredinin.AlloyEditor.Core.Swagger.csproj" />
       <ProjectReference Include="..\Bredinin.AlloyEditor.DAL.Context\Bredinin.AlloyEditor.DAL.Context.csproj" />
       <ProjectReference Include="..\Bredinin.AlloyEditor.DAL.Core\Bredinin.AlloyEditor.DAL.Core.csproj" />

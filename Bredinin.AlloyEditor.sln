@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.DAL.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Contracts", "Bredinin.AlloyEditor.Contracts\Bredinin.AlloyEditor.Contracts.csproj", "{C6C700B9-49EE-4FD6-AD26-1D6FDB6D0E26}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Core.Http", "Bredinin.AlloyEditor.Core.Http\Bredinin.AlloyEditor.Core.Http.csproj", "{31D238B0-CF69-44D7-ACA8-17A5008F59C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{C6C700B9-49EE-4FD6-AD26-1D6FDB6D0E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6C700B9-49EE-4FD6-AD26-1D6FDB6D0E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6C700B9-49EE-4FD6-AD26-1D6FDB6D0E26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31D238B0-CF69-44D7-ACA8-17A5008F59C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31D238B0-CF69-44D7-ACA8-17A5008F59C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31D238B0-CF69-44D7-ACA8-17A5008F59C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31D238B0-CF69-44D7-ACA8-17A5008F59C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +103,7 @@ Global
 		{FBD94AC7-767B-41A9-AD62-E4DAE14D8AAA} = {C71B13DF-A656-4965-A84F-FD08C8A763A0}
 		{E9657657-7A3D-408E-AD66-444FE53D713C} = {6A2D4017-9718-478E-B526-626643E0FBF4}
 		{C6C700B9-49EE-4FD6-AD26-1D6FDB6D0E26} = {FBD94AC7-767B-41A9-AD62-E4DAE14D8AAA}
+		{31D238B0-CF69-44D7-ACA8-17A5008F59C1} = {02425232-BB73-42C4-9D5D-30D4F64E795C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C26E2A09-E1AD-476E-B186-078798D09813}

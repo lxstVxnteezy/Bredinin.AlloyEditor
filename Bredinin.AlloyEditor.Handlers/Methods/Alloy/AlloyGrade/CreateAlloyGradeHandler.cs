@@ -1,4 +1,5 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
+using Bredinin.AlloyEditor.Core.Http.Exceptions;
 using Bredinin.AlloyEditor.DAL.Core;
 using Bredinin.MyPetProject.Domain.Alloys;
 using Microsoft.EntityFrameworkCore;
@@ -17,16 +18,7 @@ namespace Bredinin.MyPetProject.Handlers.Methods.Alloy.AlloyGrade
             var data = await alloyGradeRepository.Query.SingleOrDefaultAsync(x => x.Name == request.Name, ctn);
 
             if (data != null)
-                throw new ArgumentException("already exist");
-
-            var chemicalCompositions = request.ChemicalCompositions.Select(cc => new AlloyChemicalCompositions()
-            {
-                MinValue = cc.MinValue,
-                MaxValue = cc.MaxValue,
-                ExactValue = cc.ExactValue,
-                ChemicalElementId = cc.ChemicalElementId,
-            }
-            );
+                throw new BusinessException("already exist");
 
             var newAlloyGrade = new Domain.Alloys.AlloyGrade()
             {
@@ -34,7 +26,14 @@ namespace Bredinin.MyPetProject.Handlers.Methods.Alloy.AlloyGrade
                 Name = request.Name,
                 Description = request.Description,
                 AlloySystemId = request.AlloySystemId,
-                ChemicalCompositions = chemicalCompositions.ToList()
+                ChemicalCompositions = request.ChemicalCompositions.Select(cc => new AlloyChemicalCompositions()
+                {
+                    MinValue = cc.MinValue,
+                    MaxValue = cc.MaxValue,
+                    ExactValue = cc.ExactValue,
+                    ChemicalElementId = cc.ChemicalElementId,
+                }
+                ).ToList()
             };
 
             alloyGradeRepository.Add(newAlloyGrade);
