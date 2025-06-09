@@ -1,4 +1,6 @@
-﻿services:
+﻿version: '3.8'
+
+services:
   alloyeditor_webapi:
     build:
       dockerfile: Dockerfile
@@ -7,6 +9,9 @@
     container_name: alloyeditor_web_api
     depends_on:
       - db
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=alloyeddb;Username=postgres;Password=postgres
+
   db:
     image: postgres:latest
     ports:
