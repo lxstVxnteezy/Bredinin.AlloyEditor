@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'webapi'
+    static_configs:
+      - targets: ['alloyeditor_webapi:80'] # или другой порт, на котором работает ваше приложение

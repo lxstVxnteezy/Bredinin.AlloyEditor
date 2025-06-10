@@ -1,17 +1,6 @@
-﻿version: '3.8'
+﻿version: '3.8'  # Хотя version устарела, можно оставить для совместимости
 
 services:
-  alloyeditor_webapi:
-    build:
-      dockerfile: Dockerfile
-    ports:
-      - "5019:5019"
-    container_name: alloyeditor_web_api
-    depends_on:
-      - db
-    environment:
-      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=alloyeddb;Username=postgres;Password=postgres
-
   db:
     image: postgres:latest
     ports:
@@ -23,5 +12,37 @@ services:
       - db_data:/var/lib/postgresql/data
     container_name: db_postgresql_container
 
+  alloyeditor_webapi:
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "5019:5019"
+    container_name: alloyeditor_web_api
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=alloyeddb;Username=postgres;Password=postgres
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    depends_on:
+      - alloyeditor_webapi  # Только ждем webapi, без цикла
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus  # Только ждем prometheus
+
 volumes:
   db_data:
+  grafana_data:
