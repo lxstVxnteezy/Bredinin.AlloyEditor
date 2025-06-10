@@ -34,7 +34,7 @@ namespace Bredinin.AlloyEditor.WebAPI.Controllers.Alloy
             return handler.Handle(id, ctn);
         }
 
-        [HttpGet("alloys/for-main-element/{id}")]
+        [HttpGet("for-main-element/{id}")]
         public Task<InfoAlloyGradeByMainResponse[]> GetAlloysForMainElement(
             Guid id,
             [FromServices] IGetAlloysByMainElementHandler handler,
