@@ -12,13 +12,13 @@ namespace Bredinin.AlloyEditor.Core.Metrics.Server
 
         private readonly TimeSpan _delay = TimeSpan.FromSeconds(15);
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken ctn)
         {
             var prevCpuTime = Process.GetCurrentProcess().TotalProcessorTime;
 
-            while (!stoppingToken.IsCancellationRequested)
+            while (!ctn.IsCancellationRequested)
             {
-                await Task.Delay(_delay, stoppingToken);
+                await Task.Delay(_delay, ctn);
 
                 var currCpuTime = Process.GetCurrentProcess().TotalProcessorTime;
                 var cpuUsedMs = (currCpuTime - prevCpuTime).TotalMilliseconds;
