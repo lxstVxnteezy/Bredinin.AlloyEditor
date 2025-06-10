@@ -30,7 +30,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
                 Description: alloyGrade.Description,
                 AlloySystemId: alloyGrade.AlloySystemId,
                 ChemicalCompositions: alloyGrade.ChemicalCompositions
-                    .Select(ChemicalCompositionConvertToResponse.Convert)
+                    .Select(ChemicalCompositionHelper.Convert)
                     .ToArray()
             );
         }

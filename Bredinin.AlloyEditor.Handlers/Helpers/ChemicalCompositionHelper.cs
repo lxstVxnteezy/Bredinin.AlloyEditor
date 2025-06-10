@@ -3,7 +3,7 @@ using Bredinin.AlloyEditor.Domain.Alloys;
 
 namespace Bredinin.AlloyEditor.Handlers.Helpers
 {
-    internal static class ChemicalCompositionConvertToResponse
+    internal static class ChemicalCompositionHelper
     {
         public static ChemicalCompositionsResponse Convert(this AlloyChemicalCompositions compositionsResponse)
         {
