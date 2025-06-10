@@ -22,7 +22,7 @@ namespace Bredinin.AlloyEditor.WebAPI.Controllers.Alloy
             [FromBody] CreateAlloyGradeRequest request,
             CancellationToken ctn)
         {
-          return handler.Handle(request, ctn);
+            return handler.Handle(request, ctn);
         }
 
         [HttpDelete("{id}")]
@@ -31,7 +31,16 @@ namespace Bredinin.AlloyEditor.WebAPI.Controllers.Alloy
             [FromRoute] Guid id,
             CancellationToken ctn)
         {
-            return handler.Handle(id,ctn);
+            return handler.Handle(id, ctn);
+        }
+
+        [HttpGet("alloys/for-main-element/{id}")]
+        public Task<InfoAlloyGradeByMainResponse[]> GetAlloysForMainElement(
+            Guid id,
+            [FromServices] IGetAlloysByMainElementHandler handler,
+            CancellationToken ctn)
+        {
+            return handler.Handle(id, ctn);
         }
     }
 }

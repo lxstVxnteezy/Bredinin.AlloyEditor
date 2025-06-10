@@ -8,7 +8,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
     {
         public Task<ActionResult> Handle(Guid id, CancellationToken ctn);
     }
-    internal class DeleteAlloyGradeHandler(IRepository<MyPetProject.Domain.Alloys.AlloyGrade> alloyGradeRepository) : IDeleteAlloyGradeHandler
+    internal class DeleteAlloyGradeHandler(IRepository<Domain.Alloys.AlloyGrade> alloyGradeRepository) : IDeleteAlloyGradeHandler
     {
         public async Task<ActionResult> Handle(Guid id, CancellationToken ctn)
         {

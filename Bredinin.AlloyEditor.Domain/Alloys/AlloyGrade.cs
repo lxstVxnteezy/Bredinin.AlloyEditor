@@ -1,4 +1,4 @@
-﻿namespace Bredinin.MyPetProject.Domain.Alloys
+﻿namespace Bredinin.AlloyEditor.Domain.Alloys
 {
     public class AlloyGrade : BaseEntity
     {

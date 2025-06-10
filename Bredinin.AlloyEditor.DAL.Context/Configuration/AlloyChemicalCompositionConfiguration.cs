@@ -1,4 +1,4 @@
-﻿using Bredinin.MyPetProject.Domain.Alloys;
+﻿using Bredinin.AlloyEditor.Domain.Alloys;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

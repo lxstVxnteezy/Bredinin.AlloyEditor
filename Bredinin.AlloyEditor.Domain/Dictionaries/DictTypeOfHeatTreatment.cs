@@ -1,4 +1,4 @@
-﻿namespace Bredinin.MyPetProject.Domain.Dictionaries
+﻿namespace Bredinin.AlloyEditor.Domain.Dictionaries
 {
     public class DictTypeOfHeatTreatment : BaseEntity
     {

@@ -1,6 +1,6 @@
-﻿using Bredinin.MyPetProject.Domain;
-using Bredinin.MyPetProject.Domain.Alloys;
-using Bredinin.MyPetProject.Domain.Dictionaries;
+﻿using Bredinin.AlloyEditor.Domain;
+using Bredinin.AlloyEditor.Domain.Alloys;
+using Bredinin.AlloyEditor.Domain.Dictionaries;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.DAL;

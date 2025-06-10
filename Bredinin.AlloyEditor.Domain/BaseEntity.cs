@@ -1,4 +1,4 @@
-﻿namespace Bredinin.MyPetProject.Domain;
+﻿namespace Bredinin.AlloyEditor.Domain;
 
 public abstract class BaseEntity
 {

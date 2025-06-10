@@ -1,6 +1,6 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.Dictionaries.DictChemicalElements;
 using Bredinin.AlloyEditor.DAL.Core;
-using Bredinin.MyPetProject.Domain.Dictionaries;
+using Bredinin.AlloyEditor.Domain.Dictionaries;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Dictionaries.DictChemicalElements

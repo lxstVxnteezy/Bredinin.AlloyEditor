@@ -43,11 +43,13 @@ namespace Bredinin.AlloyEditor.Core.Http.Exceptions
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-            return context.Response.WriteAsync(new
+            var response = new
             {
                 StatusCode = context.Response.StatusCode,
-                Message = "An unexpected error occurred."
-            }.ToString());
+                Message = "An unexpected error occurred"
+            };
+
+            return context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(response));
         }
     }
 }

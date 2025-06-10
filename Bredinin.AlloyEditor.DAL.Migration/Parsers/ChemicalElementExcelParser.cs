@@ -1,4 +1,4 @@
-﻿using Bredinin.MyPetProject.Domain.Dictionaries;
+﻿using Bredinin.AlloyEditor.Domain.Dictionaries;
 using OfficeOpenXml;
 
 namespace Bredinin.AlloyEditor.DAL.Migration.Parsers

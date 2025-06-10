@@ -1,6 +1,6 @@
-﻿using Bredinin.MyPetProject.Domain.Dictionaries;
+﻿using Bredinin.AlloyEditor.Domain.Dictionaries;
 
-namespace Bredinin.MyPetProject.Domain.Alloys
+namespace Bredinin.AlloyEditor.Domain.Alloys
 {
     public class AlloyChemicalCompositions : BaseEntity
     {

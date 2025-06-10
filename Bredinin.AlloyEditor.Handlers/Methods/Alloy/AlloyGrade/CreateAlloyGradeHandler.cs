@@ -1,7 +1,7 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.Core.Http.Exceptions;
 using Bredinin.AlloyEditor.DAL.Core;
-using Bredinin.MyPetProject.Domain.Alloys;
+using Bredinin.AlloyEditor.Domain.Alloys;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
@@ -10,7 +10,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
     {
         Task<Guid> Handle(CreateAlloyGradeRequest request, CancellationToken ctn);
     }
-    internal class CreateAlloyGradeHandler(IRepository<MyPetProject.Domain.Alloys.AlloyGrade> alloyGradeRepository)
+    internal class CreateAlloyGradeHandler(IRepository<Domain.Alloys.AlloyGrade> alloyGradeRepository)
         : ICreateAlloyGradeHandler
     {
         public async Task<Guid> Handle(CreateAlloyGradeRequest request, CancellationToken ctn)
@@ -20,7 +20,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
             if (data != null)
                 throw new BusinessException("already exist");
 
-            var newAlloyGrade = new MyPetProject.Domain.Alloys.AlloyGrade()
+            var newAlloyGrade = new Domain.Alloys.AlloyGrade()
             {
                 Id = Guid.NewGuid(),
                 Name = request.Name,
