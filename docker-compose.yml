@@ -1,4 +1,12 @@
-﻿version: '3.8'  # Хотя version устарела, можно оставить для совместимости
+﻿networks:
+  monitoring:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local
+  grafana_data:
+    driver: local
 
 services:
   db:
@@ -8,23 +16,56 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: alloyeddb
     volumes:
       - db_data:/var/lib/postgresql/data
     container_name: db_postgresql_container
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - monitoring
+
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317"
+      - "8888:8888"
+      - "8889:8889"
+      - "13133:13133"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - monitoring
 
   alloyeditor_webapi:
     build:
+      context: .
       dockerfile: Dockerfile
     ports:
       - "5019:5019"
     container_name: alloyeditor_web_api
-    depends_on:
-      - db
     environment:
-      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=alloyeddb;Username=postgres;Password=postgres
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=alloyeddb;Username=postgres;Password=postgres"
+      ASPNETCORE_URLS: "http://+:5019"
+      Otel__Endpoint: "http://otel-collector:4317"
+    depends_on:
+      otel-collector:
+        condition: service_started
+      db:
+        condition: service_healthy
+    networks:
+      - monitoring
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:latest
+    container_name: prometheus
     ports:
       - "9090:9090"
     volumes:
@@ -32,17 +73,22 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     depends_on:
-      - alloyeditor_webapi  # Только ждем webapi, без цикла
+      - otel-collector
+    networks:
+      - monitoring
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana-oss:latest
+    container_name: grafana
     ports:
       - "3000:3000"
     volumes:
       - grafana_data:/var/lib/grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_PATHS_PROVISIONING: /etc/grafana/provisioning
     depends_on:
-      - prometheus  # Только ждем prometheus
-
-volumes:
-  db_data:
-  grafana_data:
+      - prometheus
+    networks:
+      - monitoring

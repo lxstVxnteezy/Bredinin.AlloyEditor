@@ -17,7 +17,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
             if (foundAlloyGrade == null)
                 throw new BusinessException("not found in db");
 
-            alloyGradeRepository.RemoveById(foundAlloyGrade.Id);
+            alloyGradeRepository.Remove(foundAlloyGrade);
             
             await alloyGradeRepository.SaveChanges(ctn);
 

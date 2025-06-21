@@ -6,7 +6,8 @@ using Bredinin.AlloyEditor.DAL.Core;
 using Bredinin.AlloyEditor.DAL.Migration;
 using Bredinin.AlloyEditor.Handlers;
 using Bredinin.AlloyEditor.WebAPI;
-using Prometheus;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 using Serilog;
 
 
@@ -17,7 +18,21 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
-#region Services
+
+builder.Services.AddOpenTelemetry()
+    .WithMetrics(opt =>
+
+        opt
+            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("AlloyEditor.GatewayAPI"))
+            .AddAspNetCoreInstrumentation()
+            .AddRuntimeInstrumentation()
+            .AddConsoleExporter() 
+            .AddProcessInstrumentation()
+            .AddOtlpExporter(opts =>
+            {
+                opts.Endpoint = new Uri(builder.Configuration["Otel:Endpoint"] ?? "otel-collector:4317");
+            })
+    );
 
 builder.Services.AddSerilog();
 builder.Services.AddControllers();
@@ -29,15 +44,11 @@ builder.Services.AddHandlers();
 builder.Services.AddServerMetrics();
 builder.Services.AddDataAccess(builder.Configuration);
 
-#endregion
-
 var app = builder.Build();
 
-#region Middlewares
 app.UseSerilogRequestLogging();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseRouting();
-app.UseHttpMetrics();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();
@@ -45,11 +56,7 @@ app.UseCustomSwagger();
 app.UseDatabaseMigrations();
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapMetrics();
     endpoints.MapControllers();
 });
-
-
-#endregion
 
 app.Run();

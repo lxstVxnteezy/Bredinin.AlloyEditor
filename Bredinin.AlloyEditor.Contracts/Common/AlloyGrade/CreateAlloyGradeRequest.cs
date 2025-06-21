@@ -1,6 +1,4 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions;
-
-namespace Bredinin.AlloyEditor.Contracts.Common.AlloyGrade
+﻿namespace Bredinin.AlloyEditor.Contracts.Common.AlloyGrade
 {
     public record CreateAlloyGradeRequest(string Name, string? Description, Guid AlloySystemId, CreateChemicalCompositionRequest[] ChemicalCompositions);
     public record CreateChemicalCompositionRequest(decimal? MinValue,

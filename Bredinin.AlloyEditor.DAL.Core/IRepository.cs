@@ -12,7 +12,6 @@
         void Remove(TEntity entity);
         void Remove(Guid id);
         void RemoveRange(TEntity[] entities);
-        void RemoveById(Guid id);
         Task SaveChanges(CancellationToken ctn = default);
     }
 }

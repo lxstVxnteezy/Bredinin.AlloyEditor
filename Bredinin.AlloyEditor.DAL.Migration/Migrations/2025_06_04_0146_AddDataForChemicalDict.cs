@@ -1,5 +1,8 @@
-﻿using Bredinin.AlloyEditor.DAL.Migration.Parsers;
+﻿using System.Globalization;
+using Bredinin.AlloyEditor.DAL.Migration.Parsers;
 using FluentMigrator;
+using Npgsql;
+using NpgsqlTypes;
 
 namespace Bredinin.AlloyEditor.DAL.Migration.Migrations
 {
@@ -9,24 +12,61 @@ namespace Bredinin.AlloyEditor.DAL.Migration.Migrations
         public override void Up()
         {
             var elements = ChemicalElementExcelParser.ParseElements();
-
-            foreach (var element in elements)
+            var culture = CultureInfo.InvariantCulture;
+            Execute.WithConnection((connection, transaction) =>
             {
-                Insert.IntoTable("dict_chemical_elements")
-                    .Row(new
+                var npgsqlConnection = (NpgsqlConnection)connection;
+                var npgsqlTransaction = (NpgsqlTransaction)transaction;
+
+                using (var cmd = new NpgsqlCommand(@"
+                    CREATE TEMPORARY TABLE temp_chemical_elements (
+                        LIKE dict_chemical_elements INCLUDING DEFAULTS
+                    ) ON COMMIT DROP", npgsqlConnection, npgsqlTransaction))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var writer = npgsqlConnection.BeginTextImport(@"
+                    COPY temp_chemical_elements 
+                    (id, name, symbol, description, is_base_for_alloy_system, 
+                     atomic_number, atomic_weight, ""group"", period, density) 
+                    FROM STDIN"))
+                {
+                    foreach (var element in elements)
                     {
-                        id = element.Id,
-                        name = element.Name,
-                        symbol = element.Symbol,
-                        description = element.Description,
-                        is_base_for_alloy_system = element.IsBaseForAlloySystem,
-                        atomic_number = element.AtomicNumber,
-                        atomic_weight = element.AtomicWeight,
-                        group = element.Group,
-                        period = element.Period,
-                        density = element.Density
-                    });
-            }
+                        writer.Write(Guid.NewGuid().ToString()); 
+                        writer.Write("\t");
+                        writer.Write(element.Name ?? "");       
+                        writer.Write("\t");
+                        writer.Write(element.Symbol ?? "");      
+                        writer.Write("\t");
+                        writer.Write(element.Description ?? ""); 
+                        writer.Write("\t");
+                        writer.Write(element.IsBaseForAlloySystem.ToString().ToLower());
+                        writer.Write("\t");
+                        writer.Write(element.AtomicNumber.ToString(culture));
+                        writer.Write("\t");
+
+                        writer.Write(element.AtomicWeight.ToString(culture)); 
+                        writer.Write("\t");
+                        writer.Write(element.Group.ToString(culture)); 
+                        writer.Write("\t");
+                        writer.Write(element.Period.ToString(culture)); 
+                        writer.Write("\t");
+
+                        writer.Write(element.Density.ToString(culture)); 
+                        writer.WriteLine();
+                    }
+                }
+
+                using (var cmd = new NpgsqlCommand(@"
+                    INSERT INTO dict_chemical_elements 
+                    SELECT * FROM temp_chemical_elements",
+                    npgsqlConnection, npgsqlTransaction))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            });
         }
     }
 }

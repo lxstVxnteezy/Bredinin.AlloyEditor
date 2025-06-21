@@ -1,22 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Bredinin.AlloyEditor.Common.Desktop</RootNamespace>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Prism.Container.Abstractions" Version="9.0.106" />
+    <PackageReference Include="Prism.Unity" Version="9.0.537" />
+    <PackageReference Include="Prism.Wpf" Version="9.0.537" />
     <PackageReference Include="Refit" Version="8.0.0" />
     <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
     <PackageReference Include="Refit.Newtonsoft.Json" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bredinin.AlloyEditor.Contracts\Bredinin.AlloyEditor.Contracts.csproj" />
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Desktop.Common\Bredinin.AlloyEditor.Desktop.Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -27,7 +27,7 @@ public static class DependenciesExtensions
 
         runnerBuilder
             .AddPostgres()
-            .WithGlobalConnectionString(configuration.GetConnectionString("DefaultConnection"))
+            .WithGlobalConnectionString(connectionString)
             .ScanIn(typeof(DependenciesExtensions).Assembly).For.Migrations();
     }
 

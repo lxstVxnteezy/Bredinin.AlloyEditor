@@ -46,12 +46,6 @@ namespace Bredinin.AlloyEditor.DAL.Core
         {
             Context.Set<TEntity>().RemoveRange(entities);
         }
-        public void RemoveById(Guid id)
-        {
-            var entity = GetById(id);
-
-            Context.Set<TEntity>().Remove(entity);
-        }
 
         public Task SaveChanges(CancellationToken ctn)
         {
