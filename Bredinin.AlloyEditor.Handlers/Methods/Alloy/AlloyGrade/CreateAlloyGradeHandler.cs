@@ -10,14 +10,25 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
     {
         Task<Guid> Handle(CreateAlloyGradeRequest request, CancellationToken ctn);
     }
-    internal class CreateAlloyGradeHandler(IRepository<Domain.Alloys.AlloyGrade> alloyGradeRepository)
+    internal class CreateAlloyGradeHandler(
+        IRepository<Domain.Alloys.AlloyGrade> alloyGradeRepository,
+        IRepository<Domain.Alloys.AlloySystem> alloySystemRepository)
         : ICreateAlloyGradeHandler
     {
         public async Task<Guid> Handle(CreateAlloyGradeRequest request, CancellationToken ctn)
         {
-            var data = await alloyGradeRepository.Query.SingleOrDefaultAsync(x => x.Name == request.Name, ctn);
+            var foundAlloySystem = alloySystemRepository.Query
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.Id == request.AlloySystemId, ctn);
 
-            if (data != null)
+            if (foundAlloySystem == null)
+                throw new BusinessException("not found alloySystem");
+
+            var foundAlloy = await alloyGradeRepository.Query
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.Name == request.Name, ctn);
+
+            if (foundAlloy != null)
                 throw new BusinessException("already exist");
 
             var newAlloyGrade = new Domain.Alloys.AlloyGrade()
@@ -33,7 +44,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
                     ExactValue = cc.ExactValue,
                     ChemicalElementId = cc.ChemicalElementId,
                 }
-                ).ToList()
+                ).ToArray()
             };
 
             alloyGradeRepository.Add(newAlloyGrade);

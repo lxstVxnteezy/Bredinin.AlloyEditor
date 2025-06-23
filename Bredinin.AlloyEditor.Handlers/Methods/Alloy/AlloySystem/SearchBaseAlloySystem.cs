@@ -13,7 +13,9 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloySystem
     {
         public async Task<SearchAlloySystemResponse[]> Handle(CancellationToken ctn)
         {
-            var data = await alloySystemRepository.Query.ToArrayAsync(ctn);
+            var data = await alloySystemRepository.Query
+                .AsNoTracking()
+                .ToArrayAsync(ctn);
 
             return data.Select(MapToResponse).ToArray();
         }

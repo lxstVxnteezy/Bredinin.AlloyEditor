@@ -9,7 +9,7 @@ namespace Bredinin.AlloyEditor.WebAPI.Controllers.Dictionaries
     public class DictionaryController : BaseApiController
     {
         [HttpGet("/chemical-elements")]
-        public Task<DictChemicalElementResponse[]> GetChemicalElements(
+        public Task<DictChemicalElementResponse[]?> GetChemicalElements(
             [FromServices] IInfoDictChemicalElementsHandler handler,
             CancellationToken ctn)
         {

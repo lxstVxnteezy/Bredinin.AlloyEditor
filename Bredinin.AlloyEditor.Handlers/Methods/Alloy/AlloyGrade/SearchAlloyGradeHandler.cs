@@ -16,6 +16,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
         public async Task<AlloyGradeResponse[]> Handle(CancellationToken ctn)
         {
             var alloys = await alloyGradeRepository.Query
+                .AsNoTracking()
                 .Include(x => x.ChemicalCompositions)
                 .ToArrayAsync(ctn);
 

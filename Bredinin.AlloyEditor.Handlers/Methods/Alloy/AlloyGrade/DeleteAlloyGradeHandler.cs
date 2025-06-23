@@ -21,7 +21,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
             
             await alloyGradeRepository.SaveChanges(ctn);
 
-            return new StatusCodeResult(204);
+            return new ContentResult();
         }
     }
 }

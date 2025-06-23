@@ -43,6 +43,7 @@ builder.Services.AddAddAuthenticationCustom();
 builder.Services.AddHandlers();
 builder.Services.AddServerMetrics();
 builder.Services.AddDataAccess(builder.Configuration);
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 

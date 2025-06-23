@@ -2,7 +2,6 @@
 using Bredinin.AlloyEditor.DAL.Migration.Parsers;
 using FluentMigrator;
 using Npgsql;
-using NpgsqlTypes;
 
 namespace Bredinin.AlloyEditor.DAL.Migration.Migrations
 {

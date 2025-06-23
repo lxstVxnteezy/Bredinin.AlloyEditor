@@ -2,23 +2,35 @@
 using Bredinin.AlloyEditor.DAL.Core;
 using Bredinin.AlloyEditor.Domain.Dictionaries;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Dictionaries.DictChemicalElements
 {
     public interface IInfoDictChemicalElementsHandler : IHandler
     {
-        public Task<DictChemicalElementResponse[]> Handle(CancellationToken ctn = default);
+        public Task<DictChemicalElementResponse[]?> Handle(CancellationToken ctn = default);
     }
 
-    internal class InfoDictChemicalElementsHandler(IRepository<DictChemicalElement> dictChemicalElementRepository)
+    internal class InfoDictChemicalElementsHandler(
+        IMemoryCache memoryCache,
+        IRepository<DictChemicalElement> dictChemicalElementRepository)
         : IInfoDictChemicalElementsHandler
     {
+        private const string CacheKey = nameof(InfoDictChemicalElementsHandler);
 
-        public async Task<DictChemicalElementResponse[]> Handle(CancellationToken ctn = default)
+        public async Task<DictChemicalElementResponse[]?> Handle(CancellationToken ctn = default)
         {
-            var chemicalElements = await dictChemicalElementRepository.Query.ToArrayAsync(ctn);
+            return await memoryCache.GetOrCreateAsync(CacheKey, async entry =>
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(4);
+                entry.SetPriority(CacheItemPriority.High);
 
-            return chemicalElements.Select(MapToResponse).ToArray();
+                var chemicalElements = await dictChemicalElementRepository.Query
+                    .AsNoTracking()
+                    .ToArrayAsync(ctn);
+
+                return chemicalElements.Select(MapToResponse).ToArray();
+            });
         }
 
         private static DictChemicalElementResponse MapToResponse(DictChemicalElement chemicalElement)
