@@ -1,4 +1,4 @@
-﻿using Bredinin.AlloyEditor.Domain;
+﻿using Bredinin.AlloyEditor.Domain.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,6 +10,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         builder.ToTable("users");
 
         builder.Property(x => x.Id).HasColumnName("id");
+        builder.Property(x => x.Login).HasColumnName("login");
         builder.Property(x => x.FirstName).HasColumnName("first_name");
         builder.Property(x => x.LastName).HasColumnName("last_name");
         builder.Property(x => x.SecondName).HasColumnName("second_name");

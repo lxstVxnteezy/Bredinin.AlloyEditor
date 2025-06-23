@@ -1,7 +1,8 @@
-﻿namespace Bredinin.AlloyEditor.Domain;
+﻿namespace Bredinin.AlloyEditor.Domain.Identity;
 
 public class User : BaseEntity
 {
+    public string Login { get; set; } = null!;
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public string SecondName { get; set; } = null!;

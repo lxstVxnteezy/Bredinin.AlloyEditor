@@ -1,6 +1,6 @@
-﻿using Bredinin.AlloyEditor.Domain;
-using Bredinin.AlloyEditor.Domain.Alloys;
+﻿using Bredinin.AlloyEditor.Domain.Alloys;
 using Bredinin.AlloyEditor.Domain.Dictionaries;
+using Bredinin.AlloyEditor.Domain.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.DAL;

@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bredinin.AlloyEditor.Contracts\Bredinin.AlloyEditor.Contracts.csproj" />
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Core.Authentication\Bredinin.AlloyEditor.Core.Authentication.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Core.Http\Bredinin.AlloyEditor.Core.Http.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.DAL.Core\Bredinin.AlloyEditor.DAL.Core.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Domain\Bredinin.AlloyEditor.Domain.csproj" />
