@@ -22,7 +22,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Dictionaries.DictChemicalElement
         {
             return await memoryCache.GetOrCreateAsync(CacheKey, async entry =>
             {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(4);
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15);
                 entry.SetPriority(CacheItemPriority.High);
 
                 var chemicalElements = await dictChemicalElementRepository.Query

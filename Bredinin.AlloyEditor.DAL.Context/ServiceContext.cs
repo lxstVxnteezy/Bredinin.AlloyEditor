@@ -19,4 +19,6 @@ public class ServiceContext(DbContextOptions options) : DbContext(options)
     public DbSet<DictChemicalElement> DictChemicalElements { get; set; }
     public DbSet<AlloySystem> AlloySystems { get; set; }
     public DbSet<AlloyHeatTreatment> AlloyHeatTreatments { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<RoleUser> RoleUsers { get; set; }
 }

@@ -1,21 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Bredinin.AlloyEditor.Core.Http.Exceptions
 {
-    public class ErrorHandlingMiddleware
+    public class ErrorHandlingMiddleware(RequestDelegate next, ILogger <ErrorHandlingMiddleware> logger)
     {
-        private readonly RequestDelegate _next;
-
-        public ErrorHandlingMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
-
         public async Task InvokeAsync(HttpContext context)
         {
             try
             {
-                await _next(context);
+                await next(context);
             }
             catch (BusinessException ex)
             {
@@ -23,11 +19,12 @@ namespace Bredinin.AlloyEditor.Core.Http.Exceptions
             }
             catch (Exception ex)
             {
+                logger.LogError(ex,ex.Message);
                 await HandleUnexpectedExceptionAsync(context, ex);
             }
         }
 
-        private Task HandleBusinessExceptionAsync(HttpContext context, BusinessException ex)
+        private async Task HandleBusinessExceptionAsync(HttpContext context, BusinessException ex)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
@@ -36,9 +33,10 @@ namespace Bredinin.AlloyEditor.Core.Http.Exceptions
                 StatusCode = context.Response.StatusCode,
                 Message = ex.Message
             };
-            return context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(response));
+
+            await JsonSerializer.SerializeAsync(context.Response.Body, response);
         }
-        private Task HandleUnexpectedExceptionAsync(HttpContext context, Exception ex)
+        private async Task HandleUnexpectedExceptionAsync(HttpContext context, Exception ex)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
@@ -49,7 +47,7 @@ namespace Bredinin.AlloyEditor.Core.Http.Exceptions
                 Message = "An unexpected error occurred"
             };
 
-            return context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(response));
+            await JsonSerializer.SerializeAsync(context.Response.Body, response);
         }
     }
 }

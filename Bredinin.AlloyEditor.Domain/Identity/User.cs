@@ -8,4 +8,7 @@ public class User : BaseEntity
     public string SecondName { get; set; } = null!;
     public int Age { get; set; }
     public string Hash { get; set; } = null!;
+
+    public ICollection<RoleUser> RoleUsers { get; set; } 
+        = new List<RoleUser>();
 }

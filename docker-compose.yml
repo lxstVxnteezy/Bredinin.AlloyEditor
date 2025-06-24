@@ -36,7 +36,6 @@ services:
     ports:
       - "4317:4317"
       - "8888:8888"
-      - "8889:8889"
       - "13133:13133"
     depends_on:
       db:
@@ -55,6 +54,11 @@ services:
       ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=alloyeddb;Username=postgres;Password=postgres"
       ASPNETCORE_URLS: "http://+:5019"
       Otel__Endpoint: "http://otel-collector:4317"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      JWT_KEY: "z6M9eR2XkH5wL8pQ1sT7uV4yA3dF6gJ9nB0oC7hP2qW5rE8tY1iU4oK3lN6m"
+      JWT_ISSUER: "https://localhost"
+      JWT_AUDIENCE: "Alloy Editor"
+
     depends_on:
       otel-collector:
         condition: service_started
