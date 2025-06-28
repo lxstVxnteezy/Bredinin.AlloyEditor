@@ -1,7 +1,15 @@
-﻿namespace Bredinin.AlloyEditor.Core.Validation
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace Bredinin.AlloyEditor.Core.Validation
 {
-    public class Class1
+    public static class DependenciesExtensions
     {
+        public static IServiceCollection AddValidation(this IServiceCollection service)
+        {
+
+
+            return service;
+        }
 
     }
 }
