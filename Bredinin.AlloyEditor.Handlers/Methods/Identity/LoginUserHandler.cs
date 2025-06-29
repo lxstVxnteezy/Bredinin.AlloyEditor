@@ -22,7 +22,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Identity
                 .SingleOrDefaultAsync(x => x.Login == request.Login, ctn);
 
             if (user == null)
-                throw new BusinessException("User not found");
+                throw new BusinessException($"User with login: {request.Login} not registered.");
 
             var result = passwordHasher.VerifyPassword(request.Password, user.Hash);
 

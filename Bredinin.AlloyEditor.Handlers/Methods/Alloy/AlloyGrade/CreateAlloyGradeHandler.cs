@@ -37,12 +37,12 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
                 Name = request.Name,
                 Description = request.Description,
                 AlloySystemId = request.AlloySystemId,
-                ChemicalCompositions = request.ChemicalCompositions.Select(cc => new AlloyChemicalCompositions()
+                ChemicalCompositions = request.ChemicalCompositions.Select(element => new AlloyChemicalCompositions()
                 {
-                    MinValue = cc.MinValue,
-                    MaxValue = cc.MaxValue,
-                    ExactValue = cc.ExactValue,
-                    ChemicalElementId = cc.ChemicalElementId,
+                    MinValue = element.MinValue,
+                    MaxValue = element.MaxValue,
+                    ExactValue = element.ExactValue,
+                    ChemicalElementId = element.ChemicalElementId,
                 }
                 ).ToArray()
             };

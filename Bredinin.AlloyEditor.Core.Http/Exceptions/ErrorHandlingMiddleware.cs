@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Serilog;
 
 namespace Bredinin.AlloyEditor.Core.Http.Exceptions
 {
