@@ -1,6 +1,7 @@
 using Bredinin.AlloyEditor.Identity.Service;
 using Bredinin.AlloyEditor.Identity.Service.Authentication;
 using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
+using Bredinin.AlloyEditor.Identity.Service.Handler;
 using Bredinin.AlloyEditor.Identity.Service.Migration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAddAuthenticationCustom();
 builder.Services.AddDataAccess(builder.Configuration);
 builder.Services.AddDatabaseMigrations(builder.Configuration);
+builder.Services.AddApplicationHandlers();
 
 var app = builder.Build();
 

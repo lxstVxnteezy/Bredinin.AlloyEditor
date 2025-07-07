@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Authentication\Bredinin.AlloyEditor.Identity.Service.Authentication.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.DAL.Context\Bredinin.AlloyEditor.Identity.Service.DAL.Context.csproj" />
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Handlers\Bredinin.AlloyEditor.Identity.Service.Handlers.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Migration\Bredinin.AlloyEditor.Identity.Service.Migration.csproj" />
   </ItemGroup>
 

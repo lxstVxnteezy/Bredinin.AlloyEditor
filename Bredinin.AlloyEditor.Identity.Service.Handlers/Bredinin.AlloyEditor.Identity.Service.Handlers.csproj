@@ -7,4 +7,18 @@
     <RootNamespace>Bredinin.AlloyEditor.Identity.Service.Handler</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Users\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="13.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Authentication\Bredinin.AlloyEditor.Identity.Service.Authentication.csproj" />
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Contracts\Bredinin.AlloyEditor.Identity.Service.Contracts.csproj" />
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.DAL.Context\Bredinin.AlloyEditor.Identity.Service.DAL.Context.csproj" />
+  </ItemGroup>
+
 </Project>
