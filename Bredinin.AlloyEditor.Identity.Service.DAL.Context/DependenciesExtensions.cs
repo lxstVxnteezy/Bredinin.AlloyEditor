@@ -2,16 +2,14 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Bredinin.AlloyEditor.DAL.Core
+namespace Bredinin.AlloyEditor.Identity.Service.DAL.Context
 {
     public static class DependenciesExtensions
     {
         public static IServiceCollection AddDataAccess(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ServiceDbContext>(options =>
+            services.AddDbContext<IdentityDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             return services;
         }

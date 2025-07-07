@@ -1,8 +1,8 @@
-﻿using Bredinin.AlloyEditor.Domain.Identity;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Bredinin.AlloyEditor.Identity.Service.Domain;
 
-namespace Bredinin.AlloyEditor.DAL.Configuration
+namespace Bredinin.AlloyEditor.Identity.Service.DAL.Context.Configuration
 {
     internal class RoleConfiguration : IEntityTypeConfiguration<Role>
     {

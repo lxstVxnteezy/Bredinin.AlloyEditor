@@ -1,6 +1,8 @@
-﻿namespace Bredinin.AlloyEditor.Domain.Identity
+﻿using Bredinin.AlloyEditor.Identity.Service.Domain.Base;
+
+namespace Bredinin.AlloyEditor.Identity.Service.Domain
 {
-    public class RoleUser : BaseEntity
+    public class UserRole: BaseEntity
     {
         public Role Role { get; set; } = null!;
         public Guid RoleId { get; set; }

@@ -1,4 +1,3 @@
-using Bredinin.AlloyEditor.Core.Authentication;
 using Bredinin.AlloyEditor.Core.Http.Exceptions;
 using Bredinin.AlloyEditor.Core.Metrics;
 using Bredinin.AlloyEditor.Core.Swagger;
@@ -39,7 +38,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCustomSwagger();
 builder.Services.AddDatabaseMigrations(builder.Configuration);
-builder.Services.AddAddAuthenticationCustom();
 builder.Services.AddHandlers();
 builder.Services.AddServerMetrics();
 builder.Services.AddDataAccess(builder.Configuration);

@@ -22,7 +22,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
                 .SingleOrDefaultAsync(x => x.Id == request.AlloySystemId, ctn);
 
             if (foundAlloySystem == null)
-                throw new BusinessException("not found alloySystem");
+                throw new BusinessException($"alloy system not found {request.AlloySystemId}");
 
             var foundAlloy = await alloyGradeRepository.Query
                 .AsNoTracking()
@@ -37,7 +37,8 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
                 Name = request.Name,
                 Description = request.Description,
                 AlloySystemId = request.AlloySystemId,
-                ChemicalCompositions = request.ChemicalCompositions.Select(element => new AlloyChemicalCompositions()
+                ChemicalCompositions = request.ChemicalCompositions
+                    .Select(element => new AlloyChemicalCompositions()
                 {
                     MinValue = element.MinValue,
                     MaxValue = element.MaxValue,

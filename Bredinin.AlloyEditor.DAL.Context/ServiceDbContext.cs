@@ -1,24 +1,20 @@
 ﻿using Bredinin.AlloyEditor.Domain.Alloys;
 using Bredinin.AlloyEditor.Domain.Dictionaries;
-using Bredinin.AlloyEditor.Domain.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.DAL;
 
-public class ServiceContext(DbContextOptions options) : DbContext(options)
+public class ServiceDbContext(DbContextOptions options) : DbContext(options)
 {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ServiceContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ServiceDbContext).Assembly);
     }
 
     public DbSet<DictTypeOfHeatTreatment> DictTypesOfHeatTreatments { get; set; }
-    public DbSet<User> Users { get; set; }
     public DbSet<AlloyGrade> AlloyGrades { get; set; }
     public DbSet<AlloyChemicalCompositions> AlloyChemicalCompositions { get; set; }
     public DbSet<DictChemicalElement> DictChemicalElements { get; set; }
     public DbSet<AlloySystem> AlloySystems { get; set; }
     public DbSet<AlloyHeatTreatment> AlloyHeatTreatments { get; set; }
-    public DbSet<Role> Roles { get; set; }
-    public DbSet<RoleUser> RoleUsers { get; set; }
 }

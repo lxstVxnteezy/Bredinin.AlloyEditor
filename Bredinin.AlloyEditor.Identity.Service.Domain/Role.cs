@@ -1,4 +1,6 @@
-﻿namespace Bredinin.AlloyEditor.Domain.Identity
+﻿using Bredinin.AlloyEditor.Identity.Service.Domain.Base;
+
+namespace Bredinin.AlloyEditor.Identity.Service.Domain
 {
     public class Role : BaseEntity
     {

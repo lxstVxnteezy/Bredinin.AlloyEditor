@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.DAL.Core
 {
-    internal class Repository<TEntity>(ServiceContext context) : IRepository<TEntity>
+    internal class Repository<TEntity>(ServiceDbContext context) : IRepository<TEntity>
         where TEntity : BaseEntity
     {
-        protected readonly ServiceContext Context = context;
+        protected readonly ServiceDbContext Context = context;
         public IQueryable<TEntity> Query => Context.Set<TEntity>();
         public virtual TEntity GetById(Guid id)
         {
