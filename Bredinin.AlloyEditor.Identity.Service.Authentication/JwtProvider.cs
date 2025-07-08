@@ -8,9 +8,9 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication
 {
     public static class JwtProvider
     {
-        public static readonly string Key;
-        public static readonly string Issuer;
-        public static readonly string Audience;
+        internal static readonly string Key;
+        internal static readonly string Issuer;
+        internal static readonly string Audience;
 
         static JwtProvider()
         {
@@ -23,7 +23,15 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication
         }
         public static string GenerateToken(User user)
         {
-            Claim[] claims = [new("userId", user.Id.ToString())];
+
+            var claims = new[]
+                {
+                    new Claim("userId", user.Id.ToString()),
+                    new Claim("userLogin", user.Login),
+                }
+                .Concat(user.UserRoles.Select(ur => new Claim(ClaimTypes.Role, ur.Role.Name)))
+                .ToList();
+
 
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(

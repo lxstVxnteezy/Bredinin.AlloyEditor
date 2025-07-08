@@ -2,5 +2,9 @@
 
 namespace Bredinin.AlloyEditor.Identity.Service.Contracts.Queries
 {
-    public record GetJwtTokenQuery(string Username, string Password) : IRequest<string>;
+    public record GetJwtTokenQuery : IRequest<string>
+    {
+        public string Login { get; set; } = null!;
+        public string Password { get; set; } = null!;
+    }
 }

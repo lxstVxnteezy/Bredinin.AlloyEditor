@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Identity.Service.Handler
 {
-    public class CreateUserCommandHandler(IdentityDbContext context, IPasswordHasher passwordHasher) : IRequestHandler<CreateUserCommand, Guid>
+    public class CreateUserCommandHandler(
+        IdentityDbContext context, 
+        IPasswordHasher passwordHasher) : IRequestHandler<CreateUserCommand, Guid>
     {
         public async Task<Guid> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
@@ -29,7 +31,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler
                 SecondName = request.SecondName,
                 Age = request.Age,
                 Hash = passwordHasher.Generate(request.Password),
-                UserRoles = request.RoleIds.Select(roleId => new UserRole { RoleId = roleId }).ToList()
+                UserRoles = request.RoleIds.Select(roleId => new UserRole { RoleId = roleId }).ToArray()
             };
 
             await context.Users.AddAsync(user, cancellationToken);
