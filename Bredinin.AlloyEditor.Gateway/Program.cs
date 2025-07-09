@@ -1,41 +1,35 @@
+using Bredinin.AlloyEditor.Gateway.Infrastructure;
 using Microsoft.OpenApi.Models;
-using Ocelot.DependencyInjection;
-using Ocelot.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Загрузка конфигурации Ocelot
-builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+// Конфигурация
+builder.Configuration
+    .AddJsonFile("ocelot.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables();
 
-// Добавление Ocelot и SwaggerForOcelot (один раз!)
-builder.Services.AddOcelot();
-builder.Services.AddSwaggerForOcelot(builder.Configuration);
+// Ocelot и Swagger
+builder.Services.AddGatewayOcelot(builder.Configuration);
 
-// Базовый Swagger (опционально)
+// JWT аутентификация
+builder.Services.AddJwtAuthentication(builder.Configuration);
+
+// Контроллеры
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gateway API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gateway Controllers", Version = "v1" });
 });
 
 var app = builder.Build();
 
-// Swagger UI для Ocelot
-app.UseSwaggerForOcelotUI(opt =>
-{
-    opt.PathToSwaggerGenerator = "/swagger/docs";
-});
-
-// Если нужно, можно оставить стандартный Swagger UI
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+// Middleware pipeline
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseGatewayOcelot();
 app.MapControllers();
 
-await app.UseOcelot();
 app.Run();

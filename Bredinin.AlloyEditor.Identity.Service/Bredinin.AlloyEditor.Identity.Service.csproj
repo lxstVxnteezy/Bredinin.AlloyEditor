@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Core.Authentication\Bredinin.AlloyEditor.Identity.Service.Core.Authentication.csproj" />
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Core.Swagger\Bredinin.AlloyEditor.Identity.Service.Core.Swagger.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.DAL.Context\Bredinin.AlloyEditor.Identity.Service.DAL.Context.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Handlers\Bredinin.AlloyEditor.Identity.Service.Handlers.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Migration\Bredinin.AlloyEditor.Identity.Service.Migration.csproj" />

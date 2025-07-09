@@ -1,5 +1,6 @@
 using Bredinin.AlloyEditor.Identity.Service;
 using Bredinin.AlloyEditor.Identity.Service.Authentication;
+using Bredinin.AlloyEditor.Identity.Service.Core.Swagger;
 using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
 using Bredinin.AlloyEditor.Identity.Service.Handler;
 using Bredinin.AlloyEditor.Identity.Service.Migration;
@@ -11,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddCustomSwagger();
 builder.Services.AddAddAuthenticationCustom();
 builder.Services.AddDataAccess(builder.Configuration);
 builder.Services.AddDatabaseMigrations(builder.Configuration);
@@ -26,6 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCustomSwagger();
 app.UseDatabaseMigrations();
 app.UseAuthorization();
 

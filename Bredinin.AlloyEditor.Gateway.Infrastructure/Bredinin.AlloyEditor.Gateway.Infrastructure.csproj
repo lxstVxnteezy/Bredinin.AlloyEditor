@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Domain\Bredinin.AlloyEditor.Identity.Service.Domain.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
+    <PackageReference Include="MMLib.SwaggerForOcelot" Version="9.0.0" />
   </ItemGroup>
 
 </Project>

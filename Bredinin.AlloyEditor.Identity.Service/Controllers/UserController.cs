@@ -1,5 +1,6 @@
 ﻿using Bredinin.AlloyEditor.Identity.Service.Contracts.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bredinin.AlloyEditor.Identity.Service.Controllers
@@ -24,5 +25,24 @@ namespace Bredinin.AlloyEditor.Identity.Service.Controllers
                 new { UserId = userId });
         }
 
+        [HttpGet("test")]
+        public async Task<IActionResult> Test()
+        {
+            await Task.Delay(5000);
+
+            var response = new
+            {
+                Status = "Success",
+                Message = "This is a test endpoint with 5-second delay",
+                Timestamp = DateTime.UtcNow,
+                Data = new
+                {
+                    ExampleValue = 42,
+                    Description = "This is just sample data"
+                }
+            };
+
+            return Ok(response);
+        }
     }
 }

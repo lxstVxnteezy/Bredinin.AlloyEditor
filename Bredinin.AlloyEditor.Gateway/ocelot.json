@@ -14,7 +14,7 @@
                     "Port": 5019
                 }
             ],
-            "SwaggerKey": "AlloyEditor"
+            "SwaggerKey": "Bredinin.AlloyEditor.Service"
         },
         {
             "UpstreamPathTemplate": "/api/alloys-systems",
@@ -27,7 +27,7 @@
                     "Port": 5019
                 }
             ],
-            "SwaggerKey": "AlloyEditor"
+            "SwaggerKey": "Bredinin.AlloyEditor.Service"
         },
         {
             "UpstreamPathTemplate": "/api/dictionary/chemical-elements",
@@ -40,17 +40,71 @@
                     "Port": 5019
                 }
             ],
-            "SwaggerKey": "AlloyEditor"
+            "SwaggerKey": "Bredinin.AlloyEditor.Service"
+        },
+
+        {
+            "UpstreamPathTemplate": "/api/identity/login",
+            "UpstreamHttpMethod": [ "POST" ],
+            "DownstreamPathTemplate": "/api/identity/login",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5020
+                }
+            ],
+            "SwaggerKey": "Bredinin.Identity.Service"
+        },
+        {
+            "UpstreamPathTemplate": "/api/users",
+            "UpstreamHttpMethod": [ "POST" ],
+            "DownstreamPathTemplate": "/api/users",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5020
+                }
+            ],
+            "SwaggerKey": "Bredinin.Identity.Service"
+        },
+        {
+            "UpstreamPathTemplate": "/api/users/test",
+            "UpstreamHttpMethod": [ "GET" ],
+            "DownstreamPathTemplate": "/api/users/test",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5020
+                }
+            ],
+            "SwaggerKey": "Bredinin.Identity.Service",
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "Bearer",
+                "AllowedScopes": []
+            }
         }
     ],
     "SwaggerEndPoints": [
         {
-            "Key": "AlloyEditor",
+            "Key": "Bredinin.AlloyEditor.Service",
             "Config": [
                 {
-                    "Name": "AlloyEditor API",
+                    "Name": "Bredinin.AlloyEditor.Service",
                     "Version": "v1",
                     "Url": "http://localhost:5019/swagger/v1/swagger.json"
+                }
+            ]
+        },
+        {
+            "Key": "Bredinin.Identity.Service",
+            "Config": [
+                {
+                    "Name": "Bredinin.Identity.Service",
+                    "Version": "v1",
+                    "Url": "http://localhost:5020/swagger/v1/swagger.json"
                 }
             ]
         }
