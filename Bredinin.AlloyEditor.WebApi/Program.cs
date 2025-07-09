@@ -22,7 +22,7 @@ builder.Services.AddOpenTelemetry()
     .WithMetrics(opt =>
 
         opt
-            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("AlloyEditor.GatewayAPI"))
+            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("AlloyEditor.Inf-Microservice"))
             .AddAspNetCoreInstrumentation()
             .AddRuntimeInstrumentation()
             .AddConsoleExporter() 
@@ -50,7 +50,6 @@ app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseHttpsRedirection();
 app.UseCustomSwagger();
 app.UseDatabaseMigrations();
 app.UseEndpoints(endpoints =>

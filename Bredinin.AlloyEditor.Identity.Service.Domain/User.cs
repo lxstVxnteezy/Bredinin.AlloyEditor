@@ -11,7 +11,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Domain
         public int Age { get; set; }
         public string Hash { get; set; } = null!;
 
-        public ICollection<UserRole> UserRoles { get; set; }
+        public virtual ICollection<UserRole> UserRoles { get; set; }
             = new List<UserRole>();
     }
 }

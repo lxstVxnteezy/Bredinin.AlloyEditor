@@ -5,7 +5,7 @@ using Bredinin.AlloyEditor.Identity.Service.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bredinin.AlloyEditor.Identity.Service.Handler
+namespace Bredinin.AlloyEditor.Identity.Service.Handler.Users
 {
     public class CreateUserCommandHandler(
         IdentityDbContext context, 

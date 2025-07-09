@@ -65,7 +65,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{B56770
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{D90C29F7-AE09-4DAE-A71A-9ECA5B0BF20A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Identity.Service.Authentication", "Bredinin.AlloyEditor.Identity.Service.Authentication\Bredinin.AlloyEditor.Identity.Service.Authentication.csproj", "{D68B8BED-8C0A-4FD8-89FC-9B12EA3E56E7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Identity.Service.Core.Authentication", "Bredinin.AlloyEditor.Identity.Service.Core.Authentication\Bredinin.AlloyEditor.Identity.Service.Core.Authentication.csproj", "{D68B8BED-8C0A-4FD8-89FC-9B12EA3E56E7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Identity.Service.Domain", "Bredinin.AlloyEditor.Identity.Service.Domain\Bredinin.AlloyEditor.Identity.Service.Domain.csproj", "{54A6BA2B-AFED-468B-B5D2-122CEAC7F45A}"
 EndProject
@@ -82,6 +82,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Identity.Service.Handlers", "Bredinin.AlloyEditor.Identity.Service.Handlers\Bredinin.AlloyEditor.Identity.Service.Handlers.csproj", "{CFEE4A1F-C2B1-417C-B958-B1F6AA8EB27E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Identity.Service.Contracts", "Bredinin.AlloyEditor.Identity.Service.Contracts\Bredinin.AlloyEditor.Identity.Service.Contracts.csproj", "{0EF457EF-ACA0-4D8E-AE9C-E17DDAF15E17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Identity.Service.Core.Http", "Bredinin.AlloyEditor.Identity.Service.Core.Http\Bredinin.AlloyEditor.Identity.Service.Core.Http.csproj", "{F3A04B61-5052-4DE2-B8B8-DDF018894308}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -177,6 +179,10 @@ Global
 		{0EF457EF-ACA0-4D8E-AE9C-E17DDAF15E17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EF457EF-ACA0-4D8E-AE9C-E17DDAF15E17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EF457EF-ACA0-4D8E-AE9C-E17DDAF15E17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3A04B61-5052-4DE2-B8B8-DDF018894308}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3A04B61-5052-4DE2-B8B8-DDF018894308}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3A04B61-5052-4DE2-B8B8-DDF018894308}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3A04B61-5052-4DE2-B8B8-DDF018894308}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -220,6 +226,7 @@ Global
 		{9901955B-DFB3-40BA-ADAB-DF2E1653DB35} = {7F72BA15-01C4-4927-8ABE-00EA2DB518DC}
 		{CFEE4A1F-C2B1-417C-B958-B1F6AA8EB27E} = {9901955B-DFB3-40BA-ADAB-DF2E1653DB35}
 		{0EF457EF-ACA0-4D8E-AE9C-E17DDAF15E17} = {73EC8F30-DA1B-4ED2-9904-000EF6E1CDA2}
+		{F3A04B61-5052-4DE2-B8B8-DDF018894308} = {D90C29F7-AE09-4DAE-A71A-9ECA5B0BF20A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C26E2A09-E1AD-476E-B186-078798D09813}

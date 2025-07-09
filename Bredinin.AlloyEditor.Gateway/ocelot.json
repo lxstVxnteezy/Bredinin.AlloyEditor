@@ -1,6 +1,6 @@
 {
     "GlobalConfiguration": {
-        "BaseUrl": "http://localhost:5000"
+        "BaseUrl": "http://localhost:5030"
     },
     "Routes": [
         {
@@ -11,7 +11,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 5001
+                    "Port": 5019
                 }
             ],
             "SwaggerKey": "AlloyEditor"
@@ -24,7 +24,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 5001
+                    "Port": 5019
                 }
             ],
             "SwaggerKey": "AlloyEditor"
@@ -37,7 +37,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 5001
+                    "Port": 5019
                 }
             ],
             "SwaggerKey": "AlloyEditor"
@@ -50,7 +50,7 @@
                 {
                     "Name": "AlloyEditor API",
                     "Version": "v1",
-                    "Url": "http://localhost:5001/swagger/v1/swagger.json"
+                    "Url": "http://localhost:5019/swagger/v1/swagger.json"
                 }
             ]
         }

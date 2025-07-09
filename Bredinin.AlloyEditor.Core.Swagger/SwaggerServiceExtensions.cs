@@ -45,8 +45,8 @@ public static class SwaggerServiceExtensions
         application.UseSwagger();
         application.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "AlloyEditor API v1");
-            c.RoutePrefix = "swagger"; 
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+            c.RoutePrefix = string.Empty;
         });
     }
 }

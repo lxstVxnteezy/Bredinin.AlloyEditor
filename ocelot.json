@@ -1,0 +1,58 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "http://api_gateway:5030"
+  },
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/alloys/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "DELETE" ],
+      "DownstreamPathTemplate": "/api/alloys/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "alloyeditor_webapi",  
+          "Port": 5019
+        }
+      ],
+      "SwaggerKey": "AlloyEditor"
+    },
+    {
+      "UpstreamPathTemplate": "/api/alloys-systems",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/alloys-systems",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "alloyeditor_webapi",  
+          "Port": 5019
+        }
+      ],
+      "SwaggerKey": "AlloyEditor"
+    },
+    {
+      "UpstreamPathTemplate": "/api/dictionary/chemical-elements",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/dictionary/chemical-elements",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "alloyeditor_webapi", 
+          "Port": 5019
+        }
+      ],
+      "SwaggerKey": "AlloyEditor"
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "AlloyEditor",
+      "Config": [
+        {
+          "Name": "AlloyEditor API",
+          "Version": "v1",
+          "Url": "http://alloyeditor_webapi:5019/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
+}

@@ -6,7 +6,7 @@ ENV ASPNETCORE_URLS=http://+:5019
 ENV TZ=Europe/Moscow
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
+
 WORKDIR /src
 COPY ["Bredinin.AlloyEditor.WebApi/Bredinin.AlloyEditor.WebApi.csproj", "Bredinin.AlloyEditor.WebApi/"]
 RUN dotnet restore "./Bredinin.AlloyEditor.WebApi/Bredinin.AlloyEditor.WebApi.csproj"
