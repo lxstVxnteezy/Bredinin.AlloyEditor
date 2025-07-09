@@ -128,3 +128,6 @@ tools/
 .DS_Store
 /Bredinin.AlloyEditor.Domain/obj/rider.project.restore.info
 /Bredinin.AlloyEditor.DAL.Migration/obj/rider.project.restore.info
+/Bredinin.AlloyEditor.DAL.Context/obj/rider.project.restore.info
+/Bredinin.AlloyEditor.Core.Swagger/obj/rider.project.restore.info
+/Bredinin.AlloyEditor.Core.Swagger/obj/rider.project.restore.info
