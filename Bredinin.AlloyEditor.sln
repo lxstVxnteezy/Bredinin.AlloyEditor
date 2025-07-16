@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Handle
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAPI", "WebAPI", "{C71B13DF-A656-4965-A84F-FD08C8A763A0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservice.AlloyEditor", "Microservice.AlloyEditor", "{C71B13DF-A656-4965-A84F-FD08C8A763A0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{FBD94AC7-767B-41A9-AD62-E4DAE14D8AAA}"
 EndProject
@@ -57,7 +57,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Gateway", "Bredinin.AlloyEditor.Gateway\Bredinin.AlloyEditor.Gateway.csproj", "{7C00C8F6-A8B8-4547-8C25-623B8FC935A5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{7F72BA15-01C4-4927-8ABE-00EA2DB518DC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservice.Identity", "Microservice.Identity", "{7F72BA15-01C4-4927-8ABE-00EA2DB518DC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Identity.Service", "Bredinin.AlloyEditor.Identity.Service\Bredinin.AlloyEditor.Identity.Service.csproj", "{3046E3C8-B097-40EC-8778-158A60ED57EA}"
 EndProject

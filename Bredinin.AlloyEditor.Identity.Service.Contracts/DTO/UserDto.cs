@@ -3,7 +3,7 @@
     public record UserDto
     {
         public Guid Id { get; set; }
-        public string Login { get; set; }
-        public List<RoleDto> Roles { get; set; }
+        public string Login { get; set; } = null!;
+        public List<RoleDto> Roles { get; set; } = null!;
     }
 }

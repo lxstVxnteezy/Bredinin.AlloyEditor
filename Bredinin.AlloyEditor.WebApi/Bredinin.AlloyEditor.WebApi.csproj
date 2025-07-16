@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <RootNamespace>Bredinin.AlloyEditor.WebAPI</RootNamespace>
+        <RootNamespace>Bredinin.AlloyEditor.WebApi</RootNamespace>
         <UserSecretsId>eeda1a7d-c5d7-4847-a960-fad963a2428d</UserSecretsId>
     </PropertyGroup>
 

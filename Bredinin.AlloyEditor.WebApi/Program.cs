@@ -22,7 +22,7 @@ builder.Services.AddOpenTelemetry()
     .WithMetrics(opt =>
 
         opt
-            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("Bredinin.AlloyEditor.Service"))
+            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("Bredinin.Microservice.AlloyEditor"))
             .AddAspNetCoreInstrumentation()
             .AddRuntimeInstrumentation()
             .AddConsoleExporter() 

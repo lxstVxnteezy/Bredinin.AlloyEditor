@@ -1,20 +1,18 @@
-﻿using Bredinin.AlloyEditor.Identity.Service.Contracts.Queries;
+﻿using Bredinin.AlloyEditor.Identity.Service.Contracts.Queries.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bredinin.AlloyEditor.Identity.Service.Controllers
 {
     [Route("api/identity")]
-    public class IdentityController(IMediator mediator) : BaseApiController
+    public class IdentityController(IMediator mediator) : BaseApiController(mediator)
     {
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] GetJwtTokenQuery query)
+        public async Task<string> Login([FromBody] GetJwtTokenQuery query)
         {
-            var token = await mediator.Send(query);
+            var response = await _mediator.Send(query);
 
-            return StatusCode(
-                StatusCodes.Status201Created,
-                new { Token = token });
+            return response;
         }
     }
 }

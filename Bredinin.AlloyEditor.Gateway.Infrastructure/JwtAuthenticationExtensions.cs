@@ -23,13 +23,10 @@ namespace Bredinin.AlloyEditor.Gateway.Infrastructure
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER")
-                                      ?? throw new InvalidOperationException("JWT_ISSUER is not set"),
-                        ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE")
-                                        ?? throw new InvalidOperationException("JWT_AUDIENCE is not set"),
+                        ValidIssuer = "https://localhost",
+                        ValidAudience = "Alloy Editor",
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")
-                                                   ?? throw new InvalidOperationException("JWT_KEY is not set")))
+                            Encoding.UTF8.GetBytes("z6M9eR2XkH5wL8pQ1sT7uV4yA3dF6gJ9nB0oC7hP2qW5rE8tY1iU4oK3lN6m"))
                     };
                 });
 

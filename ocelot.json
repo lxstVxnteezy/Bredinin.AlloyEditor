@@ -5,12 +5,12 @@
   "Routes": [
     {
       "UpstreamPathTemplate": "/api/alloys/{everything}",
-      "UpstreamHttpMethod": [ "GET", "POST", "DELETE" ],
+      "UpstreamHttpMethod": ["GET", "POST", "DELETE"],
       "DownstreamPathTemplate": "/api/alloys/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "alloyeditor_webapi",  
+          "Host": "alloyeditor_webapi",
           "Port": 5019
         }
       ],
@@ -18,12 +18,12 @@
     },
     {
       "UpstreamPathTemplate": "/api/alloys-systems",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": ["GET"],
       "DownstreamPathTemplate": "/api/alloys-systems",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "alloyeditor_webapi",  
+          "Host": "alloyeditor_webapi",
           "Port": 5019
         }
       ],
@@ -31,16 +31,59 @@
     },
     {
       "UpstreamPathTemplate": "/api/dictionary/chemical-elements",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": ["GET"],
       "DownstreamPathTemplate": "/api/dictionary/chemical-elements",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "alloyeditor_webapi", 
+          "Host": "alloyeditor_webapi",
           "Port": 5019
         }
       ],
       "SwaggerKey": "AlloyEditor"
+    },
+    {
+      "UpstreamPathTemplate": "/api/identity/login",
+      "UpstreamHttpMethod": ["POST"],
+      "DownstreamPathTemplate": "/api/identity/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+            "Host": "identity_service",
+            "Port": 5020
+        }
+      ],
+      "SwaggerKey": "Identity"
+    },
+    {
+      "UpstreamPathTemplate": "/api/users",
+      "UpstreamHttpMethod": ["POST"],
+      "DownstreamPathTemplate": "/api/users",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+            "Host": "identity_service",
+            "Port": 5020
+        }
+      ],
+      "SwaggerKey": "Identity"
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/test",
+      "UpstreamHttpMethod": ["GET"],
+      "DownstreamPathTemplate": "/api/users/test",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identity_service",
+          "Port": 5020
+        }
+      ],
+      "SwaggerKey": "Identity",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     }
   ],
   "SwaggerEndPoints": [
@@ -51,6 +94,16 @@
           "Name": "AlloyEditor API",
           "Version": "v1",
           "Url": "http://alloyeditor_webapi:5019/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "Identity",
+      "Config": [
+        {
+            "Name": "Identity API",
+            "Version": "v1",
+            "Url": "http://identity_service:5020/swagger/v1/swagger.json"
         }
       ]
     }
