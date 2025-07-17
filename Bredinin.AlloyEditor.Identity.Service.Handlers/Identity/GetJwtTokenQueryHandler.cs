@@ -24,7 +24,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
             if (!passwordHasher.VerifyPassword(request.Password, user.Hash)) 
                 throw new UnauthorizedAccessException("Invalid credentials");
 
-            return JwtProvider.GenerateToken(user);
+            return JwtProvider.GenerateAccessToken(user);
         }
     }
 }

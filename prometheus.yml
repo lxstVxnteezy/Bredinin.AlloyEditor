@@ -5,7 +5,27 @@ scrape_configs:
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
+  
   - job_name: 'otel-collector'
     scrape_interval: 5s
     static_configs:
       - targets: ['otel-collector:8888']
+  
+  - job_name: 'alloyeditor-webapi'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['otel-collector:8888']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: service
+        replacement: 'alloyeditor-webapi'
+  
+  - job_name: 'identity-service'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['otel-collector:8888']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: service
+        replacement: 'identity-service'
+  

@@ -1,6 +1,4 @@
-﻿version: '3.8'
-
-networks:
+﻿networks:
   monitoring:
     driver: bridge
 
@@ -18,14 +16,14 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: alloyeddb
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB_ALLOWED}
     volumes:
       - db_data:/var/lib/postgresql/data
     container_name: db_postgresql_container
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -37,14 +35,14 @@ services:
     ports:
       - "5433:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: alloyeditoruserdb
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB_IDENTITY}
     volumes:
       - identity_db_data:/var/lib/postgresql/data
     container_name: identity_db_postgresql_container
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -74,12 +72,13 @@ services:
       - "5019:5019"
     container_name: alloyeditor_web_api
     environment:
-      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=alloyeddb;Username=postgres;Password=postgres"
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=${POSTGRES_DB_ALLOWED};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      Otel__ServiceName: "alloyeditor_webapi"  # Уникальное имя сервиса для OpenTelemetry
       Otel__Endpoint: "http://otel-collector:4317"
-      ASPNETCORE_ENVIRONMENT: "Development"
-      JWT_KEY: "z6M9eR2XkH5wL8pQ1sT7uV4yA3dF6gJ9nB0oC7hP2qW5rE8tY1iU4oK3lN6m"
-      JWT_ISSUER: "https://localhost"
-      JWT_AUDIENCE: "Alloy Editor"
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      JWT_KEY: ${JWT_KEY}
+      JWT_ISSUER: ${JWT_ISSUER}
+      JWT_AUDIENCE: ${JWT_AUDIENCE}
     depends_on:
       otel-collector:
         condition: service_started
@@ -96,13 +95,14 @@ services:
       - "5020:5020"
     container_name: alloyeditor_identity_service
     environment:
-      ConnectionStrings__DefaultConnection: "Host=identity_db;Port=5432;Database=alloyeditoruserdb;Username=postgres;Password=postgres"
+      ConnectionStrings__DefaultConnection: "Host=identity_db;Port=5432;Database=${POSTGRES_DB_IDENTITY};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
       ASPNETCORE_URLS: "http://+:5020"
+      Otel__ServiceName: "identity-service" 
       Otel__Endpoint: "http://otel-collector:4317"
-      ASPNETCORE_ENVIRONMENT: "Development"
-      JWT_KEY: "z6M9eR2XkH5wL8pQ1sT7uV4yA3dF6gJ9nB0oC7hP2qW5rE8tY1iU4oK3lN6m"
-      JWT_ISSUER: "https://localhost"
-      JWT_AUDIENCE: "Alloy Editor"
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      JWT_KEY: ${JWT_KEY}
+      JWT_ISSUER: ${JWT_ISSUER}
+      JWT_AUDIENCE: ${JWT_AUDIENCE}
     depends_on:
       otel-collector:
         condition: service_started
@@ -119,11 +119,10 @@ services:
       - "5030:5030"
     container_name: alloyeditor_api_gateway
     volumes:
-    - ./ocelot.json:/app/ocelot.json:ro  # Добавлено :ro для монтирования только для чтения
+      - ./ocelot.json:/app/ocelot.json:ro
     environment:
       ASPNETCORE_URLS: "http://+:5030"
-      Otel__Endpoint: "http://otel-collector:4317"
-      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
     depends_on:
       alloyeditor_webapi:
         condition: service_started
@@ -154,8 +153,8 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
     environment:
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_SECURITY_ADMIN_USER: ${GF_ADMIN_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GF_ADMIN_PASSWORD}
       GF_PATHS_PROVISIONING: /etc/grafana/provisioning
     depends_on:
       - prometheus

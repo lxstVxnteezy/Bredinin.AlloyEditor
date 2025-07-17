@@ -9,9 +9,13 @@ receivers:
 exporters:
   prometheus:
     endpoint: otel-collector:8888
+    resource_to_telemetry_conversion:
+      enabled: true  # Включаем преобразование ресурсов в метки
+    const_labels: {}  # Убираем все const_labels
 
 processors:
-  batch:
+  batch: {}
+  # Убираем процессор resource, чтобы не перезаписывать атрибуты
 
 extensions:
   health_check:
@@ -22,5 +26,5 @@ service:
   pipelines:
     metrics:
       receivers: [otlp]
-      processors: [batch]
+      processors: [batch]  # Убираем resource processor
       exporters: [prometheus]

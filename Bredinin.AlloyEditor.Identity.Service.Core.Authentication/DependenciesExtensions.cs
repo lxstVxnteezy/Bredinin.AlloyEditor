@@ -33,6 +33,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication
 
             services.AddAuthorization();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<ITokenService, TokenService>();
 
             return services;
         }
