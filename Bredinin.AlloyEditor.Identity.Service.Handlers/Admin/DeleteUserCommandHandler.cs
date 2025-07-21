@@ -9,7 +9,9 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Admin
     {
         public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await context.Users.AsQueryable().SingleOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
+            var user = await context.Users
+                .AsQueryable()
+                .SingleOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
             if (user == null)
                 throw new InvalidOperationException("not found in db");

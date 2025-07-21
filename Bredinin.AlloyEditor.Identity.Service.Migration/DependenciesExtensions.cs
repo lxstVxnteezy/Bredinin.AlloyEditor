@@ -43,13 +43,16 @@ namespace Bredinin.AlloyEditor.Identity.Service.Migration
             connection.Open();
 
             using var cmdCheckDb = new NpgsqlCommand(
-                $"SELECT 1 FROM pg_database WHERE datname = '{databaseName}'", connection);
+                "SELECT 1 FROM pg_database WHERE datname = @databaseName",
+                connection);
+            cmdCheckDb.Parameters.AddWithValue("@databaseName", databaseName);
             var exists = cmdCheckDb.ExecuteScalar() != null;
 
             if (!exists)
             {
                 using var cmdCreateDb = new NpgsqlCommand(
-                    $"CREATE DATABASE \"{databaseName}\"", connection);
+                    $"CREATE DATABASE \"{databaseName.Replace("\"", "\"\"")}\"",
+                    connection);
                 cmdCreateDb.ExecuteNonQuery();
             }
         }

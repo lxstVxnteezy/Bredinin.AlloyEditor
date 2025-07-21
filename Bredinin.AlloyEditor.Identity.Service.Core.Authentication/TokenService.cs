@@ -1,4 +1,5 @@
-﻿using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
+﻿using System.Threading;
+using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
 using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
 using Bredinin.AlloyEditor.Identity.Service.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +51,30 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication
             if (token != null)
             {
                 token.IsRevoked = true;
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async Task RevokeRefreshAllTokenUserAsync(User user)
+        {
+            var tokens = await context.RefreshTokens
+            .AsQueryable()
+                .Where(x => x.UserId == user.Id).ToArrayAsync();
+
+            foreach (var token in tokens)
+                await RevokeRefreshTokenAsync(token.Token);
+
+            await context.SaveChangesAsync();
+        }
+
+        public async Task UseRefreshTokenAsync(string refreshToken)
+        {
+            var token = await context.RefreshTokens
+                .FirstOrDefaultAsync(rt => rt.Token == refreshToken);
+
+            if (token != null)
+            {
+                token.IsUsed = true; 
                 await context.SaveChangesAsync();
             }
         }

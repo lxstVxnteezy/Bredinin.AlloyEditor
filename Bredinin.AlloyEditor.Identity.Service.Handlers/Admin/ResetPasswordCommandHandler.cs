@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Identity.Service.Handler.Admin
 {
-    internal class ResetPasswordCommandHandler(IdentityDbContext context, IPasswordHasher passwordHasher) : IRequestHandler<ResetPasswordUserCommand>
+    internal class ResetPasswordCommandHandler(IdentityDbContext context,
+        IPasswordHasher passwordHasher,
+        ITokenService tokenService) : IRequestHandler<ResetPasswordUserCommand>
     {
         public async Task Handle(ResetPasswordUserCommand request, CancellationToken cancellationToken)
         {
@@ -16,8 +18,10 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Admin
             if (foundUser == null)
                 throw new InvalidOperationException("not found user");
 
-            foundUser.Hash = passwordHasher.Generate(request.Password);
+            await tokenService.RevokeRefreshAllTokenUserAsync(foundUser);
 
+            foundUser.Hash = passwordHasher.Generate(request.Password);
+            
             await context.SaveChangesAsync(cancellationToken);
         }
     }

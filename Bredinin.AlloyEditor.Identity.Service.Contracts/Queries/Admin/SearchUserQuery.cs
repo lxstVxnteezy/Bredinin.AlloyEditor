@@ -14,5 +14,4 @@ namespace Bredinin.AlloyEditor.Identity.Service.Contracts.Queries.Admin
     }
 
     public record GetAllSearchUserQueries : IRequest<SearchUserQuery[]>;
-
 }

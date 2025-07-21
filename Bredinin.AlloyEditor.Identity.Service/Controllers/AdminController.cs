@@ -48,7 +48,6 @@ namespace Bredinin.AlloyEditor.Identity.Service.Controllers
             return response;
         }
 
-
         [HttpGet("test")]
         public async Task<IActionResult> Test()
         {

@@ -5,6 +5,7 @@ using Bredinin.AlloyEditor.DAL.Core;
 using Bredinin.AlloyEditor.DAL.Migration;
 using Bredinin.AlloyEditor.Handlers;
 using Bredinin.AlloyEditor.WebAPI;
+using Microsoft.AspNetCore.Mvc;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using Serilog;
@@ -44,6 +45,10 @@ builder.Services.AddHandlers();
 builder.Services.AddServerMetrics();
 builder.Services.AddDataAccess(builder.Configuration);
 builder.Services.AddMemoryCache();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); // Автопроверка для всех POST/PUT/PATCH/DELETE
+});
 
 var app = builder.Build();
 

@@ -93,6 +93,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Gateway.Infrastructure", "Bredinin.AlloyEditor.Gateway.Infrastructure\Bredinin.AlloyEditor.Gateway.Infrastructure.csproj", "{375F403F-B490-4810-AC34-7BBBF8B9DB7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Identity.Service.Core.BackgroundService", "Bredinin.AlloyEditor.Identity.Service.Core.BackgroundService\Bredinin.AlloyEditor.Identity.Service.Core.BackgroundService.csproj", "{4530E91C-81FD-400C-BD28-07AD4BC1304C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -199,6 +201,10 @@ Global
 		{375F403F-B490-4810-AC34-7BBBF8B9DB7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{375F403F-B490-4810-AC34-7BBBF8B9DB7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{375F403F-B490-4810-AC34-7BBBF8B9DB7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4530E91C-81FD-400C-BD28-07AD4BC1304C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4530E91C-81FD-400C-BD28-07AD4BC1304C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4530E91C-81FD-400C-BD28-07AD4BC1304C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4530E91C-81FD-400C-BD28-07AD4BC1304C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -247,6 +253,7 @@ Global
 		{1BAA3B54-2D97-4EB3-9D1F-DA34982B29D9} = {E86DEC5F-1242-47B4-95B5-7761640CABF5}
 		{D39B028C-C34A-4FB0-86FC-15AE96399566} = {E86DEC5F-1242-47B4-95B5-7761640CABF5}
 		{375F403F-B490-4810-AC34-7BBBF8B9DB7C} = {D39B028C-C34A-4FB0-86FC-15AE96399566}
+		{4530E91C-81FD-400C-BD28-07AD4BC1304C} = {D90C29F7-AE09-4DAE-A71A-9ECA5B0BF20A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C26E2A09-E1AD-476E-B186-078798D09813}

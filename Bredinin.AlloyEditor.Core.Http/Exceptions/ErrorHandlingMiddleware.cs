@@ -19,7 +19,7 @@ namespace Bredinin.AlloyEditor.Core.Http.Exceptions
             catch (Exception ex)
             {
                 logger.LogError(ex,ex.Message);
-                await HandleUnexpectedExceptionAsync(context, ex);
+                await HandleUnexpectedExceptionAsync(context);
             }
         }
 
@@ -35,7 +35,7 @@ namespace Bredinin.AlloyEditor.Core.Http.Exceptions
 
             await JsonSerializer.SerializeAsync(context.Response.Body, response);
         }
-        private async Task HandleUnexpectedExceptionAsync(HttpContext context, Exception ex)
+        private async Task HandleUnexpectedExceptionAsync(HttpContext context)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
