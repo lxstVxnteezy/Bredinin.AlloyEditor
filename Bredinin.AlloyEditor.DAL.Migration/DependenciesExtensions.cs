@@ -49,9 +49,14 @@ public static class DependenciesExtensions
 
         if (!exists)
         {
+            var commandBuilder = new NpgsqlCommandBuilder();
+
+            var safeDatabaseName = commandBuilder.QuoteIdentifier(databaseName);
+
             using var cmdCreateDb = new NpgsqlCommand(
-                $"CREATE DATABASE \"{databaseName.Replace("\"", "\"\"")}\"",
+                $"CREATE DATABASE {safeDatabaseName}",
                 connection);
+
             cmdCreateDb.ExecuteNonQuery();
         }
     }
