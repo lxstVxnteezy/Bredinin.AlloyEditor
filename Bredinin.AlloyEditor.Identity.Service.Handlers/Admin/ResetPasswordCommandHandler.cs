@@ -18,7 +18,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Admin
             if (foundUser == null)
                 throw new InvalidOperationException("not found user");
 
-            await tokenService.RevokeRefreshAllTokenUserAsync(foundUser);
+            await tokenService.RevokeRefreshAllTokenUserAsync(foundUser.Id);
 
             foundUser.Hash = passwordHasher.Generate(request.Password);
             

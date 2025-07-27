@@ -1,8 +1,11 @@
-﻿using System.Threading;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System.Threading;
 using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
 using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
 using Bredinin.AlloyEditor.Identity.Service.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Bredinin.AlloyEditor.Identity.Service.Authentication
 {
@@ -34,7 +37,21 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication
 
         public async Task<bool> ValidateRefreshTokenAsync(string refreshToken, Guid userId)
         {
+            var handler = new JwtSecurityTokenHandler();
+            var validationResult = await handler.ValidateTokenAsync(refreshToken, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtProvider.Key)),
+                ValidateIssuer = true,
+                ValidIssuer = JwtProvider.Issuer,
+                ValidateAudience = true,
+                ValidAudience = JwtProvider.Audience
+            });
+
+            if (!validationResult.IsValid) return false;
+
             var token = await context.RefreshTokens
+                .AsNoTracking()
                 .FirstOrDefaultAsync(rt => rt.Token == refreshToken && rt.UserId == userId);
 
             return token != null &&
@@ -55,16 +72,12 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication
             }
         }
 
-        public async Task RevokeRefreshAllTokenUserAsync(User user)
+        public async Task RevokeRefreshAllTokenUserAsync(Guid userId)
         {
-            var tokens = await context.RefreshTokens
-            .AsQueryable()
-                .Where(x => x.UserId == user.Id).ToArrayAsync();
-
-            foreach (var token in tokens)
-                await RevokeRefreshTokenAsync(token.Token);
-
-            await context.SaveChangesAsync();
+            await context.RefreshTokens
+                .Where(rt => rt.UserId == userId)
+                .ExecuteUpdateAsync(setters =>
+                    setters.SetProperty(rt => rt.IsRevoked, true));
         }
 
         public async Task UseRefreshTokenAsync(string refreshToken)

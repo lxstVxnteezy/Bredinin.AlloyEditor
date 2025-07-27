@@ -45,10 +45,6 @@ builder.Services.AddHandlers();
 builder.Services.AddServerMetrics();
 builder.Services.AddDataAccess(builder.Configuration);
 builder.Services.AddMemoryCache();
-builder.Services.AddControllersWithViews(options =>
-{
-    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); // Автопроверка для всех POST/PUT/PATCH/DELETE
-});
 
 var app = builder.Build();
 

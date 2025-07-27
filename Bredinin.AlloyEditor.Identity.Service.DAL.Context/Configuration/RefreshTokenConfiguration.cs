@@ -14,7 +14,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.DAL.Context.Configuration
             builder.Property(x => x.UserId).HasColumnName("user_id");
             builder.Property(x => x.Token).HasColumnName("token");
             builder.Property(x => x.IsUsed).HasColumnName("is_used");
-            builder.Property(x => x.IsRevoked).HasColumnName("is_revorked");
+            builder.Property(x => x.IsRevoked).HasColumnName("is_revoked");
             builder.Property(x => x.Expires).HasColumnName("expires");
         }
     }

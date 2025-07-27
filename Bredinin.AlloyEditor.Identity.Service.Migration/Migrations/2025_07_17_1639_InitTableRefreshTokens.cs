@@ -11,8 +11,12 @@ namespace Bredinin.AlloyEditor.Identity.Service.Migration.Migrations
                 .WithColumn("user_id").AsGuid().ForeignKey()
                 .WithColumn("token").AsString().NotNullable()
                 .WithColumn("is_used").AsBoolean()
-                .WithColumn("is_revorked").AsBoolean()
+                .WithColumn("is_revoked").AsBoolean()
                 .WithColumn("expires").AsDateTime().NotNullable();
+
+            Create.Index("IX_refresh_tokens_token")
+                .OnTable("refresh_tokens")
+                .OnColumn("token").Unique();
         }
     }
 }

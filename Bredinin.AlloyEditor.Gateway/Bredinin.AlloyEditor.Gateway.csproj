@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bredinin.AlloyEditor.Gateway.Infrastructure\Bredinin.AlloyEditor.Gateway.Infrastructure.csproj" />
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Gateway.Core.Clients\Bredinin.AlloyEditor.Gateway.Core.Clients.csproj" />
   </ItemGroup>
 
 </Project>
