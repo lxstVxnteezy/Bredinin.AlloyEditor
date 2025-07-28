@@ -19,6 +19,16 @@ namespace Bredinin.AlloyEditor.Gateway.Core.Clients
                     ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
                 });
 
+            services.AddRefitClient<IAuthClient>()
+                .ConfigureHttpClient(c =>
+                {
+                    c.BaseAddress = new Uri(configuration["IdentityApi:BaseUrl"]);
+                })
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+                });
+
             return services;
         }
     }

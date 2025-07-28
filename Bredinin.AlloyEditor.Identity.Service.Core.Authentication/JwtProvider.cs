@@ -14,7 +14,6 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication
         internal static readonly int AccessTokenExpiryMinutes;
         internal static readonly int RefreshTokenExpiryDays;
 
-
         static JwtProvider()
         {
             Key = Environment.GetEnvironmentVariable("JWT_KEY")
@@ -23,51 +22,50 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication
                      ?? throw new InvalidOperationException("JWT_ISSUER is not set");
             Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE")
                        ?? throw new InvalidOperationException("JWT_AUDIENCE is not set");
-           
+
             if (!int.TryParse(Environment.GetEnvironmentVariable("ACCESS_TOKEN_EXPIRY_MINUTES"), out AccessTokenExpiryMinutes))
-                AccessTokenExpiryMinutes = 15; // 15 минут по умолчанию
+                AccessTokenExpiryMinutes = 15;
 
             if (!int.TryParse(Environment.GetEnvironmentVariable("REFRESH_TOKEN_EXPIRY_DAYS"), out RefreshTokenExpiryDays))
-                RefreshTokenExpiryDays = 7; // 7 дней по умолчанию
+                RefreshTokenExpiryDays = 7;
         }
+
         public static string GenerateAccessToken(User user)
         {
-
             var claims = new[]
-                {
-                    new Claim("userId", user.Id.ToString()),
-                    new Claim("userLogin", user.Login),
-                }
-                .Concat(user.UserRoles.Select(ur => new Claim(ClaimTypes.Role, ur.Role.Name)))
-                .ToList();
+            {
+                new Claim("userId", user.Id.ToString()),
+                new Claim("userLogin", user.Login),
+            }
+            .Concat(user.UserRoles.Select(ur => new Claim(ClaimTypes.Role, ur.Role.Name)))
+            .ToList();
 
-
-            var signingCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(Key)),
-                SecurityAlgorithms.HmacSha256
-            );
-
-            var token = new JwtSecurityToken(
-                signingCredentials: signingCredentials,
-                claims: claims,
-                issuer: Issuer,
-                audience: Audience,
-                expires: DateTime.Now.AddHours(12));
-
-            var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return tokenValue;
+            return GenerateToken(claims, TimeSpan.FromMinutes(AccessTokenExpiryMinutes));
         }
 
         public static string GenerateRefreshToken()
         {
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iss, JwtProvider.Issuer),
+                new Claim(JwtRegisteredClaimNames.Aud, JwtProvider.Audience),
+                new Claim(JwtRegisteredClaimNames.Exp,
+                    new DateTimeOffset(DateTime.UtcNow.AddDays(RefreshTokenExpiryDays)).ToUnixTimeSeconds().ToString(),
+                    ClaimValueTypes.Integer64)
             };
 
-            return GenerateToken(claims, TimeSpan.FromDays(RefreshTokenExpiryDays));
+            var signingCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key)),
+                SecurityAlgorithms.HmacSha256
+            );
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                signingCredentials: signingCredentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         private static string GenerateToken(IEnumerable<Claim> claims, TimeSpan expiration)
@@ -78,11 +76,12 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication
             );
 
             var token = new JwtSecurityToken(
-                signingCredentials: signingCredentials,
-                claims: claims,
                 issuer: Issuer,
                 audience: Audience,
-                expires: DateTime.UtcNow.Add(expiration));
+                claims: claims,
+                expires: DateTime.UtcNow.Add(expiration),
+                signingCredentials: signingCredentials
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

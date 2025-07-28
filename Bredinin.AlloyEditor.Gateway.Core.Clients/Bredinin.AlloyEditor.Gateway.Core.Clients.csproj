@@ -14,5 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bredinin.AlloyEditor.Contracts\Bredinin.AlloyEditor.Contracts.csproj" />
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Contracts\Bredinin.AlloyEditor.Identity.Service.Contracts.csproj" />
   </ItemGroup>
     </Project>

@@ -9,7 +9,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Migration.Migrations
         {
             Create.Table("refresh_tokens").WithColumn("id").AsGuid().PrimaryKey()
                 .WithColumn("user_id").AsGuid().ForeignKey()
-                .WithColumn("token").AsString().NotNullable()
+                .WithColumn("token").AsString(int.MaxValue).NotNullable()
                 .WithColumn("is_used").AsBoolean()
                 .WithColumn("is_revoked").AsBoolean()
                 .WithColumn("expires").AsDateTime().NotNullable();

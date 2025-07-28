@@ -1,6 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using System.Threading;
 using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
 using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
 using Bredinin.AlloyEditor.Identity.Service.Domain;
@@ -38,17 +37,23 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication
         public async Task<bool> ValidateRefreshTokenAsync(string refreshToken, Guid userId)
         {
             var handler = new JwtSecurityTokenHandler();
-            var validationResult = await handler.ValidateTokenAsync(refreshToken, new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtProvider.Key)),
-                ValidateIssuer = true,
-                ValidIssuer = JwtProvider.Issuer,
-                ValidateAudience = true,
-                ValidAudience = JwtProvider.Audience
-            });
 
-            if (!validationResult.IsValid) return false;
+            var validationResult = await handler.ValidateTokenAsync(
+                refreshToken,
+                new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtProvider.Key)),
+                    ValidateIssuer = false,
+                    ValidIssuer = JwtProvider.Issuer,
+                    ValidateAudience = true,
+                    ValidAudience = JwtProvider.Audience,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                });
+
+            if (!validationResult.IsValid)
+                return false;
 
             var token = await context.RefreshTokens
                 .AsNoTracking()
@@ -87,7 +92,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication
 
             if (token != null)
             {
-                token.IsUsed = true; 
+                token.IsUsed = true;
                 await context.SaveChangesAsync();
             }
         }
