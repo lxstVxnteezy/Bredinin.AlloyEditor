@@ -1,4 +1,5 @@
 ﻿using Bredinin.AlloyEditor.Gateway.Core.Clients.ApiClients;
+using Bredinin.AlloyEditor.Gateway.Core.Clients.Handlers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
@@ -9,7 +10,11 @@ namespace Bredinin.AlloyEditor.Gateway.Core.Clients
     {
         public static IServiceCollection AddClients(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<JwtRefreshHandler>();
+
+
             services.AddRefitClient<IDictionaryClient>()
+                .AddHttpMessageHandler<JwtRefreshHandler>()
                 .ConfigureHttpClient(c =>
                 {
                     c.BaseAddress = new Uri(configuration["AlloyEditorApi:BaseUrl"]);
@@ -23,6 +28,36 @@ namespace Bredinin.AlloyEditor.Gateway.Core.Clients
                 .ConfigureHttpClient(c =>
                 {
                     c.BaseAddress = new Uri(configuration["IdentityApi:BaseUrl"]);
+                })
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+                });
+
+            services.AddRefitClient<IAdminClient>()
+                .ConfigureHttpClient(c =>
+                {
+                    c.BaseAddress = new Uri(configuration["IdentityApi:BaseUrl"]);
+                })
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+                });
+
+            services.AddRefitClient<IAlloyClient>()
+                .ConfigureHttpClient(c =>
+                {
+                    c.BaseAddress = new Uri(configuration["AlloyEditorApi:BaseUrl"]);
+                })
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+                });
+
+            services.AddRefitClient<IAlloySystemClient>()
+                .ConfigureHttpClient(c =>
+                {
+                    c.BaseAddress = new Uri(configuration["AlloyEditorApi:BaseUrl"]);
                 })
                 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
                 {

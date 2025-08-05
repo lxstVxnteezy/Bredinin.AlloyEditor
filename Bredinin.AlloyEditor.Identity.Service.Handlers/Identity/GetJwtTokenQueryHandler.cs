@@ -24,12 +24,9 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
             if (!passwordHasher.VerifyPassword(request.Password, user.Hash)) 
                 throw new UnauthorizedAccessException("Invalid credentials");
 
-            var accessToken = tokenService.GenerateAccessToken(user);
-            var refreshToken = await tokenService.GenerateRefreshTokenAsync(user);
+            var response = await tokenService.GeneratePairsTokensAsync(user);
 
-            return new AuthResponse(
-                AccessToken: accessToken, 
-                RefreshToken: refreshToken);
+            return response;
         }
     }
 }

@@ -18,7 +18,18 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
 
             var userId = Guid.Parse(jwtToken.Claims.First(c => c.Type == "userId").Value);
 
-            if (!await tokenService.ValidateRefreshTokenAsync(query.RefreshToken, userId))
+            var refreshTokenIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "refreshTokenId");
+
+            if (refreshTokenIdClaim == null || !Guid.TryParse(refreshTokenIdClaim.Value, out var refreshTokenId))
+                throw new InvalidOperationException("refreshTokenId not found in access token");
+
+            var refreshToken = await context.RefreshTokens.AsQueryable()
+                .SingleOrDefaultAsync(x => x.Id == refreshTokenId, cancellationToken);
+
+            if (refreshToken == null)
+                throw new UnauthorizedAccessException();
+
+            if (!await tokenService.ValidateRefreshTokenAsync(refreshToken.Token, userId))
                 throw new UnauthorizedAccessException();
 
             var user = await context.Users
@@ -29,15 +40,11 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
             if (user == null)
                 throw new UnauthorizedAccessException();
 
-            await tokenService.UseRefreshTokenAsync(query.RefreshToken);
-            await tokenService.RevokeRefreshTokenAsync(query.RefreshToken);
+            await tokenService.UseRefreshTokenAsync(refreshToken.Token);
+            await tokenService.RevokeRefreshTokenAsync(refreshToken.Token);
 
-            var newAccessToken = tokenService.GenerateAccessToken(user);
-            var newRefreshToken = await tokenService.GenerateRefreshTokenAsync(user);
 
-            return new AuthResponse(
-                newAccessToken,
-                newRefreshToken);
+            return await tokenService.GeneratePairsTokensAsync(user);
         }
     }
 }

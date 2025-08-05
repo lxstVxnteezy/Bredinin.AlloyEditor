@@ -5,6 +5,7 @@ using Bredinin.AlloyEditor.Identity.Service.Core.Swagger;
 using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
 using Bredinin.AlloyEditor.Identity.Service.Handler;
 using Bredinin.AlloyEditor.Identity.Service.Migration;
+using Bredinin.AlloyEditor.Services.Common;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using Serilog;
@@ -17,6 +18,14 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
+
+builder.Configuration.AddJsonFile(
+    Path.Combine(AppContext.BaseDirectory, "Configs/jwtSettings.json"),
+    optional: false,
+    reloadOnChange: true);
+
+builder.Services.AddJwtConfiguration(builder.Configuration);
+builder.Services.AddSingleton<JwtProvider>();
 
 builder.Services.AddOpenTelemetry()
     .WithMetrics(opt =>
@@ -40,7 +49,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCustomSwagger();
-builder.Services.AddAddAuthenticationCustom();
+builder.Services.AddAddAuthenticationCustom(builder.Configuration);
 builder.Services.AddDataAccess(builder.Configuration);
 builder.Services.AddDatabaseMigrations(builder.Configuration);
 builder.Services.AddApplicationHandlers();

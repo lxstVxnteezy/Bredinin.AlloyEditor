@@ -1,21 +1,30 @@
+using Bredinin.AlloyEditor.Gateway.Core.Authentication;
 using Bredinin.AlloyEditor.Gateway.Core.Clients;
-using Microsoft.OpenApi.Models;
+using Bredinin.AlloyEditor.Gateway.Core.Swagger;
+using Bredinin.AlloyEditor.Services.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile(
+    Path.Combine(AppContext.BaseDirectory, "Configs/jwtSettings.json"),
+    optional: false,
+    reloadOnChange: true);
+
+builder.Services.AddJwtConfiguration(builder.Configuration);
+builder.Services.AddSingleton<JwtProvider>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gateway Controllers", Version = "v1" });
-});
+builder.Services.AddCustomSwagger();
+builder.Services.AddAddAuthenticationCustom(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
+
 
 builder.Services.AddClients(builder.Configuration);
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseCustomSwagger();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

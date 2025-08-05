@@ -1,14 +1,11 @@
 ﻿using System.Text;
-using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
-using Bredinin.AlloyEditor.Identity.Service.Authentication.Jobs;
 using Bredinin.AlloyEditor.Services.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-
-namespace Bredinin.AlloyEditor.Identity.Service.Authentication
+namespace Bredinin.AlloyEditor.Gateway.Core.Authentication
 {
     public static class DependenciesExtensions
     {
@@ -41,9 +38,6 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication
                 });
 
             services.AddAuthorization();
-            services.AddScoped<IPasswordHasher, PasswordHasher>();
-            services.AddScoped<ITokenService, TokenService>();
-            services.AddHostedService<TokenCleanupJob>();
 
             return services;
         }

@@ -16,6 +16,10 @@ namespace Bredinin.AlloyEditor.Identity.Service.Core.Http.Exceptions
             {
                 await HandleBusinessExceptionAsync(context, ex);
             }
+            catch (UnauthorizedAccessException ex)
+            {
+                await HandleAuthExceptionAsync(context);
+            }
             catch (Exception ex)
             {
                 logger.LogError(ex, ex.Message);    
@@ -23,7 +27,21 @@ namespace Bredinin.AlloyEditor.Identity.Service.Core.Http.Exceptions
             }
         }
 
-        private async Task HandleBusinessExceptionAsync(HttpContext context, BusinessException ex)
+        private async Task HandleAuthExceptionAsync(HttpContext context)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+            var response = new
+            {
+                StatusCode = context.Response.StatusCode,
+                Message = "Unauthorized"
+            };
+
+            await JsonSerializer.SerializeAsync(context.Response.Body, response);
+        }
+
+        private async Task HandleBusinessExceptionAsync(HttpContext context, Exception ex)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status400BadRequest;

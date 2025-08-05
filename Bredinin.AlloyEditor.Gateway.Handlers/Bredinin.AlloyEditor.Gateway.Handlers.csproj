@@ -7,14 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Refit" Version="8.0.0" />
-    <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
-    <PackageReference Include="Refit.Newtonsoft.Json" Version="8.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.13.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bredinin.AlloyEditor.Contracts\Bredinin.AlloyEditor.Contracts.csproj" />
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Gateway.Core.Clients\Bredinin.AlloyEditor.Gateway.Core.Clients.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Contracts\Bredinin.AlloyEditor.Identity.Service.Contracts.csproj" />
   </ItemGroup>
-    </Project>
+
+</Project>
