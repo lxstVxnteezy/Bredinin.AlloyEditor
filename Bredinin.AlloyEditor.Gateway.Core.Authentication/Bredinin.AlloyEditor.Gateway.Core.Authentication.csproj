@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Core.Authentication\Bredinin.AlloyEditor.Identity.Service.Core.Authentication.csproj" />
-    <ProjectReference Include="..\Bredinin.AlloyEditor.Services.Common\Bredinin.AlloyEditor.Services.Common.csproj" />
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Authentication\Bredinin.AlloyEditor.Common.Authentication.csproj" />
   </ItemGroup>
 
 </Project>

@@ -34,7 +34,7 @@
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.DAL.Context\Bredinin.AlloyEditor.Identity.Service.DAL.Context.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Handlers\Bredinin.AlloyEditor.Identity.Service.Handlers.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Migration\Bredinin.AlloyEditor.Identity.Service.Migration.csproj" />
-    <ProjectReference Include="..\Bredinin.AlloyEditor.Services.Common\Bredinin.AlloyEditor.Services.Common.csproj" />
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Authentication\Bredinin.AlloyEditor.Common.Authentication.csproj" />
   </ItemGroup>
 
 </Project>

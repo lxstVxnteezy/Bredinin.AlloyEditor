@@ -1,10 +1,8 @@
 ﻿using Bredinin.AlloyEditor.Gateway.Core.Clients.ApiClients;
-using Bredinin.AlloyEditor.Gateway.Core.Clients.Handlers;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Bredinin.AlloyEditor.Gateway.Handlers;
 using Refit;
 
-namespace Bredinin.AlloyEditor.Gateway.Core.Clients
+namespace Bredinin.AlloyEditor.Gateway
 {
     public static class DependenciesExtensions
     {

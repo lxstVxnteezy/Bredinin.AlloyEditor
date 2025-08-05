@@ -20,7 +20,7 @@
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Contracts\Bredinin.AlloyEditor.Identity.Service.Contracts.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.DAL.Context\Bredinin.AlloyEditor.Identity.Service.DAL.Context.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Domain\Bredinin.AlloyEditor.Identity.Service.Domain.csproj" />
-    <ProjectReference Include="..\Bredinin.AlloyEditor.Services.Common\Bredinin.AlloyEditor.Services.Common.csproj" />
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Authentication\Bredinin.AlloyEditor.Common.Authentication.csproj" />
   </ItemGroup>
 
 </Project>

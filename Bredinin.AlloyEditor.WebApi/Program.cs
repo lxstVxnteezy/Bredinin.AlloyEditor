@@ -5,7 +5,6 @@ using Bredinin.AlloyEditor.DAL.Core;
 using Bredinin.AlloyEditor.DAL.Migration;
 using Bredinin.AlloyEditor.Handlers;
 using Bredinin.AlloyEditor.WebAPI;
-using Microsoft.AspNetCore.Mvc;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using Serilog;

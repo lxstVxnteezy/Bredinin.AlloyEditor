@@ -12,37 +12,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Bredinin.AlloyEditor.Identity.Service.Authentication;
 
-public class TokenService : ITokenService
+public class TokenService(IdentityDbContext context, JwtProvider jwtProvider) : ITokenService
 {
     private const string RefreshTokenIdClaim = "refreshTokenId";
     private const string UserIdClaim = "userId";
     private const string UserLoginClaim = "userLogin";
-
-    private readonly IdentityDbContext _context;
-    private readonly JwtProvider _jwtProvider;
-
-    public TokenService(IdentityDbContext context, JwtProvider jwtProvider)
-    {
-        _context = context;
-        _jwtProvider = jwtProvider;
-    }
-
-    public string GenerateAccessToken(User user) =>
-        GenerateToken(CreateBaseClaims(user), TimeSpan.FromMinutes(_jwtProvider.JwtConfiguration.AccessTokenExpiryMinutes));
-
-    public string GenerateRefreshToken()
-    {
-        var claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Iss, _jwtProvider.JwtConfiguration.Issuer),
-            new Claim(JwtRegisteredClaimNames.Aud, _jwtProvider.JwtConfiguration.Audience),
-            new Claim(JwtRegisteredClaimNames.Exp,
-                new DateTimeOffset(DateTime.UtcNow.AddDays(_jwtProvider.JwtConfiguration.RefreshTokenExpiryDays))
-                    .ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
-        };
-        return GenerateToken(claims, TimeSpan.FromDays(_jwtProvider.JwtConfiguration.RefreshTokenExpiryDays));
-    }
 
     public async Task<AuthResponse> GeneratePairsTokensAsync(User user)
     {
@@ -53,15 +27,15 @@ public class TokenService : ITokenService
         if (!Guid.TryParse(jwtToken.Claims.FirstOrDefault(c => c.Type == RefreshTokenIdClaim)?.Value, out var refreshTokenId))
             throw new InvalidOperationException("refreshTokenId not found in access token");
 
-        await _context.RefreshTokens.AddAsync(new RefreshToken
+        await context.RefreshTokens.AddAsync(new RefreshToken
         {
             Id = refreshTokenId,
             Token = refreshToken,
-            Expires = DateTime.UtcNow.AddDays(_jwtProvider.JwtConfiguration.RefreshTokenExpiryDays),
+            Expires = DateTime.UtcNow.AddDays(jwtProvider.JwtConfiguration.RefreshTokenExpiryDays),
             UserId = user.Id
         });
 
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
         return new AuthResponse(accessToken, refreshToken);
     }
 
@@ -72,7 +46,7 @@ public class TokenService : ITokenService
 
         if (!validationResult.IsValid) return false;
 
-        var token = await _context.RefreshTokens
+        var token = await context.RefreshTokens
             .AsNoTracking()
             .FirstOrDefaultAsync(rt => rt.Token == refreshToken && rt.UserId == userId);
 
@@ -86,20 +60,20 @@ public class TokenService : ITokenService
         UpdateRefreshTokenAsync(rt => rt.Token == refreshToken, rt => rt.IsUsed = true);
 
     public async Task RevokeRefreshAllTokenUserAsync(Guid userId) =>
-        await _context.RefreshTokens
+        await context.RefreshTokens
             .Where(rt => rt.UserId == userId)
             .ExecuteUpdateAsync(s => s.SetProperty(rt => rt.IsRevoked, true));
 
     private string GenerateToken(IEnumerable<Claim> claims, TimeSpan expiration) =>
         new JwtSecurityTokenHandler().WriteToken(new JwtSecurityToken(
-            issuer: _jwtProvider.JwtConfiguration.Issuer,
-            audience: _jwtProvider.JwtConfiguration.Audience,
+            issuer: jwtProvider.JwtConfiguration.Issuer,
+            audience: jwtProvider.JwtConfiguration.Audience,
             claims: claims,
             expires: DateTime.UtcNow.Add(expiration),
             signingCredentials: GetSigningCredentials()));
 
     private SigningCredentials GetSigningCredentials() => new(
-        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtProvider.JwtConfiguration.Key)),
+        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtProvider.JwtConfiguration.Key)),
         SecurityAlgorithms.HmacSha256);
 
     private IEnumerable<Claim> CreateBaseClaims(User user)
@@ -117,22 +91,38 @@ public class TokenService : ITokenService
     private TokenValidationParameters GetTokenValidationParameters() => new()
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtProvider.JwtConfiguration.Key)),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtProvider.JwtConfiguration.Key)),
         ValidateIssuer = false,
-        ValidIssuer = _jwtProvider.JwtConfiguration.Issuer,
+        ValidIssuer = jwtProvider.JwtConfiguration.Issuer,
         ValidateAudience = true,
-        ValidAudience = _jwtProvider.JwtConfiguration.Audience,
+        ValidAudience = jwtProvider.JwtConfiguration.Audience,
         ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero
     };
 
     private async Task UpdateRefreshTokenAsync(Expression<Func<RefreshToken, bool>> predicate, Action<RefreshToken> updateAction)
     {
-        var token = await _context.RefreshTokens.FirstOrDefaultAsync(predicate);
+        var token = await context.RefreshTokens.FirstOrDefaultAsync(predicate);
         if (token != null)
         {
             updateAction(token);
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
+    }
+    private string GenerateAccessToken(User user) =>
+        GenerateToken(CreateBaseClaims(user), TimeSpan.FromMinutes(jwtProvider.JwtConfiguration.AccessTokenExpiryMinutes));
+
+    private string GenerateRefreshToken()
+    {
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Iss, jwtProvider.JwtConfiguration.Issuer),
+            new Claim(JwtRegisteredClaimNames.Aud, jwtProvider.JwtConfiguration.Audience),
+            new Claim(JwtRegisteredClaimNames.Exp,
+                new DateTimeOffset(DateTime.UtcNow.AddDays(jwtProvider.JwtConfiguration.RefreshTokenExpiryDays))
+                    .ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+        };
+        return GenerateToken(claims, TimeSpan.FromDays(jwtProvider.JwtConfiguration.RefreshTokenExpiryDays));
     }
 }
