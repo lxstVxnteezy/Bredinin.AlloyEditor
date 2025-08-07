@@ -15,11 +15,7 @@ namespace Bredinin.AlloyEditor.Gateway.Handlers
             var authHeader = httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
 
             if (string.IsNullOrEmpty(authHeader))
-                return new HttpResponseMessage(System.Net.HttpStatusCode.Unauthorized)
-                {
-                    ReasonPhrase = "Authorization header is missing"
-                };
-
+                throw new UnauthorizedAccessException();
 
             var token = authHeader.StartsWith("Bearer ")
                 ? authHeader.Substring("Bearer ".Length)
@@ -28,18 +24,12 @@ namespace Bredinin.AlloyEditor.Gateway.Handlers
             var tokenHandler = new JwtSecurityTokenHandler();
 
             if (!tokenHandler.CanReadToken(token))
-                return new HttpResponseMessage(System.Net.HttpStatusCode.Unauthorized)
-                {
-                    ReasonPhrase = "Invalid JWT token format"
-                };
+                throw new UnauthorizedAccessException();
 
             var jwtToken = tokenHandler.ReadJwtToken(token);
 
             if (IsTokenExpired(jwtToken))
-                return new HttpResponseMessage(System.Net.HttpStatusCode.Unauthorized)
-                {
-                    ReasonPhrase = "Token has expired"
-                };
+                throw new UnauthorizedAccessException();
 
 
             if (ShouldRefreshToken(jwtToken))
@@ -51,10 +41,7 @@ namespace Bredinin.AlloyEditor.Gateway.Handlers
                 }
                 catch
                 {
-                    return new HttpResponseMessage(System.Net.HttpStatusCode.Unauthorized)
-                    {
-                        ReasonPhrase = "Token refresh failed"
-                    };
+                    throw new UnauthorizedAccessException();
                 }
             }
 
