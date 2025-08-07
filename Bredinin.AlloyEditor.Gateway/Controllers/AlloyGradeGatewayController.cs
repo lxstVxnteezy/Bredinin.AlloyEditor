@@ -11,8 +11,8 @@ namespace Bredinin.AlloyEditor.Gateway.Controllers
         [HttpGet]
         public async Task<ActionResult<AlloyGradeResponse[]>> GetGrades(CancellationToken ctn)
         {
-            var grades = await alloyClient.GetGrades(ctn);
-            return Ok(grades);
+            var response = await alloyClient.GetGrades(ctn);
+            return Ok(response);
         }
 
         [HttpPost]
@@ -20,8 +20,8 @@ namespace Bredinin.AlloyEditor.Gateway.Controllers
             [FromBody] CreateAlloyGradeRequest request,
             CancellationToken ctn)
         {
-            var id = await alloyClient.CreateAlloyGrade(request, ctn);
-            return Ok(id);
+            var response = await alloyClient.CreateAlloyGrade(request, ctn);
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
@@ -36,8 +36,8 @@ namespace Bredinin.AlloyEditor.Gateway.Controllers
             Guid id,
             CancellationToken ctn)
         {
-            var alloys = await alloyClient.GetAlloysForMainElement(id, ctn);
-            return Ok(alloys);
+            var response = await alloyClient.GetAlloysForMainElement(id, ctn);
+            return Ok(response);
         }
     }
 }

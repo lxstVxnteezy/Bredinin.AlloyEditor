@@ -11,15 +11,15 @@ namespace Bredinin.AlloyEditor.Gateway.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] GetJwtTokenQuery query, CancellationToken cancellationToken)
         {
-            var elements = await client.Login(query, cancellationToken);
-            return Ok(elements);
+            var response = await client.Login(query, cancellationToken);
+            return Ok(response);
         }
 
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenQuery query, CancellationToken cancellationToken)
         {
-            var elements = await client.RefreshToken(query, cancellationToken);
-            return Ok(elements);
+            var response = await client.RefreshToken(query, cancellationToken);
+            return Ok(response);
         }
     }
 }

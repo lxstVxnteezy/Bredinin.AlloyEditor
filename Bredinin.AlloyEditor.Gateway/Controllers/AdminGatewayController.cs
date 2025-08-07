@@ -12,8 +12,8 @@ namespace Bredinin.AlloyEditor.Gateway.Controllers
         [HttpPost("user")]
         public async Task<ActionResult<Guid>> CreateUser([FromBody] CreateUserCommand command)
         {
-            var userId = await adminClient.CreateUser(command);
-            return Ok(userId);
+            var response = await adminClient.CreateUser(command);
+            return Ok(response);
         }
 
         [HttpPut("user")]
@@ -40,15 +40,15 @@ namespace Bredinin.AlloyEditor.Gateway.Controllers
         [HttpGet("search-users")]
         public async Task<ActionResult<SearchUserQuery[]>> GetAllSearchQueries()
         {
-            var queries = await adminClient.GetAllSearchQueries();
-            return Ok(queries);
+            var response = await adminClient.GetAllSearchQueries();
+            return Ok(response);
         }
 
         [HttpGet("test")]
         public async Task<IActionResult> Test()
         {
-            var result = await adminClient.Test();
-            return Ok(result);
+            var response = await adminClient.Test();
+            return Ok(response);
         }
     }
 }

@@ -118,8 +118,6 @@ services:
     ports:
       - "5030:5030"
     container_name: alloyeditor_api_gateway
-    volumes:
-      - ./ocelot.json:/app/ocelot.json:ro
     environment:
       ASPNETCORE_URLS: "http://+:5030"
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}

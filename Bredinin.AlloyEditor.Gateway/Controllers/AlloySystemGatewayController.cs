@@ -11,8 +11,8 @@ namespace Bredinin.AlloyEditor.Gateway.Controllers
         [HttpGet]
         public async Task<ActionResult<SearchAlloySystemResponse[]>> GetAlloySystem(CancellationToken ctn)
         {
-            var systems = await alloySystemClient.GetAlloySystem(ctn);
-            return Ok(systems);
+            var response = await alloySystemClient.GetAlloySystem(ctn);
+            return Ok(response);
         }
     }
 }

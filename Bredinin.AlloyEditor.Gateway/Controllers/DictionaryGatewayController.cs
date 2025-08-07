@@ -11,8 +11,8 @@ namespace Bredinin.AlloyEditor.Gateway.Controllers
         [HttpGet("chemical-elements")]
         public async Task<IActionResult> GetChemicalElements(CancellationToken cancellationToken)
         {
-            var elements = await dictionaryClient.GetChemicalElements(cancellationToken);
-            return Ok(elements);
+            var response = await dictionaryClient.GetChemicalElements(cancellationToken);
+            return Ok(response);
         }
     }
 }

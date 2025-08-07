@@ -5,9 +5,9 @@ namespace Bredinin.AlloyEditor.Gateway.Core.Clients.ApiClients
 {
     public interface IDictionaryClient
     {
-        [Headers("Authorization: Bearer")] // Явно указываем, что заголовок должен передаваться
-        [Get("/api/dictionary/chemical-elements")]
+        [Headers("Authorization: Bearer")] 
 
+        [Get("/api/dictionary/chemical-elements")]
         Task<DictChemicalElementResponse[]?> GetChemicalElements(CancellationToken cancellationToken = default);
     }
 
