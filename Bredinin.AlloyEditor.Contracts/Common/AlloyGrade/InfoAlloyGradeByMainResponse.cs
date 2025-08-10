@@ -6,5 +6,5 @@ namespace Bredinin.AlloyEditor.Contracts.Common.AlloyGrade
         Guid Id,
         string Name,
         string? Description,
-        ChemicalCompositionsResponse[] ChemicalCompositions);
+        ChemicalCompositionsDto[] ChemicalCompositions);
 }

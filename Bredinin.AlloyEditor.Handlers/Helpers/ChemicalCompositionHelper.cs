@@ -5,9 +5,9 @@ namespace Bredinin.AlloyEditor.Handlers.Helpers
 {
     internal static class ChemicalCompositionHelper
     {
-        public static ChemicalCompositionsResponse Convert(this AlloyChemicalCompositions compositionsResponse)
+        public static ChemicalCompositionsDto Convert(this AlloyChemicalCompositions compositionsResponse)
         {
-            return new ChemicalCompositionsResponse(
+            return new ChemicalCompositionsDto(
                 Id: compositionsResponse.Id,
                 MinValue: compositionsResponse.MinValue,
                 MaxValue: compositionsResponse.MaxValue,

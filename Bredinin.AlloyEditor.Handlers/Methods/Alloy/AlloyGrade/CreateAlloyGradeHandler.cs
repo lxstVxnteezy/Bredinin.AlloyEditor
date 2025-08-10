@@ -2,6 +2,7 @@
 using Bredinin.AlloyEditor.Core.Http.Exceptions;
 using Bredinin.AlloyEditor.DAL.Core;
 using Bredinin.AlloyEditor.Domain.Alloys;
+using Bredinin.AlloyEditor.Domain.Dictionaries;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
@@ -12,7 +13,8 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
     }
     internal class CreateAlloyGradeHandler(
         IRepository<Domain.Alloys.AlloyGrade> alloyGradeRepository,
-        IRepository<Domain.Alloys.AlloySystem> alloySystemRepository)
+        IRepository<Domain.Alloys.AlloySystem> alloySystemRepository,
+        IRepository<DictChemicalElement> chemicalElementRepository)
         : ICreateAlloyGradeHandler
     {
         public async Task<Guid> Handle(CreateAlloyGradeRequest request, CancellationToken ctn)
@@ -31,21 +33,17 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
             if (foundAlloy != null)
                 throw new BusinessException("already exist");
 
+            var chemicalCompositions = request.ChemicalCompositions
+                .Select(MapToEntity)
+                .ToArray();
+
             var newAlloyGrade = new Domain.Alloys.AlloyGrade()
             {
                 Id = Guid.NewGuid(),
                 Name = request.Name,
                 Description = request.Description,
                 AlloySystemId = request.AlloySystemId,
-                ChemicalCompositions = request.ChemicalCompositions
-                    .Select(element => new AlloyChemicalCompositions()
-                {
-                    MinValue = element.MinValue,
-                    MaxValue = element.MaxValue,
-                    ExactValue = element.ExactValue,
-                    ChemicalElementId = element.ChemicalElementId,
-                }
-                ).ToArray()
+                ChemicalCompositions = chemicalCompositions
             };
 
             alloyGradeRepository.Add(newAlloyGrade);
@@ -54,5 +52,24 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
 
             return newAlloyGrade.Id;
         }
+
+        private AlloyChemicalCompositions MapToEntity(CreateChemicalCompositionRequest chemicalComposition)
+        {
+            var foundElement = chemicalElementRepository.Query
+                .SingleOrDefault(x => x.Id == chemicalComposition.ChemicalElementId);
+
+            if (foundElement == null)
+                throw new BusinessException("ChemicalElement not found in db");
+
+            return new AlloyChemicalCompositions
+            {
+                Id = Guid.NewGuid(),
+                MinValue = chemicalComposition.MinValue,
+                MaxValue = chemicalComposition.MaxValue,
+                ExactValue = chemicalComposition.ExactValue,
+                ChemicalElementId = chemicalComposition.ChemicalElementId,
+            };
+        }
     }
+
 }

@@ -1,6 +1,6 @@
 ﻿namespace Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions
 {
-    public record ChemicalCompositionsResponse(Guid Id,
+    public record ChemicalCompositionsDto(Guid Id,
         decimal? MinValue,
         decimal? MaxValue,
         decimal? ExactValue,

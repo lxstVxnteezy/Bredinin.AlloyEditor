@@ -55,7 +55,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Core.Http.Exceptions
         }
         private async Task HandleUnexpectedExceptionAsync(HttpContext context)
         {
-            context.Response.ContentType = "application/json";
+              context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
             var response = new

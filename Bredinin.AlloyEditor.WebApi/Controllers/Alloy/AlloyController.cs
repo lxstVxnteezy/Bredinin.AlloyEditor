@@ -1,5 +1,7 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
+using Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions;
 using Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade;
+using Bredinin.AlloyEditor.Handlers.Methods.Alloy.ChemicalCompositions;
 using Bredinin.AlloyEditor.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,6 +35,17 @@ namespace Bredinin.AlloyEditor.WebAPI.Controllers.Alloy
         {
             return handler.Handle(id, ctn);
         }
+
+        [HttpPut("chemical-compositions/{id}")]
+        public Task<ChemicalCompositionsDto[]> EditChemicalCompositions(
+            [FromRoute]Guid id,
+            [FromBody]ChemicalCompositionsRequest[] request,
+            [FromServices]IEditChemicalCompositionsAlloyGradeHandler handler,
+            CancellationToken ctn)
+        {
+            return handler.Handle(id, request, ctn);
+        }
+
 
         [HttpGet("for-main-element/{id}")]
         public Task<InfoAlloyGradeByMainResponse[]> GetAlloysForMainElement(

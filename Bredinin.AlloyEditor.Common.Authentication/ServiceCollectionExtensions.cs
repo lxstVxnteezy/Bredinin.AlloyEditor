@@ -9,7 +9,6 @@ namespace Bredinin.AlloyEditor.Services.Common
             this IServiceCollection services,
             IConfiguration configuration)
         {
-             
             services.Configure<JwtConfiguration>(configuration.GetSection(JwtConfiguration.SectionName));
 
             return services;

@@ -13,7 +13,8 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication.Jobs
         IConfiguration config) : BackgroundService
     {
 
-        private readonly TimeSpan _interval = TimeSpan.FromHours(config.GetValue<int>("TokenCleanup:IntervalHours"));
+        private readonly TimeSpan _interval = TimeSpan
+            .FromHours(config.GetValue<int>("TokenCleanup:IntervalHours"));
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
