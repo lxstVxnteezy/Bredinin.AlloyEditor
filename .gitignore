@@ -1,133 +1,123 @@
-﻿# General
+﻿### Общие файлы IDE ###
+## Rider
+.idea/
+*.sln.iml
+*.userprefs
+*.DotSettings
+*.DotSettings.user
+
+## Visual Studio
+.vs/
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
-*.ide/
-.vs/
-.idea/
-*.swp
-*.cache
-*.DS_Store
-Thumbs.db
-
-# Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-[Aa][Rr][Mm]/
-[Aa][Rr][Mm]64/
-bld/
-[Bb]in/
-[Oo]bj/
-[Ll]og/
-[Ll]ogs/
-[Bb]in/[Dd]ebug/
-
-
-# Visual Studio files
-*.aps
-*.ncb
-*.opensdf
-*.sdf
-*.cachefile
 *.VC.db
 *.VC.VC.opendb
 
-# Rider files
-*.sln.iml
-*.csproj.iml
-.idea/
-*.idea/
-
-# MSTest test results
-[Tt]est[Rr]esult*/
-[Bb]uild[Ll]og.*
-
-# NuGet
-[Nn]u[Pp]ackages/
-*.nupkg
-packages/
-nuget.exe
-.nuget/
-
-# Build results
-*.dotCover
-*.coverage
-*.coveragexml
-
-# VS Code
-.vscode/
-
-# Azure Functions
-func/
-
-# Output files
+### Скомпилированные файлы ###
+## .NET Core
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
 *.exe
 *.dll
 *.pdb
 *.xml
 
-# Local development files
-appsettings.Development.json
-launchSettings.json
+## WPF
+*.aps
+*.cache
+*.ilk
+*.nupkg
+*.opensdf
+*.pch
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
 
-# SQL Server files
+### Зависимости ###
+packages/
+[Nn]u[Gg]et/
+*.nupkg
+*.nuget.props
+*.nuget.targets
+
+### Логи и кэши ###
+## Serilog и другие логи
+[Ll]og/
+[Ll]ogs/
+*.log
+*.cache
+*.jfm
+
+### Настройки проекта ###
+*.pubxml
+*.pubxml.user
+*.publishsettings
+
+### Файлы данных ###
 *.mdf
 *.ldf
+*.sdf
 
-# Compiled files
-**/bin/
-**/obj/
+### Тестовые результаты ###
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
 
-# Exceptions
-!**/obj/project.assets.json
-!**/obj/project.nuget.cache
+### Резервные копии ###
+*.[Cc]ache
+*.bak
+*.tmp
 
-# Rider specific
-*.sln.ide/
+### Файлы развертывания ###
+*.ps1
+*.psm1
+*.psd1
+*.rdl.data
 
-# Visual Studio cache/options directory
-.vs/
-.vscode/
+### Файлы специфичные для ASP.NET ###
+## Окружение
+appsettings.Development.json
+appsettings.Local.json
+appsettings.Staging.json
 
-# MSBuild
-*.binlog
-*.msbuild.log
+## Опубликованные файлы
+**/wwwroot/lib/
+**/wwwroot/dist/
+**/wwwroot/.DS_Store
 
-# Cake
-tools/
+## Файлы сессий
+*.session.sql
 
-# JetBrains Rider
-.idea/
-*.sln.iml
-*.DotSettings
-
-# Visual Studio Code
-.vscode/
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-*.code-workspace
-
-# Local History for Visual Studio Code
-.history/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
-
-# macOS
+### Файлы операционных систем ###
+## macOS
 .DS_Store
-/Bredinin.AlloyEditor.Domain/obj/rider.project.restore.info
-/Bredinin.AlloyEditor.DAL.Migration/obj/rider.project.restore.info
-/Bredinin.AlloyEditor.DAL.Context/obj/rider.project.restore.info
-/Bredinin.AlloyEditor.Core.Swagger/obj/rider.project.restore.info
-/Bredinin.AlloyEditor.Core.Swagger/obj/rider.project.restore.info
+._*
+
+## Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+## Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
