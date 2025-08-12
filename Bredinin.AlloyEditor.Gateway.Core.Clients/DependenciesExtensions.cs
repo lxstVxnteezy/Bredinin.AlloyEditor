@@ -1,18 +1,17 @@
 ﻿using Bredinin.AlloyEditor.Gateway.Core.Clients.ApiClients;
-using Bredinin.AlloyEditor.Gateway.Handlers;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Refit;
 
-namespace Bredinin.AlloyEditor.Gateway
+namespace Bredinin.AlloyEditor.Gateway.Core.Clients
 {
     public static class DependenciesExtensions
     {
         public static IServiceCollection AddClients(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<JwtRefreshHandler>();
 
 
             services.AddRefitClient<IDictionaryClient>()
-                .AddHttpMessageHandler<JwtRefreshHandler>()
                 .ConfigureHttpClient(c =>
                 {
                     c.BaseAddress = new Uri(configuration["AlloyEditorApi:BaseUrl"]);
