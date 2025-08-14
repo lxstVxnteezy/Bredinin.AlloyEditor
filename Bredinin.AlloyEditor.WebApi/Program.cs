@@ -52,7 +52,7 @@ app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseServiceSwaggerUI(uiTitle: "Alloy Editor API");
+app.UseServiceSwaggerUi(uiTitle: "Alloy Editor API");
 app.UseDatabaseMigrations();
 app.UseEndpoints(endpoints =>
 {

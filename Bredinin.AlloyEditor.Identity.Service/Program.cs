@@ -49,7 +49,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAddAuthenticationCustom(builder.Configuration);
-builder.Services.AddServiceSwagger("Bredinin.Identity.Service");
+builder.Services.AddServiceSwagger("Bredinin.Identity.Service",true);
 
 builder.Services.AddDataAccess(builder.Configuration);
 builder.Services.AddDatabaseMigrations(builder.Configuration);
@@ -65,7 +65,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseServiceSwaggerUI(uiTitle: "Identity Service API");
+app.UseServiceSwaggerUi(uiTitle: "Identity Service API");
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseDatabaseMigrations();
 app.UseAuthorization();

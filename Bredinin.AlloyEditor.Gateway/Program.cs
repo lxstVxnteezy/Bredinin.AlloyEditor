@@ -30,7 +30,7 @@ builder.Services.AddOpenTelemetry()
             })
     );
 
-builder.Services.AddServiceSwagger("Bredinin.ApiGateway");
+builder.Services.AddServiceSwagger("Bredinin.ApiGateway",true);
 
 builder.Services.AddJwtConfiguration(builder.Configuration);
 builder.Services.AddSingleton<JwtProvider>();
@@ -47,7 +47,7 @@ builder.Services.AddClients(builder.Configuration);
 var app = builder.Build();
 
 
-app.UseServiceSwaggerUI(uiTitle: "API Gateway");
+app.UseServiceSwaggerUi(uiTitle: "API Gateway");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

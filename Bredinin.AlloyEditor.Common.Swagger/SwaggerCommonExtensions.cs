@@ -10,6 +10,7 @@ namespace Bredinin.AlloyEditor.Common.Swagger
         public static IServiceCollection AddServiceSwagger(
             this IServiceCollection services,
             string serviceName,
+            bool jwtSecurityDefinition = false,
             string version = "v1",
             Action<SwaggerGenOptions>? customize = null)
         {
@@ -20,8 +21,9 @@ namespace Bredinin.AlloyEditor.Common.Swagger
                     Title = serviceName,
                     Version = version
                 });
-
-                AddJwtSecurityDefinition(options);
+               
+                if (jwtSecurityDefinition)
+                 AddJwtSecurityDefinition(options);
 
                 customize?.Invoke(options);
             });
@@ -57,7 +59,7 @@ namespace Bredinin.AlloyEditor.Common.Swagger
             });
         }
 
-        public static IApplicationBuilder UseServiceSwaggerUI(
+        public static IApplicationBuilder UseServiceSwaggerUi(
             this IApplicationBuilder app,
             string? routePrefix = null,
             string uiTitle = "API Documentation")
