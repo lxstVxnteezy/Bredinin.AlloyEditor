@@ -1,5 +1,5 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
-using Bredinin.AlloyEditor.DAL.Core;
+using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Handlers.Helpers;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,30 +10,24 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
         public Task<AlloyGradeResponse[]> Handle(CancellationToken ctn);
     }
 
-    internal class SearchAlloyGradeHandler(IRepository<Domain.Alloys.AlloyGrade> alloyGradeRepository)
+    internal class SearchAlloyGradeHandler(ServiceDbContext context)
         : ISearchAlloyGradeHandler
     {
         public async Task<AlloyGradeResponse[]> Handle(CancellationToken ctn)
         {
-            var alloys = await alloyGradeRepository.Query
+            return await context.AlloyGrades
                 .AsNoTracking()
                 .Include(x => x.ChemicalCompositions)
+                .Select(x => new AlloyGradeResponse(
+                    x.Id,
+                    x.Name,
+                    x.Description,
+                    x.AlloySystemId,
+                    x.ChemicalCompositions
+                        .Select(ChemicalCompositionHelper.Convert)
+                        .ToArray()
+                ))
                 .ToArrayAsync(ctn);
-
-            return alloys.Select(MapToResponse).ToArray();
-        }
-
-        private static AlloyGradeResponse MapToResponse(Domain.Alloys.AlloyGrade alloyGrade)
-        {
-            return new AlloyGradeResponse(
-                Id: alloyGrade.Id,
-                Name: alloyGrade.Name,
-                Description: alloyGrade.Description,
-                AlloySystemId: alloyGrade.AlloySystemId,
-                ChemicalCompositions: alloyGrade.ChemicalCompositions
-                    .Select(ChemicalCompositionHelper.Convert)
-                    .ToArray()
-            );
         }
     }
 }

@@ -34,11 +34,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Swagger\Bredinin.AlloyEditor.Common.Swagger.csproj" />
       <ProjectReference Include="..\Bredinin.AlloyEditor.Core.Http\Bredinin.AlloyEditor.Core.Http.csproj" />
       <ProjectReference Include="..\Bredinin.AlloyEditor.Core.Metrics\Bredinin.AlloyEditor.Core.Metrics.csproj" />
-      <ProjectReference Include="..\Bredinin.AlloyEditor.Core.Swagger\Bredinin.AlloyEditor.Core.Swagger.csproj" />
       <ProjectReference Include="..\Bredinin.AlloyEditor.DAL.Context\Bredinin.AlloyEditor.DAL.Context.csproj" />
-      <ProjectReference Include="..\Bredinin.AlloyEditor.DAL.Core\Bredinin.AlloyEditor.DAL.Core.csproj" />
       <ProjectReference Include="..\Bredinin.AlloyEditor.DAL.Migration\Bredinin.AlloyEditor.DAL.Migration.csproj" />
       <ProjectReference Include="..\Bredinin.AlloyEditor.Handlers\Bredinin.AlloyEditor.Handlers.csproj" />
     </ItemGroup>

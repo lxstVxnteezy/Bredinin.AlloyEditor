@@ -1,12 +1,15 @@
 {
-  "profiles": {
-    "Bredinin.AlloyEditor.Identity.Service": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:51925;http://localhost:51928"
+    "profiles": {
+        "Bredinin.AlloyEditor.Identity.Service": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "launchUrl": "swagger",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "REFRESH_TOKEN_EXPIRY_DAYS": "7"
+            },
+            "dotnetRunMessages": true,
+            "applicationUrl": "http://localhost:5020"
+        }
     }
-  }
 }

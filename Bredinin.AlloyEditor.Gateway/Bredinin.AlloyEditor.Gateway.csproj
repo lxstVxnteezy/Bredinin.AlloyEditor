@@ -27,9 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Swagger\Bredinin.AlloyEditor.Common.Swagger.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Gateway.Core.Authentication\Bredinin.AlloyEditor.Gateway.Core.Authentication.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Gateway.Core.Clients\Bredinin.AlloyEditor.Gateway.Core.Clients.csproj" />
-    <ProjectReference Include="..\Bredinin.AlloyEditor.Gateway.Core.Swagger\Bredinin.AlloyEditor.Gateway.Core.Swagger.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Authentication\Bredinin.AlloyEditor.Common.Authentication.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Gateway.Handlers\Bredinin.AlloyEditor.Gateway.Handlers.csproj" />
   </ItemGroup>

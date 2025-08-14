@@ -1,5 +1,5 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.Dictionaries.DictChemicalElements;
-using Bredinin.AlloyEditor.DAL.Core;
+using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Domain.Dictionaries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -13,7 +13,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Dictionaries.DictChemicalElement
 
     internal class InfoDictChemicalElementsHandler(
         IMemoryCache memoryCache,
-        IRepository<DictChemicalElement> dictChemicalElementRepository)
+        ServiceDbContext context)
         : IInfoDictChemicalElementsHandler
     {
         private const string CacheKey = nameof(InfoDictChemicalElementsHandler);
@@ -25,7 +25,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Dictionaries.DictChemicalElement
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15);
                 entry.SetPriority(CacheItemPriority.High);
 
-                var chemicalElements = await dictChemicalElementRepository.Query
+                var chemicalElements = await context.DictChemicalElements
                     .AsNoTracking()
                     .ToArrayAsync(ctn);
 

@@ -1,6 +1,6 @@
-﻿using Bredinin.AlloyEditor.Core.Http.Exceptions;
-using Bredinin.AlloyEditor.DAL.Core;
+﻿using Bredinin.AlloyEditor.DAL;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
 {
@@ -9,19 +9,14 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
         public Task<ActionResult> Handle(Guid id, CancellationToken ctn);
     }
     internal class DeleteAlloyGradeHandler(
-        IRepository<Domain.Alloys.AlloyGrade> alloyGradeRepository) 
+        ServiceDbContext context)
         : IDeleteAlloyGradeHandler
     {
         public async Task<ActionResult> Handle(Guid id, CancellationToken ctn)
         {
-            var foundAlloyGrade = await alloyGradeRepository.FoundByIdAsync(id, ctn);
-
-            if (foundAlloyGrade == null)
-                throw new BusinessException($"Alloy with data Identifier: {id} not found in database");
-
-            alloyGradeRepository.Remove(foundAlloyGrade);
-            
-            await alloyGradeRepository.SaveChanges(ctn);
+            await context.AlloyGrades
+                .Where(x => x.Id == id)
+                .ExecuteDeleteAsync(ctn);
 
             return new ContentResult();
         }

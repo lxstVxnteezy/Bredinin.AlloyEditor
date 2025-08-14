@@ -1,8 +1,7 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.Core.Http.Exceptions;
-using Bredinin.AlloyEditor.DAL.Core;
+using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Domain.Alloys;
-using Bredinin.AlloyEditor.Domain.Dictionaries;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
@@ -11,22 +10,19 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
     {
         Task<Guid> Handle(CreateAlloyGradeRequest request, CancellationToken ctn);
     }
-    internal class CreateAlloyGradeHandler(
-        IRepository<Domain.Alloys.AlloyGrade> alloyGradeRepository,
-        IRepository<Domain.Alloys.AlloySystem> alloySystemRepository,
-        IRepository<DictChemicalElement> chemicalElementRepository)
+    internal class CreateAlloyGradeHandler(ServiceDbContext context)
         : ICreateAlloyGradeHandler
     {
         public async Task<Guid> Handle(CreateAlloyGradeRequest request, CancellationToken ctn)
         {
-            var foundAlloySystem = alloySystemRepository.Query
+            var foundAlloySystem = context.AlloySystems
                 .AsNoTracking()
                 .SingleOrDefaultAsync(x => x.Id == request.AlloySystemId, ctn);
 
             if (foundAlloySystem == null)
                 throw new BusinessException($"alloy system not found {request.AlloySystemId}");
 
-            var foundAlloy = await alloyGradeRepository.Query
+            var foundAlloy = await context.AlloyGrades
                 .AsNoTracking()
                 .SingleOrDefaultAsync(x => x.Name == request.Name, ctn);
 
@@ -46,16 +42,16 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
                 ChemicalCompositions = chemicalCompositions
             };
 
-            alloyGradeRepository.Add(newAlloyGrade);
+            context.Add(newAlloyGrade);
 
-            await alloyGradeRepository.SaveChanges(ctn);
+            await context.SaveChangesAsync(ctn);
 
             return newAlloyGrade.Id;
         }
 
         private AlloyChemicalCompositions MapToEntity(CreateChemicalCompositionRequest chemicalComposition)
         {
-            var foundElement = chemicalElementRepository.Query
+            var foundElement = context.AlloyChemicalCompositions
                 .SingleOrDefault(x => x.Id == chemicalComposition.ChemicalElementId);
 
             if (foundElement == null)

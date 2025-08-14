@@ -24,13 +24,13 @@
     <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.2" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Swagger\Bredinin.AlloyEditor.Common.Swagger.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Core.Authentication\Bredinin.AlloyEditor.Identity.Service.Core.Authentication.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Core.Http\Bredinin.AlloyEditor.Identity.Service.Core.Http.csproj" />
-    <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Core.Swagger\Bredinin.AlloyEditor.Identity.Service.Core.Swagger.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.DAL.Context\Bredinin.AlloyEditor.Identity.Service.DAL.Context.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Handlers\Bredinin.AlloyEditor.Identity.Service.Handlers.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Migration\Bredinin.AlloyEditor.Identity.Service.Migration.csproj" />

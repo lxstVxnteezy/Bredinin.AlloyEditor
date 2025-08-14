@@ -1,5 +1,5 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyBaseSystem;
-using Bredinin.AlloyEditor.DAL.Core;
+using Bredinin.AlloyEditor.DAL;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloySystem
@@ -8,16 +8,16 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloySystem
     {
         Task<SearchAlloySystemResponse[]> Handle(CancellationToken ctn);
     }
-    internal class SearchAlloySystem(IRepository<Domain.Alloys.AlloySystem> alloySystemRepository)
+    internal class SearchAlloySystem(ServiceDbContext context)
         : ISearchAlloySystem
     {
         public async Task<SearchAlloySystemResponse[]> Handle(CancellationToken ctn)
         {
-            var data = await alloySystemRepository.Query
+            var alloySystems = await context.AlloySystems
                 .AsNoTracking()
                 .ToArrayAsync(ctn);
 
-            return data.Select(MapToResponse).ToArray();
+            return alloySystems.Select(MapToResponse).ToArray();
         }
 
         private SearchAlloySystemResponse MapToResponse(Domain.Alloys.AlloySystem alloySystem)

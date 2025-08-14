@@ -1,12 +1,12 @@
 {
-  "profiles": {
-    "Bredinin.AlloyEditor.WebApi": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:51924;http://localhost:51927"
+    "profiles": {
+        "Bredinin.AlloyEditor.WebApi": {
+            "commandName": "Project",
+            "applicationUrl": "http://localhost:5019",
+            "launchBrowser": true,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"          
+            }
+        }
     }
-  }
 }

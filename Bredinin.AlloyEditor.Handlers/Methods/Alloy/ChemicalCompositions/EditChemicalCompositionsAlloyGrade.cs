@@ -1,8 +1,7 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions;
 using Bredinin.AlloyEditor.Core.Http.Exceptions;
-using Bredinin.AlloyEditor.DAL.Core;
+using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Domain.Alloys;
-using Bredinin.AlloyEditor.Domain.Dictionaries;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.ChemicalCompositions
@@ -13,13 +12,12 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.ChemicalCompositions
             ChemicalCompositionsRequest[] request,
             CancellationToken ctn);
     }
-    public class EditChemicalCompositionsAlloyGradeHandler(
-        IRepository<Domain.Alloys.AlloyGrade> alloyRepository,
-        IRepository<DictChemicalElement> chemicalElementRepository) : IEditChemicalCompositionsAlloyGradeHandler
+    public class EditChemicalCompositionsAlloyGradeHandler
+        (ServiceDbContext context) : IEditChemicalCompositionsAlloyGradeHandler
     {
         public async Task<ChemicalCompositionsDto[]> Handle(Guid alloyGradeId, ChemicalCompositionsRequest[] request, CancellationToken ctn)
         {
-            var foundAlloy = await alloyRepository.Query
+            var foundAlloy = await context.AlloyGrades
                 .Include(x => x.ChemicalCompositions)
                 .SingleOrDefaultAsync(x => x.Id == alloyGradeId, ctn);
 
@@ -33,14 +31,14 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.ChemicalCompositions
             foundAlloy.ChemicalCompositions.Clear();
             foundAlloy.ChemicalCompositions = chemicalCompositions;
 
-            await alloyRepository.SaveChanges(ctn);
+            await context.SaveChangesAsync(ctn);
 
             return foundAlloy.ChemicalCompositions.Select(MapToResponse).ToArray();
         }
 
         private AlloyChemicalCompositions MapToEntity(ChemicalCompositionsRequest chemicalComposition)
         {
-            var foundElement = chemicalElementRepository.Query
+            var foundElement = context.DictChemicalElements
                 .SingleOrDefault(x => x.Id == chemicalComposition.ChemicalElementId);
 
             if (foundElement == null)
@@ -55,7 +53,6 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.ChemicalCompositions
                 ChemicalElementId = chemicalComposition.ChemicalElementId,
             };
         }
-
         private ChemicalCompositionsDto MapToResponse(AlloyChemicalCompositions element)
         {
             return new ChemicalCompositionsDto(

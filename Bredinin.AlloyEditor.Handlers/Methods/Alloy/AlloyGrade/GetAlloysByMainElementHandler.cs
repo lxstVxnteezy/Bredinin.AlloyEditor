@@ -1,6 +1,5 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
-using Bredinin.AlloyEditor.Core.Http.Exceptions;
-using Bredinin.AlloyEditor.DAL.Core;
+using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Handlers.Helpers;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,33 +11,23 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
     }
 
     internal class GetAlloysByMainElementHandler(
-        IRepository<Domain.Alloys.AlloyGrade> alloyGradeRepository)
+        ServiceDbContext context)
         : IGetAlloysByMainElementHandler
     {
         public async Task<InfoAlloyGradeByMainResponse[]> Handle(Guid id, CancellationToken ctn)
         {
-            var result = await alloyGradeRepository.Query
+            return await context.AlloyGrades
                 .AsNoTracking()
                 .Where(x => x.AlloySystemId == id)
-                .Include(x=>x.ChemicalCompositions)
+                .Include(x => x.ChemicalCompositions)
+                .Select(x => new InfoAlloyGradeByMainResponse(
+                    x.Id,
+                    x.Name,
+                    x.Description,
+                    x.ChemicalCompositions
+                        .Select(ChemicalCompositionHelper.Convert)
+                        .ToArray()))
                 .ToArrayAsync(ctn);
-
-            if (result.Length == 0)
-                throw new BusinessException("Alloys this system not found in db");
-
-            return result.Select(MapToResponse).ToArray();
         }
-
-        private InfoAlloyGradeByMainResponse MapToResponse(Domain.Alloys.AlloyGrade alloyGrade)
-        {
-            return new InfoAlloyGradeByMainResponse(
-                Id: alloyGrade.Id,
-                Name: alloyGrade.Name,
-                Description: alloyGrade.Description,
-                ChemicalCompositions: alloyGrade.ChemicalCompositions
-                    .Select(ChemicalCompositionHelper.Convert)
-                    .ToArray());
-        }
-
     }
 }

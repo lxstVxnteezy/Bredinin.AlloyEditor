@@ -1,7 +1,7 @@
+using Bredinin.AlloyEditor.Common.Swagger;
 using Bredinin.AlloyEditor.Core.Http.Exceptions;
 using Bredinin.AlloyEditor.Core.Metrics;
-using Bredinin.AlloyEditor.Core.Swagger;
-using Bredinin.AlloyEditor.DAL.Core;
+using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.DAL.Migration;
 using Bredinin.AlloyEditor.Handlers;
 using Bredinin.AlloyEditor.WebAPI;
@@ -38,11 +38,11 @@ builder.Services.AddOpenTelemetry()
 builder.Services.AddSerilog();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddCustomSwagger();
+builder.Services.AddServiceSwagger("Bredinin.AlloyEditor.Service");
+builder.Services.AddDataAccess(builder.Configuration);
 builder.Services.AddDatabaseMigrations(builder.Configuration);
 builder.Services.AddHandlers();
 builder.Services.AddServerMetrics();
-builder.Services.AddDataAccess(builder.Configuration);
 builder.Services.AddMemoryCache();
 
 var app = builder.Build();
@@ -52,7 +52,7 @@ app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCustomSwagger();
+app.UseServiceSwaggerUI(uiTitle: "Alloy Editor API");
 app.UseDatabaseMigrations();
 app.UseEndpoints(endpoints =>
 {
