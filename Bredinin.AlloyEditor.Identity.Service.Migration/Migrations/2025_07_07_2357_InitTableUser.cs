@@ -7,14 +7,17 @@ namespace Bredinin.AlloyEditor.Identity.Service.Migration.Migrations
     {
         public override void Up()
         {
-            Create.Table("users")
-                .WithColumn("id").AsGuid().PrimaryKey()
-                .WithColumn("login").AsString().NotNullable()
-                .WithColumn("first_name").AsString().Nullable()
-                .WithColumn("last_name").AsString().Nullable()
-                .WithColumn("second_name").AsString().Nullable()
-                .WithColumn("age").AsInt32().Nullable()
-                .WithColumn("hash").AsString().Nullable();
+            Execute.Sql(@"
+            CREATE TABLE users (
+                id         UUID PRIMARY KEY,
+                login      VARCHAR(60) NOT NULL UNIQUE,
+                first_name VARCHAR(100) NOT NULL,
+                last_name  VARCHAR(100) NOT NULL,
+                second_name VARCHAR(100) NULL,
+                age        INT NOT NULL,
+                hash       VARCHAR NOT NULL
+            );
+        ");
         }
     }
 }

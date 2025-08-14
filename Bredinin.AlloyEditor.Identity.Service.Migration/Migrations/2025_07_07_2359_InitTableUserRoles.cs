@@ -7,26 +7,26 @@ namespace Bredinin.AlloyEditor.Identity.Service.Migration.Migrations
     {
         public override void Up()
         {
-            Create.Table("user_roles")
-                .WithColumn("id").AsGuid().PrimaryKey()
-                .WithColumn("user_id").AsGuid().NotNullable()
-                .WithColumn("role_id").AsGuid().NotNullable();
+            Execute.Sql(@"
+        CREATE TABLE user_roles (
+            id       UUID PRIMARY KEY,
+            user_id  UUID NOT NULL,
+            role_id  UUID NOT NULL,
 
-            Create.Index("IX_user_roles_user_id_role_id")
-                .OnTable("user_roles")
-                .OnColumn("user_id").Ascending()
-                .OnColumn("role_id").Ascending()
-                .WithOptions().Unique();
+            CONSTRAINT uq_user_roles_pair 
+                UNIQUE (user_id, role_id),
 
-            Create.ForeignKey("FK_user_roles_users")
-                .FromTable("user_roles").ForeignColumn("user_id")
-                .ToTable("users").PrimaryColumn("id")
-                .OnDelete(System.Data.Rule.Cascade);
-
-            Create.ForeignKey("FK_user_roles_roles")
-                .FromTable("user_roles").ForeignColumn("role_id")
-                .ToTable("roles").PrimaryColumn("id")
-                .OnDelete(System.Data.Rule.Cascade);
+            CONSTRAINT fk_user_roles_user
+                FOREIGN KEY (user_id) 
+                REFERENCES users (id) 
+                ON DELETE CASCADE,
+                
+            CONSTRAINT fk_user_roles_role
+                FOREIGN KEY (role_id) 
+                REFERENCES roles (id) 
+                ON DELETE CASCADE
+        );
+    ");
         }
     }
 }

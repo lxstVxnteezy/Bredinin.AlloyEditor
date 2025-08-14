@@ -7,10 +7,15 @@ namespace Bredinin.AlloyEditor.Identity.Service.Migration.Migrations
     {
         public override void Up()
         {
-            Create.Table("roles")
-                .WithColumn("id").AsGuid().PrimaryKey()
-                .WithColumn("name").AsString().NotNullable()
-                .WithColumn("description").AsString().Nullable();
+            Execute.Sql(@"
+            CREATE TABLE roles (
+                id           UUID PRIMARY KEY,
+                name         VARCHAR(60) NOT NULL UNIQUE,
+                description  VARCHAR NOT NULL        
+            );
+        ");
         }
     }
 }
+
+ 

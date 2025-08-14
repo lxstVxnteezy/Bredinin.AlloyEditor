@@ -7,16 +7,21 @@ namespace Bredinin.AlloyEditor.Identity.Service.Migration.Migrations
     {
         public override void Up()
         {
-            Create.Table("refresh_tokens").WithColumn("id").AsGuid().PrimaryKey()
-                .WithColumn("user_id").AsGuid().ForeignKey()
-                .WithColumn("token").AsString(int.MaxValue).NotNullable()
-                .WithColumn("is_used").AsBoolean()
-                .WithColumn("is_revoked").AsBoolean()
-                .WithColumn("expires").AsDateTime().NotNullable();
+            Execute.Sql(@"
+        CREATE TABLE refresh_tokens (
+            id          UUID PRIMARY KEY,
+            user_id     UUID NOT NULL,
+            token       TEXT NOT NULL UNIQUE,
+            is_user      BOOL,
+            is_revoked   BOOL,
+            expires     TIMESTAMP NOT NULL,
 
-            Create.Index("IX_refresh_tokens_token")
-                .OnTable("refresh_tokens")
-                .OnColumn("token").Unique();
+            CONSTRAINT fk_refresh_tokens_user
+                FOREIGN KEY (user_id) 
+                REFERENCES users(id) 
+                ON DELETE CASCADE
+        );
+    ");
         }
     }
 }
