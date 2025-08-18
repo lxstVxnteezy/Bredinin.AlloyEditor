@@ -11,7 +11,9 @@ namespace Bredinin.AlloyEditor.Identity.Service.DAL.Context.Configuration
             builder.ToTable("user_roles");
 
             builder.Property(x => x.Id).HasColumnName("id");
+
             builder.Property(x => x.RoleId).HasColumnName("role_id");
+
             builder.Property(x => x.UserId).HasColumnName("user_id");
 
             builder.HasOne(ur => ur.User)

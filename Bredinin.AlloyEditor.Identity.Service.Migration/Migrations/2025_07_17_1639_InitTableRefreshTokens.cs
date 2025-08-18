@@ -12,7 +12,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Migration.Migrations
             id          UUID PRIMARY KEY,
             user_id     UUID NOT NULL,
             token       TEXT NOT NULL UNIQUE,
-            is_user      BOOL,
+            is_used      BOOL,
             is_revoked   BOOL,
             expires     TIMESTAMP NOT NULL,
 

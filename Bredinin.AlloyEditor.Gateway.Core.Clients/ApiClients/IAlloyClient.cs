@@ -10,7 +10,7 @@ public interface IAlloyClient
     Task<AlloyGradeResponse[]> GetGrades(CancellationToken ctn = default);
 
     [Post("/api/alloys")]
-    Task<Guid> CreateAlloyGrade(CreateAlloyGradeRequest request,CancellationToken ctn);
+    Task<Guid> CreateAlloyGrade(CreateAlloyGradeRequest request, CancellationToken ctn);
 
     [Delete("/api/alloys/{id}")]
     Task<IActionResult> DeleteAlloyGrade(

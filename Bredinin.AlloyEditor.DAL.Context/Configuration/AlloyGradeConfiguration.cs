@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Bredinin.AlloyEditor.DAL.Configuration
 {
-    internal class AlloyGradeConfiguration: IEntityTypeConfiguration<AlloyGrade>
+    internal class AlloyGradeConfiguration : IEntityTypeConfiguration<AlloyGrade>
     {
         public void Configure(EntityTypeBuilder<AlloyGrade> builder)
         {

@@ -30,7 +30,8 @@ builder.Services.AddOpenTelemetry()
             })
     );
 
-builder.Services.AddServiceSwagger("Bredinin.ApiGateway",true);
+builder.Services.AddServiceSwagger(
+    "Bredinin.ApiGateway", true);
 
 builder.Services.AddJwtConfiguration(builder.Configuration);
 builder.Services.AddSingleton<JwtProvider>();
@@ -38,7 +39,7 @@ builder.Services.AddSingleton<JwtProvider>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddAddAuthenticationCustom(builder.Configuration);
+builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 
 

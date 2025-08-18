@@ -17,9 +17,11 @@ namespace Bredinin.AlloyEditor.DAL.Migration.Parsers
             var elements = new List<DictChemicalElement>();
 
             ExcelPackage.License.SetNonCommercialOrganization("My Noncommercial organization");
+           
             using var package = new ExcelPackage(new FileInfo(filePath));
+           
             var worksheet = package.Workbook.Worksheets[0];
-            int rowCount = worksheet.Dimension.Rows;
+            var rowCount = worksheet.Dimension.Rows;
 
             for (int row = 2; row <= rowCount; row++)
             {

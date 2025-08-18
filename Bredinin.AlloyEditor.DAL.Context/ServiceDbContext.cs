@@ -12,9 +12,14 @@ public class ServiceDbContext(DbContextOptions options) : DbContext(options)
     }
 
     public DbSet<DictTypeOfHeatTreatment> DictTypesOfHeatTreatments { get; set; }
+
     public DbSet<AlloyGrade> AlloyGrades { get; set; }
+
     public DbSet<AlloyChemicalCompositions> AlloyChemicalCompositions { get; set; }
+
     public DbSet<DictChemicalElement> DictChemicalElements { get; set; }
+
     public DbSet<AlloySystem> AlloySystems { get; set; }
+
     public DbSet<AlloyHeatTreatment> AlloyHeatTreatments { get; set; }
 }

@@ -6,10 +6,10 @@ namespace Bredinin.AlloyEditor.Identity.Service.Contracts.Commands.Admin
     public record EditUserCommand : IRequest<UpdateUserResponse>
     {
         public Guid Id { get; set; }
-        public string FirstName { get; init; } = null!;
-        public string LastName { get; init; } = null!;
-        public string SecondName { get; init; } = null!;
+        public required string FirstName { get; init; } 
+        public required string LastName { get; init; } 
+        public required string SecondName { get; init; }
         public int Age { get; init; }
-        public Guid[] RoleIds { get; init; } = Array.Empty<Guid>();
+        public Guid[] RoleIds { get; init; } = [];
     }
 }

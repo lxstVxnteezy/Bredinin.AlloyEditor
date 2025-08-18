@@ -8,7 +8,7 @@ namespace Bredinin.AlloyEditor.Core.Metrics.Server
     {
         private readonly Gauge _memoryGauge = Prometheus.Metrics.CreateGauge(
             "process_memory_usage_megabytes",
-            "Current memory usage in megabytes (MB)");  
+            "Current memory usage in megabytes (MB)");
 
         private readonly TimeSpan _delay = TimeSpan.FromSeconds(15);
 
@@ -20,7 +20,7 @@ namespace Bredinin.AlloyEditor.Core.Metrics.Server
 
                 double memoryUsageMb = process.WorkingSet64 / (1024.0 * 1024.0);
 
-                _memoryGauge.Set(memoryUsageMb); 
+                _memoryGauge.Set(memoryUsageMb);
 
                 await Task.Delay(_delay, ctn);
             }

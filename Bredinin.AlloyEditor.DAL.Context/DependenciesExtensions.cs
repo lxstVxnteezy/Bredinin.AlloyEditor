@@ -10,7 +10,7 @@ public static class DependenciesExtensions
     {
         services.AddDbContext<ServiceDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
-        
+
         return services;
     }
 }

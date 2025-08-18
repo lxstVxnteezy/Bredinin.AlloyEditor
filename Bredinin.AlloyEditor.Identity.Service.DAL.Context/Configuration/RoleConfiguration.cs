@@ -11,7 +11,9 @@ namespace Bredinin.AlloyEditor.Identity.Service.DAL.Context.Configuration
             builder.ToTable("roles");
 
             builder.Property(x => x.Id).HasColumnName("id");
+
             builder.Property(x => x.Name).HasColumnName("name");
+
             builder.Property(x => x.Description).HasColumnName("description");
         }
     }

@@ -21,9 +21,9 @@ namespace Bredinin.AlloyEditor.Common.Swagger
                     Title = serviceName,
                     Version = version
                 });
-               
+
                 if (jwtSecurityDefinition)
-                 AddJwtSecurityDefinition(options);
+                    AddJwtSecurityDefinition(options);
 
                 customize?.Invoke(options);
             });

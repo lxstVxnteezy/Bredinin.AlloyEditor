@@ -1,5 +1,4 @@
 ﻿using Bredinin.AlloyEditor.Core.Metrics.Server;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bredinin.AlloyEditor.Core.Metrics

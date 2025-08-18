@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Bredinin.AlloyEditor.Core.Http.Exceptions
 {
-    public class ErrorHandlingMiddleware(RequestDelegate next, ILogger <ErrorHandlingMiddleware> logger)
+    public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
     {
         public async Task InvokeAsync(HttpContext context)
         {
@@ -18,7 +18,7 @@ namespace Bredinin.AlloyEditor.Core.Http.Exceptions
             }
             catch (Exception ex)
             {
-                logger.LogError(ex,ex.Message);
+                logger.LogError(ex, ex.Message);
                 await HandleUnexpectedExceptionAsync(context);
             }
         }

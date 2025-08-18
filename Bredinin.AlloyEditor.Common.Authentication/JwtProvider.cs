@@ -2,7 +2,7 @@
 
 namespace Bredinin.AlloyEditor.Services.Common
 {
-    public class JwtProvider 
+    public class JwtProvider
     {
         public readonly JwtConfiguration JwtConfiguration;
 
@@ -19,6 +19,5 @@ namespace Bredinin.AlloyEditor.Services.Common
             if (string.IsNullOrWhiteSpace(JwtConfiguration.Audience))
                 throw new ArgumentException("JWT Audience cannot be null or empty", nameof(JwtConfiguration.Audience));
         }
-
     }
 }

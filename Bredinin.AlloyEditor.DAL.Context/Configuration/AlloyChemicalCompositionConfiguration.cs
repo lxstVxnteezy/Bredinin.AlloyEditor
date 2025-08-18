@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Bredinin.AlloyEditor.DAL.Configuration
 {
-    internal class AlloyChemicalCompositionConfiguration:IEntityTypeConfiguration<AlloyChemicalCompositions>
+    internal class AlloyChemicalCompositionConfiguration : IEntityTypeConfiguration<AlloyChemicalCompositions>
     {
         public void Configure(EntityTypeBuilder<AlloyChemicalCompositions> builder)
         {

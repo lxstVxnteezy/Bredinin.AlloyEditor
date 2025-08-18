@@ -9,7 +9,7 @@ namespace Bredinin.AlloyEditor.Gateway.Core.Authentication
 {
     public static class DependenciesExtensions
     {
-        public static IServiceCollection AddAddAuthenticationCustom(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtConfig = configuration.GetSection(JwtConfiguration.SectionName)
                 .Get<JwtConfiguration>();

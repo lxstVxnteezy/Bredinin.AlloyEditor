@@ -5,7 +5,7 @@ namespace Bredinin.AlloyEditor.Gateway.Core.Clients.ApiClients
 {
     public interface IDictionaryClient
     {
-        [Headers("Authorization: Bearer")] 
+        [Headers("Authorization: Bearer")]
 
         [Get("/api/dictionary/chemical-elements")]
         Task<DictChemicalElementResponse[]?> GetChemicalElements(CancellationToken cancellationToken = default);
