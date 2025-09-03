@@ -7,6 +7,9 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <RootNamespace>Bredinin.AlloyEditor.WebApi</RootNamespace>
         <UserSecretsId>eeda1a7d-c5d7-4847-a960-fad963a2428d</UserSecretsId>
+	    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	    <NoWarn>$(NoWarn);1591</NoWarn>
+	    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>

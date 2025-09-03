@@ -7,7 +7,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces
     {
         Task<AuthResponse> GeneratePairsTokensAsync(User user);
         Task<bool> ValidateRefreshTokenAsync(string refreshToken, Guid userId);
-        Task RevokeRefreshTokenAsync(string refreshToken);
+        //Task RevokeRefreshTokenAsync(string refreshToken);
         Task RevokeRefreshAllTokenUserAsync(Guid userId);
         Task UseRefreshTokenAsync(string refreshToken);
     }

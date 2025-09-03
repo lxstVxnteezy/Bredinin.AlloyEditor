@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Protocols.Configuration;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -24,6 +26,8 @@ namespace Bredinin.AlloyEditor.Common.Swagger
 
                 if (jwtSecurityDefinition)
                     AddJwtSecurityDefinition(options);
+
+                TryAddXmlComments(options);
 
                 customize?.Invoke(options);
             });
@@ -57,6 +61,39 @@ namespace Bredinin.AlloyEditor.Common.Swagger
                     Array.Empty<string>()
                 }
             });
+        }
+
+        private static void TryAddXmlComments(SwaggerGenOptions options)
+        {
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            Assembly? mainAssembly = null;
+
+            foreach (var assembly in assemblies)
+            {
+                if (!assembly.IsDynamic &&
+                    !assembly.FullName?.StartsWith("System.") == true &&
+                    !assembly.FullName?.StartsWith("Microsoft.") == true &&
+                    assembly.EntryPoint != null)
+                {
+                    mainAssembly = assembly;
+                    break;
+                }
+            }
+
+            mainAssembly ??= assemblies.FirstOrDefault(a =>
+                !a.IsDynamic &&
+                !a.FullName?.StartsWith("System.") == true &&
+                !a.FullName?.StartsWith("Microsoft.") == true);
+
+            if (mainAssembly == null)
+                throw new InvalidConfigurationException();
+
+            var assemblyName = mainAssembly.GetName().Name;
+            var xmlFileName = $"{assemblyName}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFileName);
+
+            if (File.Exists(xmlPath))
+                options.IncludeXmlComments(xmlPath);
         }
 
         public static IApplicationBuilder UseServiceSwaggerUi(

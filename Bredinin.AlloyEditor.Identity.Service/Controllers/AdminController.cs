@@ -6,9 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Bredinin.AlloyEditor.Identity.Service.Controllers
 {
+    /// <summary>
+    /// Контроллер для работы с пользователями
+    /// </summary>
+    
     [Route("api/admin")]
     public class AdminController(IMediator mediator) : BaseApiController(mediator)
     {
+        /// <summary>
+        /// Создать нового пользователя
+        /// </summary>
+        /// <param name="command">Данные пользователя</param>
+        /// <returns>Созданный пользователь</returns>
+        /// <response code="201">Пользователь успешно создан</response>
+        /// <response code="400">Неверные данные</response>
         [HttpPost("user")]
         public async Task<Guid> CreateUser([FromBody] CreateUserCommand command)
         {
@@ -16,7 +27,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Controllers
 
             return response;
         }
-
+        
         [HttpPut("user")]
         public async Task<UpdateUserResponse> UpdateUser([FromBody] EditUserCommand command)
         {
@@ -25,6 +36,13 @@ namespace Bredinin.AlloyEditor.Identity.Service.Controllers
             return response;
         }
 
+        /// <summary>
+        /// Получить пользователя по ID
+        /// </summary>
+        /// <param name="userId">Идентификатор пользователя</param>
+        /// <returns>Данные пользователя</returns>
+        /// <response code="200">Пользователь найден</response>
+        /// <response code="404">Пользователь не найден</response>
         [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteUser(Guid userId)
         {
@@ -39,7 +57,12 @@ namespace Bredinin.AlloyEditor.Identity.Service.Controllers
 
             return Ok();
         }
-
+        
+        /// <summary>
+        /// Получить всех пользователей
+        /// </summary>
+        /// <returns>Список пользователей</returns>
+        /// <response code="200">Успешное выполнение</response>
         [HttpGet("search-users")]
         public async Task<SearchUserQuery[]> GetAllSearchQueries()
         {
@@ -47,7 +70,10 @@ namespace Bredinin.AlloyEditor.Identity.Service.Controllers
 
             return response;
         }
-
+        /// <summary>
+        /// TEST
+        /// </summary>
+        /// <response code="200">Успешное выполнение</response>
         [HttpGet("test")]
         public async Task<IActionResult> Test()
         {

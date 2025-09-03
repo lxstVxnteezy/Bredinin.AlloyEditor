@@ -1,18 +1,19 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions;
+﻿using System.Linq.Expressions;
+using Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions;
 using Bredinin.AlloyEditor.Domain.Alloys;
 
 namespace Bredinin.AlloyEditor.Handlers.Helpers
 {
     internal static class ChemicalCompositionHelper
     {
-        public static ChemicalCompositionsDto Convert(this AlloyChemicalCompositions compositionsResponse)
+        public static Expression<Func<AlloyChemicalCompositions, ChemicalCompositionsDto>> ConvertExpression()
         {
-            return new ChemicalCompositionsDto(
-                Id: compositionsResponse.Id,
-                MinValue: compositionsResponse.MinValue,
-                MaxValue: compositionsResponse.MaxValue,
-                ExactValue: compositionsResponse.ExactValue,
-                ChemicalElementId: compositionsResponse.ChemicalElementId
+            return x => new ChemicalCompositionsDto(
+                x.Id,
+                x.MinValue,
+                x.MaxValue,
+                x.ExactValue,
+                x.ChemicalElementId
             );
         }
     }

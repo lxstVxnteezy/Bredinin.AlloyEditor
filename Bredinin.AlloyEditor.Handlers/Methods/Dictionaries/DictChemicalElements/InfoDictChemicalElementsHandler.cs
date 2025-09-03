@@ -7,8 +7,8 @@ using Microsoft.Extensions.Caching.Memory;
 namespace Bredinin.AlloyEditor.Handlers.Methods.Dictionaries.DictChemicalElements
 {
     public interface IInfoDictChemicalElementsHandler : IHandler
-    {
-        public Task<DictChemicalElementResponse[]?> Handle(CancellationToken ctn = default);
+    { 
+        Task<DictChemicalElementResponse[]?> Handle(CancellationToken ctn = default);
     }
 
     internal class InfoDictChemicalElementsHandler(
