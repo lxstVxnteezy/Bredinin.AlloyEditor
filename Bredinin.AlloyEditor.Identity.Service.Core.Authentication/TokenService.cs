@@ -1,130 +1,105 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Linq.Expressions;
-using System.Security.Claims;
-using System.Text;
-using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
-using Bredinin.AlloyEditor.Identity.Service.Contracts.Queries.Auth;
-using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
-using Bredinin.AlloyEditor.Identity.Service.Domain;
-using Bredinin.AlloyEditor.Services.Common;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+﻿    using System.IdentityModel.Tokens.Jwt;
+    using System.Security.Claims;
+    using System.Security.Cryptography;
+    using System.Text;
+    using System.Text.Json;
+    using Bredinin.AlloyEditor.Identity.Service.Authentication.Entities;
+    using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
+    using Bredinin.AlloyEditor.Identity.Service.Contracts.Queries.Auth;
+    using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
+    using Bredinin.AlloyEditor.Identity.Service.Domain;
+    using Bredinin.AlloyEditor.Services.Common;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Caching.Distributed;
+    using Microsoft.IdentityModel.Tokens;
 
-namespace Bredinin.AlloyEditor.Identity.Service.Authentication;
+    namespace Bredinin.AlloyEditor.Identity.Service.Authentication;
 
-public class TokenService(IdentityDbContext context, JwtProvider jwtProvider) : ITokenService
-{
-    private const string RefreshTokenIdClaim = "refreshTokenId";
-    private const string UserIdClaim = "userId";
-    private const string UserLoginClaim = "userLogin";
-
-    public async Task<AuthResponse> GeneratePairsTokensAsync(User user)
+    public class TokenService(
+        IdentityDbContext context, 
+        JwtProvider jwtProvider,
+        IDistributedCache cache) : ITokenService
     {
-        var refreshTokenId = Guid.NewGuid();
 
-        var accessToken = GenerateAccessToken(user, refreshTokenId);
+        private readonly JwtConfiguration _jwtConfig = jwtProvider.Value;
+        private const string RefreshTokenPrefix = "refresh_";
 
-        var refreshToken = GenerateRefreshToken(refreshTokenId, user.Id);
-
-        var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(accessToken);
-
-        await context.RefreshTokens.AddAsync(new RefreshToken
+        public async Task<AuthResponse> GenerateTokensAsync(User user)
         {
-            Id = refreshTokenId,
-            Token = refreshToken,
-            Expires = DateTime.UtcNow.AddDays(jwtProvider.JwtConfiguration.RefreshTokenExpiryDays),
-            UserId = user.Id
-        });
+            var accessToken = GenerateAccessToken(user);
 
-        await context.SaveChangesAsync();
+            var refreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+            
+            var expires = DateTime.UtcNow.AddDays(_jwtConfig.RefreshTokenExpiryDays);
 
-        return new AuthResponse(accessToken, refreshToken);
-    }
+            var entry = new RefreshTokenCacheEntry
+            {
+                UserId = user.Id,
+                Expires = expires
+            };
 
-    public async Task<bool> ValidateRefreshTokenAsync(string refreshToken, Guid userId)
-    {
-        var handler = new JwtSecurityTokenHandler();
-        var validationResult = await handler.ValidateTokenAsync(refreshToken, GetTokenValidationParameters());
+            var options = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpiration = expires
+            };
 
-        if (!validationResult.IsValid) return false;
+            await cache.SetStringAsync(
+                RefreshTokenPrefix + refreshToken,
+                JsonSerializer.Serialize(entry),
+                options);
 
-        var token = await context.RefreshTokens
-            .AsNoTracking()
-            .FirstOrDefaultAsync(rt => rt.Token == refreshToken && rt.UserId == userId);
+            return new AuthResponse(accessToken, refreshToken);
+        }
 
-        return token != null && !token.IsUsed && !token.IsRevoked && token.Expires > DateTime.UtcNow;
-    }
-
-    //public Task RevokeRefreshTokenAsync(string refreshToken) =>
-    //    UpdateRefreshTokenAsync(rt => rt.Token == refreshToken, rt => rt.IsRevoked = true);
-
-    public Task UseRefreshTokenAsync(string refreshToken) =>
-        UpdateRefreshTokenAsync(rt => rt.Token == refreshToken, rt => rt.IsUsed = true);
-
-    public async Task RevokeRefreshAllTokenUserAsync(Guid userId) =>
-        await context.RefreshTokens
-            .Where(rt => rt.UserId == userId)
-            .ExecuteUpdateAsync(s => s.SetProperty(rt => rt.IsRevoked, true));
-
-    private string GenerateToken(IEnumerable<Claim> claims, TimeSpan expiration) =>
-        new JwtSecurityTokenHandler().WriteToken(new JwtSecurityToken(
-            issuer: jwtProvider.JwtConfiguration.Issuer,
-            audience: jwtProvider.JwtConfiguration.Audience,
-            claims: claims,
-            expires: DateTime.UtcNow.Add(expiration),
-            signingCredentials: GetSigningCredentials()));
-
-    private SigningCredentials GetSigningCredentials() => new(
-        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtProvider.JwtConfiguration.Key)),
-        SecurityAlgorithms.HmacSha256);
-
-    private IEnumerable<Claim> CreateBaseClaims(User user, Guid id)
-    {
-        var claims = new List<Claim>
+        public async Task<AuthResponse> RefreshAsync(string refreshToken)
         {
-            new(UserIdClaim, user.Id.ToString()),
-            new(UserLoginClaim, user.Login),
-            new(RefreshTokenIdClaim,id.ToString())
-        };
-        claims.AddRange(user.UserRoles.Select(ur => new Claim(ClaimTypes.Role, ur.Role.Name)));
-        return claims;
-    }
+            var key = RefreshTokenPrefix + refreshToken;
 
-    private TokenValidationParameters GetTokenValidationParameters() => new()
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtProvider.JwtConfiguration.Key)),
-        ValidateIssuer = false,
-        ValidIssuer = jwtProvider.JwtConfiguration.Issuer,
-        ValidateAudience = true,
-        ValidAudience = jwtProvider.JwtConfiguration.Audience,
-        ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero
-    };
+            var entryJson = await cache.GetStringAsync(key);
+           
+            if (entryJson == null)
+                throw new UnauthorizedAccessException("Invalid refresh token");
 
-    private async Task UpdateRefreshTokenAsync(
-        Expression<Func<RefreshToken,
-        bool>> predicate, Action<RefreshToken> updateAction)
-    {
-        var token = await context.RefreshTokens.FirstOrDefaultAsync(predicate);
-        if (token != null)
+            var entry = JsonSerializer.Deserialize<RefreshTokenCacheEntry>(entryJson)!;
+
+            if (entry.Expires <= DateTime.UtcNow)
+                throw new UnauthorizedAccessException("Refresh token expired");
+
+            await cache.RemoveAsync(key);
+
+            var user = await context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .SingleOrDefaultAsync(u => u.Id == entry.UserId);
+
+            if (user == null)
+                throw new UnauthorizedAccessException("User not found");
+
+            return await GenerateTokensAsync(user);
+        }
+
+        private string GenerateAccessToken(User user)
         {
-            updateAction(token);
-            await context.SaveChangesAsync();
+            var claims = new List<Claim>
+            {
+                new("userId", user.Id.ToString()),
+                new("userLogin", user.Login)
+            };
+
+            claims.AddRange(user.UserRoles.Select(ur => new Claim(ClaimTypes.Role, ur.Role.Name)));
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.Key));
+           
+            var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _jwtConfig.Issuer,
+                audience: _jwtConfig.Audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(_jwtConfig.AccessTokenExpiryMinutes),
+                signingCredentials: signingCredentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
-    private string GenerateAccessToken(User user, Guid id) =>
-        GenerateToken(CreateBaseClaims(user, id),
-            TimeSpan.FromMinutes(jwtProvider.JwtConfiguration.AccessTokenExpiryMinutes));
-
-    private string GenerateRefreshToken(Guid id, Guid userId)
-    {
-        var claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Jti, id.ToString()),
-            new(UserIdClaim, userId.ToString()),
-        };
-
-        return GenerateToken(claims, TimeSpan.FromDays(jwtProvider.JwtConfiguration.RefreshTokenExpiryDays));
-    }
-}

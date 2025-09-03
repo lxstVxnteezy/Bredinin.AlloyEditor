@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
-using Bredinin.AlloyEditor.Identity.Service.Authentication.Jobs;
 using Bredinin.AlloyEditor.Services.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
@@ -43,7 +42,6 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication
             services.AddAuthorization();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<ITokenService, TokenService>();
-            services.AddHostedService<TokenCleanupJob>();
 
             return services;
         }

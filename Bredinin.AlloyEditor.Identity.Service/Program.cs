@@ -9,6 +9,7 @@ using Bredinin.AlloyEditor.Common.Swagger;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using Serilog;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,12 +38,18 @@ builder.Services.AddOpenTelemetry()
             .AddAspNetCoreInstrumentation()
             .AddRuntimeInstrumentation()
             .AddConsoleExporter()
-            .AddProcessInstrumentation()
             .AddOtlpExporter(opts =>
             {
                 opts.Endpoint = new Uri(builder.Configuration["Otel:Endpoint"] ?? "otel-collector:4317");
             })
     );
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
+    options.Configuration = redisConnectionString;
+    options.InstanceName = "auth_:";
+});
+
 
 builder.Services.AddSerilog();
 builder.Services.AddControllers();
