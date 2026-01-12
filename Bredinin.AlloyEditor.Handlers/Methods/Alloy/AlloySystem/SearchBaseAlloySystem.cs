@@ -13,20 +13,15 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloySystem
     {
         public async Task<SearchAlloySystemResponse[]> Handle(CancellationToken ctn)
         {
-            var alloySystems = await context.AlloySystems
+            return await context.AlloySystems
                 .AsNoTracking()
+                .OrderBy(x => x.Name)
+                .Select(x => new SearchAlloySystemResponse(
+                    x.Id,
+                    x.BaseElementId,
+                    x.Name,
+                    x.Description))
                 .ToArrayAsync(ctn);
-
-            return alloySystems.Select(MapToResponse).ToArray();
-        }
-
-        private SearchAlloySystemResponse MapToResponse(Domain.Alloys.AlloySystem alloySystem)
-        {
-            return new SearchAlloySystemResponse(
-                Id: alloySystem.Id,
-                BaseElementId: alloySystem.BaseElementId,
-                Name: alloySystem.Name,
-                Description: alloySystem.Description);
         }
     }
 }

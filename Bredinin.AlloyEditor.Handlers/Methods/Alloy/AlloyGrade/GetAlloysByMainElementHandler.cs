@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
 {
     public interface IGetAlloysByMainElementHandler : IHandler
-    { 
+    {
         Task<InfoAlloyGradeByMainResponse[]> Handle(Guid id, CancellationToken ctn);
     }
 
@@ -15,28 +15,29 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
         ServiceDbContext context)
         : IGetAlloysByMainElementHandler
     {
-        public async Task<InfoAlloyGradeByMainResponse[]> Handle(Guid id, CancellationToken ctn)
+        public async Task<InfoAlloyGradeByMainResponse[]> Handle(Guid alloySystemId, CancellationToken ctn)
         {
-            var response = await context.AlloyGrades
+            var systemExists = await context.AlloySystems
                 .AsNoTracking()
-                .Where(x => x.AlloySystemId == id)
-                .Include(x => x.ChemicalCompositions)
+                .AnyAsync(x => x.Id == alloySystemId, ctn);
+
+            if (!systemExists)
+                throw new BusinessException($"Alloy system not found: {alloySystemId}");
+
+            var result = await context.AlloyGrades
+                .AsNoTracking()
+                .Where(x => x.AlloySystemId == alloySystemId)
                 .Select(x => new InfoAlloyGradeByMainResponse(
                     x.Id,
                     x.Name,
                     x.Description,
                     x.ChemicalCompositions
-                        .AsQueryable() 
-                        .Select(ChemicalCompositionHelper.ConvertExpression())
+                        .Select(ChemicalCompositionHelper.Convert)
                         .ToArray()
-                    )
-                )
+                ))
                 .ToArrayAsync(ctn);
-            
-            if (response.Length == 0)
-                throw new BusinessException("alloys could not be found");
-            
-            return response;
+
+            return result;
         }
     }
 }

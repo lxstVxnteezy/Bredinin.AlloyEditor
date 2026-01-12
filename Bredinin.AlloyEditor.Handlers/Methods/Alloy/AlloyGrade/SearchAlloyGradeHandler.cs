@@ -1,7 +1,6 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
-using Bredinin.AlloyEditor.Core.Http.Exceptions;
+using Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions;
 using Bredinin.AlloyEditor.DAL;
-using Bredinin.AlloyEditor.Handlers.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade;
@@ -17,21 +16,23 @@ internal class SearchAlloyGradeHandler(ServiceDbContext context)
     public async Task<AlloyGradeResponse[]> Handle(CancellationToken ctn)
     {
         var response = await context.AlloyGrades
+            .AsNoTracking()
+            .OrderBy(x => x.Name)
             .Select(x => new AlloyGradeResponse(
                 x.Id,
                 x.Name,
                 x.Description,
                 x.AlloySystemId,
-                x.ChemicalCompositions
-                    .AsQueryable() 
-                    .Select(ChemicalCompositionHelper.ConvertExpression())
-                    .ToArray()
+                x.ChemicalCompositions.Select(cc=> new ChemicalCompositionsDto(
+                            cc.Id,
+                            cc.MinValue,
+                            cc.MaxValue,
+                            cc.ExactValue,
+                            cc.ChemicalElementId
+                            )).ToArray()
             ))
             .ToArrayAsync(ctn);
 
-        if (response.Length == 0)
-            throw new BusinessException("alloys could not be found");
-        
-        return response;
+        return response.Length == 0 ? Array.Empty<AlloyGradeResponse>() : response;
     }
 }

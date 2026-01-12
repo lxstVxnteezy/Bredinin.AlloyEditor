@@ -11,9 +11,9 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Admin
     {
         public async Task<UpdateUserResponse> Handle(EditUserCommand request, CancellationToken cancellationToken)
         {
-            AssertRole(request);
+            await AssertRoleAsync(request, cancellationToken);
 
-            var foundUser = await context.Users.AsQueryable()
+            var foundUser = await context.Users
                 .Include(x => x.UserRoles)
                 .ThenInclude(x => x.Role)
                 .SingleOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
@@ -43,18 +43,18 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Admin
                 RoleIds: foundUser.UserRoles.Select(x=>x.RoleId).ToArray());
         }
 
-        private void AssertRole(EditUserCommand request)
+        private async Task AssertRoleAsync(EditUserCommand request, CancellationToken ct)
         {
-            var missingRoles = request.RoleIds
-                .Where(roleId => context.Roles
-                    .Find(roleId) == null)
-                .ToArray();
+            var existingRoleIds = await context.Roles
+                .Where(r => request.RoleIds.Contains(r.Id))
+                .Select(r => r.Id)
+                .ToListAsync(ct);
+
+            var missingRoles = request.RoleIds.Except(existingRoleIds).ToArray();
 
             if (missingRoles.Any())
-            {
-                var missingRoleIds = string.Join(", ", missingRoles);
-                throw new InvalidOperationException($"Roles not found: {missingRoleIds}");
-            }
+                throw new InvalidOperationException(
+                    $"Roles not found: {string.Join(", ", missingRoles)}");
         }
     }
 }

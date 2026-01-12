@@ -13,10 +13,12 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Admin
     {
         public async Task<Guid> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            if (await context.Users.AsQueryable().AnyAsync(u => u.Login == request.Login, cancellationToken))
+            if (await context.Users
+                    .AnyAsync(u => u.Login == request.Login, cancellationToken))
+
                 throw new InvalidOperationException($"User with login '{request.Login}' already exists");
 
-            var existingRolesCount = await context.Roles.AsQueryable()
+            var existingRolesCount = await context.Roles
                 .Where(r => request.RoleIds.Contains(r.Id))
                 .CountAsync(cancellationToken);
 

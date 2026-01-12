@@ -17,33 +17,45 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.ChemicalCompositions
     {
         public async Task<ChemicalCompositionsDto[]> Handle(Guid alloyGradeId, ChemicalCompositionsRequest[] request, CancellationToken ctn)
         {
+            var requestedElementIds = request.Select(r => r.ChemicalElementId)
+                .Distinct()
+                .ToArray();
+
+            var existingIds = await context.DictChemicalElements
+                .Where(x => requestedElementIds.Contains(x.Id))
+                .Select(x => x.Id)
+                .ToArrayAsync(cancellationToken: ctn);
+
+            var missing = requestedElementIds.Except(existingIds).ToArray();
+          
+            if (missing.Length > 0)
+                throw new BusinessException($"ChemicalElement(s) not found in db: {string.Join(',', missing)}");
+
             var foundAlloy = await context.AlloyGrades
                 .Include(x => x.ChemicalCompositions)
                 .SingleOrDefaultAsync(x => x.Id == alloyGradeId, ctn);
 
             if (foundAlloy == null)
-                throw new BusinessException("Alloy not found in db");
+                throw new BusinessException($"Alloy with {alloyGradeId} not found in db");
 
             var chemicalCompositions = request
-                .Select(MapToEntity)
+                .Select(rc => MapToEntity(rc, foundAlloy.Id))
                 .ToArray();
 
             foundAlloy.ChemicalCompositions.Clear();
-            foundAlloy.ChemicalCompositions = chemicalCompositions;
+
+            foreach (var cc in chemicalCompositions)
+            {
+                foundAlloy.ChemicalCompositions.Add(cc);
+            }
 
             await context.SaveChangesAsync(ctn);
 
             return foundAlloy.ChemicalCompositions.Select(MapToResponse).ToArray();
         }
 
-        private AlloyChemicalCompositions MapToEntity(ChemicalCompositionsRequest chemicalComposition)
+        private AlloyChemicalCompositions MapToEntity(ChemicalCompositionsRequest chemicalComposition, Guid alloyGradeId)
         {
-            var foundElement = context.DictChemicalElements
-                .SingleOrDefault(x => x.Id == chemicalComposition.ChemicalElementId);
-
-            if (foundElement == null)
-                throw new BusinessException("ChemicalElement not found in db");
-
             return new AlloyChemicalCompositions
             {
                 Id = Guid.NewGuid(),
@@ -51,6 +63,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.ChemicalCompositions
                 MaxValue = chemicalComposition.MaxValue,
                 ExactValue = chemicalComposition.ExactValue,
                 ChemicalElementId = chemicalComposition.ChemicalElementId,
+                AlloyGradeId = alloyGradeId
             };
         }
         private ChemicalCompositionsDto MapToResponse(AlloyChemicalCompositions element)

@@ -1,6 +1,5 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.Dictionaries.DictChemicalElements;
 using Bredinin.AlloyEditor.DAL;
-using Bredinin.AlloyEditor.Domain.Dictionaries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -25,28 +24,24 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Dictionaries.DictChemicalElement
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15);
                 entry.SetPriority(CacheItemPriority.High);
 
-                var chemicalElements = await context.DictChemicalElements
+                var responses = await context.DictChemicalElements
                     .AsNoTracking()
+                    .Select(chemicalElement => new DictChemicalElementResponse(
+                        chemicalElement.Id,
+                        chemicalElement.Name,
+                        chemicalElement.Symbol,
+                        chemicalElement.Description,
+                        chemicalElement.IsBaseForAlloySystem,
+                        chemicalElement.AtomicNumber,
+                        chemicalElement.AtomicWeight,
+                        chemicalElement.Group,
+                        chemicalElement.Period,
+                        chemicalElement.Density
+                    ))
                     .ToArrayAsync(ctn);
 
-                return chemicalElements.Select(MapToResponse).ToArray();
+                return responses;
             });
-        }
-
-        private static DictChemicalElementResponse MapToResponse(DictChemicalElement chemicalElement)
-        {
-            return new DictChemicalElementResponse(
-                Id: chemicalElement.Id,
-                Name: chemicalElement.Name,
-                Symbol: chemicalElement.Symbol,
-                Description: chemicalElement.Description,
-                IsBaseForAlloySystem: chemicalElement.IsBaseForAlloySystem,
-                AtomicNumber: chemicalElement.AtomicNumber,
-                AtomicWeight: chemicalElement.AtomicWeight,
-                Group: chemicalElement.Group,
-                Period: chemicalElement.Period,
-                Density: chemicalElement.Density
-            );
         }
     }
 }

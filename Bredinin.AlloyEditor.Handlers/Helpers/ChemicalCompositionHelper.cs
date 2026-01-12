@@ -16,5 +16,15 @@ namespace Bredinin.AlloyEditor.Handlers.Helpers
                 x.ChemicalElementId
             );
         }
+
+        public static ChemicalCompositionsDto Convert(AlloyChemicalCompositions x)
+       => new(
+           x.Id,
+           x.MinValue,
+           x.MaxValue,
+           x.ExactValue,
+           x.ChemicalElementId
+       );
+
     }
 }
