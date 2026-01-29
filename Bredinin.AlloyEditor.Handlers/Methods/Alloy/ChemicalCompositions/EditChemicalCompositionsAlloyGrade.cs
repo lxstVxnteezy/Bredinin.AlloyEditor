@@ -2,6 +2,7 @@
 using Bredinin.AlloyEditor.Core.Http.Exceptions;
 using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Domain.Alloys;
+using Bredinin.AlloyEditor.Handlers.Validators;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.ChemicalCompositions
@@ -41,6 +42,8 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.ChemicalCompositions
             var chemicalCompositions = request
                 .Select(rc => MapToEntity(rc, foundAlloy.Id))
                 .ToArray();
+
+            AlloyChemicalCompositionValidator.ValidateTotalRange(chemicalCompositions);
 
             foundAlloy.ChemicalCompositions.Clear();
 
