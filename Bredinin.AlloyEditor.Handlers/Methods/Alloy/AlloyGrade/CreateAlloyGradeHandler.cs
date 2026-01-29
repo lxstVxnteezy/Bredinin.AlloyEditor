@@ -2,6 +2,7 @@
 using Bredinin.AlloyEditor.Core.Http.Exceptions;
 using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Domain.Alloys;
+using Bredinin.AlloyEditor.Handlers.Validators;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
@@ -15,7 +16,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
     {
         public async Task<Guid> Handle(CreateAlloyGradeRequest request, CancellationToken ctn)
         {
-            var foundAlloySystem = context.AlloySystems
+            var foundAlloySystem = await context.AlloySystems
                 .AsNoTracking()
                 .SingleOrDefaultAsync(x => x.Id == request.AlloySystemId, ctn);
 
@@ -32,6 +33,8 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
             var chemicalCompositions = request.ChemicalCompositions
                 .Select(MapToEntity)
                 .ToArray();
+
+            AlloyChemicalCompositionValidator.ValidateTotalRange(chemicalCompositions);
 
             var newAlloyGrade = new Domain.Alloys.AlloyGrade()
             {
@@ -51,7 +54,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
 
         private AlloyChemicalCompositions MapToEntity(CreateChemicalCompositionRequest chemicalComposition)
         {
-            var foundElement = context.AlloyChemicalCompositions
+            var foundElement = context.DictChemicalElements
                 .SingleOrDefault(x => x.Id == chemicalComposition.ChemicalElementId);
 
             if (foundElement == null)

@@ -1,6 +1,7 @@
 using Bredinin.AlloyEditor.Common.Swagger;
 using Bredinin.AlloyEditor.Core.Http.Exceptions;
 using Bredinin.AlloyEditor.Core.Metrics;
+using Bredinin.AlloyEditor.Core.Validation;
 using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.DAL.Migration;
 using Bredinin.AlloyEditor.Handlers;
@@ -44,6 +45,7 @@ builder.Services.AddDatabaseMigrations(builder.Configuration);
 builder.Services.AddHandlers();
 builder.Services.AddServerMetrics();
 builder.Services.AddMemoryCache();
+builder.Services.AddValidation();
 
 var app = builder.Build();
 
