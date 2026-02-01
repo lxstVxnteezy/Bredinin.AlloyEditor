@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
 {
     public interface IDeleteAlloyGradeHandler : IHandler
-    { 
+    {
         Task<ActionResult> Handle(Guid id, CancellationToken ctn);
     }
     internal class DeleteAlloyGradeHandler(

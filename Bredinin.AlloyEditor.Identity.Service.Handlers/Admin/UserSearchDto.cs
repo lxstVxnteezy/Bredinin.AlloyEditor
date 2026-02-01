@@ -10,6 +10,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Admin
         public async Task<SearchUserQuery[]> Handle(GetAllSearchUserQueries request, CancellationToken cancellationToken)
         {
             var users = await context.Users
+                .AsNoTracking()
                 .Include(x => x.UserRoles)
                 .Select(x => new SearchUserQuery(
                     x.Id,

@@ -2,11 +2,11 @@
 
 namespace Bredinin.AlloyEditor.Services.Common
 {
-    public class JwtProvider
+    public class JwtOptionsAccessor
     {
         public readonly JwtConfiguration Value;
 
-        public JwtProvider(IOptions<JwtConfiguration> configOptions)
+        public JwtOptionsAccessor(IOptions<JwtConfiguration> configOptions)
         {
             Value = configOptions.Value;
 

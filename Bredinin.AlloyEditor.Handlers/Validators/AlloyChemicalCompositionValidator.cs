@@ -9,18 +9,18 @@ namespace Bredinin.AlloyEditor.Handlers.Validators
         /// <summary>
         /// Проверяет, что сумма MinValue и MaxValue всех элементов не превышает 100
         /// </summary>
-        /// <param name="compositions">Массив химических составов</param>
+        /// <param name="chemicalCompositions">Массив химических составов</param>
 
-        public static void ValidateTotalRange(AlloyChemicalCompositions[] compositions)
+        public static void ValidateTotalRange(ICollection<AlloyChemicalCompositions> chemicalCompositions)
         {
-            if (compositions.Length == 0)
+            if (chemicalCompositions.Count == 0)
                 return;
 
-            var totalMin = compositions
+            var totalMin = chemicalCompositions
                 .Where(x => x.MinValue.HasValue)
                 .Sum(x => x.MinValue!.Value);
 
-            var totalMax = compositions
+            var totalMax = chemicalCompositions
                 .Where(x => x.MaxValue.HasValue)
                 .Sum(x => x.MaxValue!.Value);
 

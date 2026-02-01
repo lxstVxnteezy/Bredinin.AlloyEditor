@@ -62,6 +62,9 @@ internal sealed class CreateAlloyGradeHandler(ServiceDbContext context) : ICreat
             ChemicalCompositions = chemicalCompositions
         };
 
+        AlloyChemicalCompositionValidator
+            .ValidateTotalRange(newAlloyGrade.ChemicalCompositions);
+
         context.AlloyGrades.Add(newAlloyGrade);
 
         await context.SaveChangesAsync(ctn);

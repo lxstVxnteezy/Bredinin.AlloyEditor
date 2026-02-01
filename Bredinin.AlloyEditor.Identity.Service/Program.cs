@@ -26,7 +26,7 @@ builder.Configuration.AddJsonFile(
     reloadOnChange: true);
 
 builder.Services.AddJwtConfiguration(builder.Configuration);
-builder.Services.AddSingleton<JwtProvider>();
+builder.Services.AddSingleton<JwtOptionsAccessor>();
 
 builder.Services.AddOpenTelemetry()
     .WithMetrics(opt =>

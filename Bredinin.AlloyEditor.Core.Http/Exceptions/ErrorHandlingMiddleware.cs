@@ -35,6 +35,7 @@ namespace Bredinin.AlloyEditor.Core.Http.Exceptions
 
             await JsonSerializer.SerializeAsync(context.Response.Body, response);
         }
+
         private async Task HandleUnexpectedExceptionAsync(HttpContext context)
         {
             context.Response.ContentType = "application/json";

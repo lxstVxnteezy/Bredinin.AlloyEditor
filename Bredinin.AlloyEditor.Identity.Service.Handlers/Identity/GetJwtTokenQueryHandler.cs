@@ -14,6 +14,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
         public async Task<AuthResponse> Handle(GetJwtTokenQuery request, CancellationToken cancellationToken)
         {
             var user = await context.Users
+                .AsNoTracking()
                 .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
                 .SingleOrDefaultAsync(x => x.Login == request.Login, cancellationToken);
