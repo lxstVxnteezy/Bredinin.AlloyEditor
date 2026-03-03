@@ -5,7 +5,19 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces
 {
     public interface ITokenService
     {
-        Task<AuthResponse> GenerateTokensAsync(User user);
-        Task<AuthResponse> RefreshAsync(string refreshToken);
+        /// <summary>
+        /// Генерирует access token для пользователя
+        /// </summary>
+        string GenerateAccessToken(User user);
+
+        /// <summary>
+        /// Генерирует случайный refresh token (просто строку)
+        /// </summary>
+        string GenerateRefreshToken();
+
+        /// <summary>
+        /// Создаёт объект ответа с токенами
+        /// </summary>
+        AuthResponse CreateAuthResponse(string accessToken, string refreshToken);
     }
 }
