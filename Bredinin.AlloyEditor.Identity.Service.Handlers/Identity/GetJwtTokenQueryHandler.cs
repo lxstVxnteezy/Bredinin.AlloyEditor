@@ -30,6 +30,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
             var refreshToken = TokenService.GenerateRefreshToken();
 
             var expires = DateTime.UtcNow.AddDays(7);
+            
             await SaveRefreshTokenAsync(refreshToken, user.Id, expires, cancellationToken);
 
             return CreateTokenResponse(accessToken, refreshToken);

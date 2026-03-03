@@ -15,12 +15,14 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
         public override async Task<AuthResponse> Handle(RefreshTokenQuery request, CancellationToken cancellationToken)
         {
             var entry = await GetAndValidateRefreshTokenAsync(request.RefreshToken, cancellationToken);
+            
             if (entry == null)
                 throw new UnauthorizedAccessException("Invalid or expired refresh token");
 
             await RemoveRefreshTokenAsync(request.RefreshToken, cancellationToken);
 
             var user = await GetUserWithRolesAsync(entry.UserId, cancellationToken);
+            
             if (user == null)
                 throw new UnauthorizedAccessException("User not found");
 
@@ -28,6 +30,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
             var refreshToken = TokenService.GenerateRefreshToken();
 
             var expires = DateTime.UtcNow.AddDays(7);
+          
             await SaveRefreshTokenAsync(refreshToken, user.Id, expires, cancellationToken);
 
             return CreateTokenResponse(accessToken, refreshToken);
