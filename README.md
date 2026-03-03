@@ -201,20 +201,6 @@ Bredinin.AlloyEditor/
 
 ---
 
-## 🧪 Тестирование
-
-```bash
-# Unit тесты
-dotnet test Bredinin.AlloyEditor.Tests.Unit
-
-# Интеграционные тесты
-dotnet test Bredinin.AlloyEditor.Tests.Integration
-
-# Functional тесты (Testcontainers)
-dotnet test Bredinin.AlloyEditor.Tests.Functional
-```
-
----
 
 ## 📄 Лицензия
 
