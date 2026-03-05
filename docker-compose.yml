@@ -117,9 +117,9 @@ services:
     build:
       context: .
       dockerfile: Bredinin.AlloyEditor.Identity.Service/Dockerfile
+    container_name: alloyeditor_identity_service
     ports:
       - "5020:5020"
-    container_name: alloyeditor_identity_service
     environment:
       ConnectionStrings__DefaultConnection: "Host=identity_db;Port=5432;Database=${POSTGRES_DB_IDENTITY};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
       ConnectionStrings__Redis: "redis:6379,password=${REDIS_PASSWORD},abortConnect=false,connectTimeout=5000,syncTimeout=3000"
@@ -140,13 +140,12 @@ services:
     networks:
       - monitoring
    
-  api_gateway:
+  # === 3 ИНСТАНСА ГЕЙТВЕЯ (без портов наружу) ===
+  api_gateway1:
     build:
       context: .
       dockerfile: Bredinin.AlloyEditor.Gateway/Dockerfile
-    ports:
-      - "5030:5030"
-    container_name: alloyeditor_api_gateway
+    container_name: alloyeditor_api_gateway1
     environment:
       ASPNETCORE_URLS: "http://+:5030"
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
@@ -160,6 +159,61 @@ services:
         condition: service_healthy
     networks:
       - monitoring
+
+  api_gateway2:
+    build:
+      context: .
+      dockerfile: Bredinin.AlloyEditor.Gateway/Dockerfile
+    container_name: alloyeditor_api_gateway2
+    environment:
+      ASPNETCORE_URLS: "http://+:5031"
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      ConnectionStrings__Redis: "redis:6379,password=${REDIS_PASSWORD}"
+    depends_on:
+      alloyeditor_webapi:
+        condition: service_started
+      identity_service:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    networks:
+      - monitoring
+
+  api_gateway3:
+    build:
+      context: .
+      dockerfile: Bredinin.AlloyEditor.Gateway/Dockerfile
+    container_name: alloyeditor_api_gateway3
+    environment:
+      ASPNETCORE_URLS: "http://+:5032"
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      ConnectionStrings__Redis: "redis:6379,password=${REDIS_PASSWORD}"
+    depends_on:
+      alloyeditor_webapi:
+        condition: service_started
+      identity_service:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    networks:
+      - monitoring
+
+  # === NGINX ===
+  nginx:
+    image: nginx:latest
+    container_name: alloyeditor_nginx
+    ports:
+      - "80:80"
+      - "443:443"  # на будущее для HTTPS
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api_gateway1
+      - api_gateway2
+      - api_gateway3
+    networks:
+      - monitoring
+    restart: unless-stopped
 
   prometheus:
     image: prom/prometheus:latest
