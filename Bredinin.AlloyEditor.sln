@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11520.95
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{02425232-BB73-42C4-9D5D-30D4F64E795C}"
 EndProject
@@ -88,6 +88,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Gateway.Core.Authentication", "Bredinin.AlloyEditor.Gateway.Core.Authentication\Bredinin.AlloyEditor.Gateway.Core.Authentication.csproj", "{B1034804-A431-4EA4-9D79-56950B1088F1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{A68B54CE-1D5B-466C-9CD8-53DA45451DE1}"
+	ProjectSection(SolutionItems) = preProject
+		.env = .env
+		docker-compose.yml = docker-compose.yml
+		nginx.conf = nginx.conf
+		otel-collector-config.yaml = otel-collector-config.yaml
+		prometheus.yml = prometheus.yml
+		redis.conf = redis.conf
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Common.Authentication", "Bredinin.AlloyEditor.Common.Authentication\Bredinin.AlloyEditor.Common.Authentication.csproj", "{FD230980-2B5F-4C20-933F-BD6DFC87C99E}"
 EndProject
@@ -96,6 +104,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Gateway.Handlers", "Bredinin.AlloyEditor.Gateway.Handlers\Bredinin.AlloyEditor.Gateway.Handlers.csproj", "{90C73BF4-9A92-2612-4C52-935330F0D2C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Common.Swagger", "Bredinin.AlloyEditor.Common.Swagger\Bredinin.AlloyEditor.Common.Swagger.csproj", "{10CA312D-47CC-4C1A-A824-522620F8F1A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{2C757665-B618-4551-AB2C-7ED4292B9CFC}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

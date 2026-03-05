@@ -198,23 +198,26 @@ POST `/api/alloys`
 
 ```json
 {
-  "name": "Steel AISI 304",
-  "systemId": 1,
-  "elements": [
-    { "elementId": 26, "percentage": 70 },
-    { "elementId": 24, "percentage": 18 },
-    { "elementId": 28, "percentage": 8 }
+  "name": "string",
+  "description": "string",
+  "alloySystemId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "chemicalCompositions": [
+    {
+      "minValue": 0,
+      "maxValue": 0,
+      "exactValue": 0,
+      "chemicalElementId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    }
   ]
 }
 ```
 
 ### Ответ
 
+201
 ```json
 {
-  "id": 15,
-  "name": "Steel AISI 304",
-  "createdAt": "2026-03-05T12:00:00Z"
+  "id": 3fa85f64-5717-4562-b3fc-2c963f66afa6, 
 }
 ```
 
