@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Domain\Bredinin.AlloyEditor.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Dictionaries\DictHeatTreatment\" />
+  </ItemGroup>
+
 </Project>

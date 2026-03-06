@@ -198,15 +198,44 @@ POST `/api/alloys`
 
 ```json
 {
-  "name": "string",
-  "description": "string",
-  "alloySystemId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "Сталь 45",
+  "description": "Конструкционная углеродистая сталь",
+  "alloySystemId": "fe-c-system-id",
   "chemicalCompositions": [
     {
-      "minValue": 0,
-      "maxValue": 0,
-      "exactValue": 0,
-      "chemicalElementId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      "chemicalElementId": "carbon-id",
+      "minValue": 0.42,
+      "maxValue": 0.5
+    },
+    {
+      "chemicalElementId": "silicon-id",
+      "minValue": 0.17,
+      "maxValue": 0.37
+    }
+  ],
+  "heatTreatments": [
+    {
+      "heatTreatmentTypeId": "quenching-id",
+      "temperatureMin": 800,
+      "temperatureMax": 820,
+      "holdingTimeMin": 30,
+      "holdingTimeMax": 60,
+      "coolingMedium": "Масло",
+      "isDefault": true
+    }
+  ],
+  "defaultMechanicalProperties": [
+    {
+      "propertyTypeId": "hardness-hb-id",
+      "valueMin": 170,
+      "valueMax": 210,
+      "condition": "исходное состояние",
+      "source": "ГОСТ 1050-2013"
+    },
+    {
+      "propertyTypeId": "tensile-strength-id",
+      "valueExact": 600,
+      "condition": "исходное состояние"
     }
   ]
 }

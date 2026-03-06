@@ -1,4 +1,6 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
+using Bredinin.AlloyEditor.Contracts.Common.HeatTreatment;
+using Bredinin.AlloyEditor.Contracts.Common.MechenicalProperties;
 using Bredinin.AlloyEditor.Core.Http.Exceptions;
 using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Domain.Alloys;
@@ -53,13 +55,26 @@ internal sealed class CreateAlloyGradeHandler(ServiceDbContext context) : ICreat
             .Select(MapToEntity)
             .ToList();
 
+        var heatTreatments = request.HeatTreatments?
+            .Select(MapToHeatTreatment)
+            .ToList() ?? new List<AlloyHeatTreatment>
+        {
+            Capacity = 0
+        };
+
+        var defaultProperties = request.DefaultMechanicalProperties?
+            .Select(p => MapToMechanicalProperty(p, null))  // null = без ТО
+            .ToList() ?? [];
+
         var newAlloyGrade = new Domain.Alloys.AlloyGrade
         {
             Id = Guid.NewGuid(),
             Name = request.Name.Trim(),
             Description = request.Description?.Trim(),
             AlloySystemId = request.AlloySystemId,
-            ChemicalCompositions = chemicalCompositions
+            ChemicalCompositions = chemicalCompositions,
+            HeatTreatments = heatTreatments,
+            MechanicalProperties = defaultProperties  // свойства без ТО
         };
 
         AlloyChemicalCompositionValidator
@@ -84,4 +99,35 @@ internal sealed class CreateAlloyGradeHandler(ServiceDbContext context) : ICreat
             ChemicalElementId = request.ChemicalElementId
         };
     }
+    private static AlloyHeatTreatment MapToHeatTreatment(
+        CreateHeatTreatmentRequest request) => new()
+    {
+        Id = Guid.NewGuid(),
+        HeatTreatmentTypeId = request.HeatTreatmentTypeId,
+        TemperatureMin = request.TemperatureMin,
+        TemperatureMax = request.TemperatureMax,
+        TemperatureExact = request.TemperatureExact,
+        HoldingTimeMin = request.HoldingTimeMin,
+        HoldingTimeMax = request.HoldingTimeMax,
+        HoldingTimeExact = request.HoldingTimeExact,
+        CoolingMedium = request.CoolingMedium,
+        Description = request.Description,
+        StepOrder = request.StepOrder,
+        IsDefault = request.IsDefault
+    };
+
+    private static AlloyMechanicalProperty MapToMechanicalProperty(
+        CreateMechanicalPropertyRequest request,
+        Guid? heatTreatmentId) => new()
+    {
+        Id = Guid.NewGuid(),
+        PropertyTypeId = request.PropertyTypeId,
+        HeatTreatmentId = heatTreatmentId,
+        ValueMin = request.ValueMin,
+        ValueMax = request.ValueMax,
+        ValueExact = request.ValueExact,
+        Condition = request.Condition,
+        Source = request.Source,
+        Notes = request.Notes
+    };
 }

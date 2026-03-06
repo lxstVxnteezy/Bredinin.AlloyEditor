@@ -11,9 +11,10 @@
 
         public virtual ICollection<AlloyChemicalCompositions> ChemicalCompositions { get; set; } =
             new List<AlloyChemicalCompositions>();
-        
-        public virtual ICollection<AlloyHeatTreatment> HeatTreatments { get; set; } =
-            new List<AlloyHeatTreatment>();
 
+        public virtual ICollection<AlloyHeatTreatment> HeatTreatments { get; set; }
+            = new List<AlloyHeatTreatment>();
+        public virtual ICollection<AlloyMechanicalProperty> MechanicalProperties { get; set; }
+            = new List<AlloyMechanicalProperty>();
     }
 }

@@ -22,4 +22,8 @@ public class ServiceDbContext(DbContextOptions options) : DbContext(options)
     public DbSet<AlloySystem> AlloySystems { get; set; }
 
     public DbSet<AlloyHeatTreatment> AlloyHeatTreatments { get; set; }
+    public DbSet<DictMechanicalPropertyType> DictMechanicalPropertyTypes { get; set; }
+
+    public DbSet<AlloyMechanicalProperty> AlloyMechanicalProperties { get; set; }
+
 }
