@@ -1,13 +1,11 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
+using Bredinin.AlloyEditor.Core.Validation.Extensions;
 using FluentValidation;
 
 namespace Bredinin.AlloyEditor.Core.Validation.Validators.AlloyGrade
 {
     public class CreateAlloyGradeRequestValidator : AbstractValidator<CreateAlloyGradeRequest>
     {
-        private const decimal MaxPercent = 100;
-        private const decimal MaxElementValue = 99;
-
         public CreateAlloyGradeRequestValidator()
         {
             RuleFor(x => x.Name)
@@ -28,50 +26,45 @@ namespace Bredinin.AlloyEditor.Core.Validation.Validators.AlloyGrade
                         .NotEmpty();
 
                     comp.RuleFor(x => x.MinValue)
-                        .InclusiveBetween(0, MaxElementValue)
+                        .Must(ChemicalCompositionValidationExtensions.IsValidValueRange)
+                        .WithMessage($"MinValue must be between 0 and {ChemicalCompositionValidationExtensions.GetMaxElementValue()}")
                         .When(x => x.MinValue.HasValue);
 
                     comp.RuleFor(x => x.MaxValue)
-                        .InclusiveBetween(0, MaxElementValue)
-                        .GreaterThanOrEqualTo(x => x.MinValue)
+                        .Must(ChemicalCompositionValidationExtensions.IsValidValueRange)
+                        .WithMessage($"MaxValue must be between 0 and {ChemicalCompositionValidationExtensions.GetMaxElementValue()}")
+                        .Must((request, maxValue) => 
+                            ChemicalCompositionValidationExtensions.IsValidMinMaxRange(request.MinValue, maxValue))
+                        .WithMessage("MaxValue must be greater than or equal to MinValue")
                         .When(x => x.MaxValue.HasValue);
 
                     comp.RuleFor(x => x.ExactValue)
-                        .InclusiveBetween(0, MaxElementValue)
+                        .Must(ChemicalCompositionValidationExtensions.IsValidExactValue)
+                        .WithMessage($"ExactValue must be between 0 and {ChemicalCompositionValidationExtensions.GetMaxElementValue()}")
                         .When(x => x.ExactValue.HasValue);
 
                     comp.RuleFor(x => x)
-                        .Must(x =>
-                            x.ExactValue.HasValue ||
-                            (x.MinValue.HasValue && x.MaxValue.HasValue))
+                        .Must(x => ChemicalCompositionValidationExtensions.IsEitherExactOrRange(
+                            x.ExactValue, x.MinValue, x.MaxValue))
                         .WithMessage("Either ExactValue or Min/Max must be specified");
-                  
-                    comp.RuleFor(x => x)
-                        .Must(x =>
-                            !x.MinValue.HasValue ||
-                            !x.MaxValue.HasValue ||
-                            x.MinValue != x.MaxValue)
-                        .WithMessage("MinValue and MaxValue must be different");
 
+                    comp.RuleFor(x => x)
+                        .Must(x => ChemicalCompositionValidationExtensions.AreMinAndMaxDifferent(
+                            x.MinValue, x.MaxValue))
+                        .WithMessage("MinValue and MaxValue must be different");
                 });
 
             RuleFor(x => x.ChemicalCompositions)
                 .Must(BeValidTotalRange)
-                .WithMessage("The sum of Min/Max values must not exceed 100");
-
+                .WithMessage($"The sum of Min/Max values must not exceed {ChemicalCompositionValidationExtensions.GetMaxPercent()}");
         }
-        private static bool BeValidTotalRange(
-            CreateChemicalCompositionRequest[] compositions)
+
+        private static bool BeValidTotalRange(CreateChemicalCompositionRequest[] compositions)
         {
-            var totalMin = compositions
-                .Where(x => x.MinValue.HasValue)
-                .Sum(x => x.MinValue!.Value);
-
-            var totalMax = compositions
-                .Where(x => x.MaxValue.HasValue)
-                .Sum(x => x.MaxValue!.Value);
-
-            return totalMin <= MaxPercent && totalMax <= MaxPercent;
+            return ChemicalCompositionValidationExtensions.IsTotalRangeValid(
+                compositions,
+                x => x.MinValue,
+                x => x.MaxValue);
         }
     }
 }

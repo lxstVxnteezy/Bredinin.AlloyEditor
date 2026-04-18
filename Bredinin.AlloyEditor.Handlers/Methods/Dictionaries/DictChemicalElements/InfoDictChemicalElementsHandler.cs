@@ -1,7 +1,9 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common.Dictionaries.DictChemicalElements;
+﻿using Bredinin.AlloyEditor.Common.Configurations;
+using Bredinin.AlloyEditor.Contracts.Common.Dictionaries.DictChemicalElements;
 using Bredinin.AlloyEditor.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Dictionaries.DictChemicalElements
 {
@@ -12,7 +14,8 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Dictionaries.DictChemicalElement
 
     internal class InfoDictChemicalElementsHandler(
         IMemoryCache memoryCache,
-        ServiceDbContext context)
+        ServiceDbContext context,
+        IOptions<CacheSettings> cacheSettings)
         : IInfoDictChemicalElementsHandler
     {
         private const string CacheKey = nameof(InfoDictChemicalElementsHandler);
@@ -21,7 +24,7 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Dictionaries.DictChemicalElement
         {
             return await memoryCache.GetOrCreateAsync(CacheKey, async entry =>
             {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15);
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(cacheSettings.Value.ExpirationMinutes);
                 entry.SetPriority(CacheItemPriority.High);
 
                 var responses = await context.DictChemicalElements

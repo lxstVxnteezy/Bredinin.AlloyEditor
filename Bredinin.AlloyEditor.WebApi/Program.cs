@@ -1,5 +1,6 @@
+using Bredinin.AlloyEditor.Common.Configurations;
+using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Common.Swagger;
-using Bredinin.AlloyEditor.Core.Http.Exceptions;
 using Bredinin.AlloyEditor.Core.Metrics;
 using Bredinin.AlloyEditor.Core.Validation;
 using Bredinin.AlloyEditor.DAL;
@@ -18,6 +19,9 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
+
+builder.Services.Configure<CacheSettings>(
+    builder.Configuration.GetSection(CacheSettings.SectionName));
 
 builder.Services.AddOpenTelemetry()
     .WithMetrics(opt =>

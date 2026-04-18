@@ -13,10 +13,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Http\Bredinin.AlloyEditor.Common.Http.csproj" />
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Common\Bredinin.AlloyEditor.Common.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Contracts\Bredinin.AlloyEditor.Contracts.csproj" />
-    <ProjectReference Include="..\Bredinin.AlloyEditor.Core.Http\Bredinin.AlloyEditor.Core.Http.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.DAL.Context\Bredinin.AlloyEditor.DAL.Context.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Domain\Bredinin.AlloyEditor.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Validators\" />
   </ItemGroup>
 
 </Project>

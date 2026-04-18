@@ -1,6 +1,5 @@
 using Bredinin.AlloyEditor.Identity.Service;
 using Bredinin.AlloyEditor.Identity.Service.Authentication;
-using Bredinin.AlloyEditor.Identity.Service.Core.Http.Exceptions;
 using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
 using Bredinin.AlloyEditor.Identity.Service.Handler;
 using Bredinin.AlloyEditor.Identity.Service.Migration;
@@ -9,7 +8,7 @@ using Bredinin.AlloyEditor.Common.Swagger;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using Serilog;
-using StackExchange.Redis;
+using Bredinin.AlloyEditor.Common.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 

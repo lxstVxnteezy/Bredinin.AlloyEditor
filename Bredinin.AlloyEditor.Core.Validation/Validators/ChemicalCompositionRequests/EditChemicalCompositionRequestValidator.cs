@@ -1,4 +1,5 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions;
+using Bredinin.AlloyEditor.Core.Validation.Extensions;
 using FluentValidation;
 
 namespace Bredinin.AlloyEditor.Core.Validation.Validators.ChemicalCompositionRequests
@@ -12,17 +13,19 @@ namespace Bredinin.AlloyEditor.Core.Validation.Validators.ChemicalCompositionReq
                 .NotEmpty();
 
             RuleFor(x => x.MinValue)
-                .GreaterThanOrEqualTo(0)
-                .LessThanOrEqualTo(99);
+                .Must(ChemicalCompositionValidationExtensions.IsValidValueRange)
+                .WithMessage($"MinValue must be between 0 and {ChemicalCompositionValidationExtensions.GetMaxElementValue()}");
 
             RuleFor(x => x.MaxValue)
-                .GreaterThanOrEqualTo(x => x.MinValue)
-                .LessThanOrEqualTo(99);
+                .Must(ChemicalCompositionValidationExtensions.IsValidValueRange)
+                .WithMessage($"MaxValue must be between 0 and {ChemicalCompositionValidationExtensions.GetMaxElementValue()}")
+                .Must((request, maxValue) => 
+                    ChemicalCompositionValidationExtensions.IsValidMinMaxRange(request.MinValue, maxValue))
+                .WithMessage("MaxValue must be greater than or equal to MinValue");
 
             RuleFor(x => x)
-                .Must(x =>
-                    x.ExactValue.HasValue ||
-                    x.MinValue.HasValue && x.MaxValue.HasValue)
+                .Must(x => ChemicalCompositionValidationExtensions.IsEitherExactOrRange(
+                    x.ExactValue, x.MinValue, x.MaxValue))
                 .WithMessage("Either ExactValue or Min/Max must be specified");
         }
     }

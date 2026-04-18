@@ -44,10 +44,10 @@ public class TokenService(
             AbsoluteExpiration = expires
         };
 
-        await cache.SetStringAsync(
-            RefreshTokenPrefix + refreshToken,
-            JsonSerializer.Serialize(entry),
-            options);
+        //await cache.SetStringAsync(
+        //    RefreshTokenPrefix + refreshToken,
+        //    JsonSerializer.Serialize(entry),
+        //    options);
 
         return new AuthResponse(accessToken, refreshToken);
     }

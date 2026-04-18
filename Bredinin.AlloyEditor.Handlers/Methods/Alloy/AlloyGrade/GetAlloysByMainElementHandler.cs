@@ -1,5 +1,5 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
-using Bredinin.AlloyEditor.Core.Http.Exceptions;
+﻿using Bredinin.AlloyEditor.Common.Http;
+using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Handlers.Helpers;
 using Microsoft.EntityFrameworkCore;

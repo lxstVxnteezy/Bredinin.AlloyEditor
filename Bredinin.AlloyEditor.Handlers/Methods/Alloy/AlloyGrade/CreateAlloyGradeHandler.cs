@@ -1,8 +1,7 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
-using Bredinin.AlloyEditor.Core.Http.Exceptions;
+﻿using Bredinin.AlloyEditor.Common.Http;
+using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Domain.Alloys;
-using Bredinin.AlloyEditor.Handlers.Validators;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade;
@@ -12,18 +11,24 @@ public interface ICreateAlloyGradeHandler : IHandler
     Task<Guid> Handle(CreateAlloyGradeRequest request, CancellationToken ctn);
 }
 
-internal sealed class CreateAlloyGradeHandler(ServiceDbContext context) : ICreateAlloyGradeHandler
+internal class CreateAlloyGradeHandler(ServiceDbContext context) : ICreateAlloyGradeHandler
 {
     public async Task<Guid> Handle(CreateAlloyGradeRequest request, CancellationToken ctn)
     {
-        ArgumentNullException.ThrowIfNull(request);
-
-        var alloySystemExists = await context.AlloySystems
+        var alloySystem = await context.AlloySystems
             .AsNoTracking()
-            .AnyAsync(x => x.Id == request.AlloySystemId, ctn);
+            .SingleOrDefaultAsync(s => s.Id == request.AlloySystemId, ctn);
 
-        if (!alloySystemExists)
+        if (alloySystem == null)
             throw new BusinessException($"Alloy system not found: {request.AlloySystemId}");
+
+        var baseElementExist = request.ChemicalCompositions
+           .Any(e => e.ChemicalElementId == alloySystem.BaseElementId);
+
+        if (!baseElementExist)
+            throw new BusinessException($"Base element for alloy creation is not added. '{request.Name}");
+
+        ArgumentNullException.ThrowIfNull(request);
 
         var alloyExists = await context.AlloyGrades
             .AsNoTracking()
@@ -61,9 +66,6 @@ internal sealed class CreateAlloyGradeHandler(ServiceDbContext context) : ICreat
             AlloySystemId = request.AlloySystemId,
             ChemicalCompositions = chemicalCompositions
         };
-
-        AlloyChemicalCompositionValidator
-            .ValidateTotalRange(newAlloyGrade.ChemicalCompositions);
 
         context.AlloyGrades.Add(newAlloyGrade);
 

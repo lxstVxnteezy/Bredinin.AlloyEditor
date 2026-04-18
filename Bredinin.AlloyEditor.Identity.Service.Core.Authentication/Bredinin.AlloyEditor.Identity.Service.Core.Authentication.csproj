@@ -23,8 +23,4 @@
     <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Authentication\Bredinin.AlloyEditor.Common.Authentication.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Jobs\" />
-  </ItemGroup>
-
 </Project>
