@@ -6,13 +6,15 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
+using Bredinin.AlloyEditor.Services.Common;
 
 namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity.Base
 {
     public abstract class BaseAuthHandler<TContract>(
         ITokenService tokenService,
         IdentityDbContext context,
-        IDistributedCache cache)
+        IDistributedCache cache,
+        JwtOptionsAccessor  jwtOptionsAccessor)
         : IRequestHandler<TContract, AuthResponse>
         where TContract : IRequest<AuthResponse>
     {

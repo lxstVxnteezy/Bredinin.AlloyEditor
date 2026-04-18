@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Bredinin.AlloyEditor.Domain\Bredinin.AlloyEditor.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Validators\" />
-  </ItemGroup>
-
 </Project>

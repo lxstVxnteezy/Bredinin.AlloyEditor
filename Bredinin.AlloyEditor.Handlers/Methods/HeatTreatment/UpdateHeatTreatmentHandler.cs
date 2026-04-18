@@ -1,5 +1,5 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common.HeatTreatment;
-using Bredinin.AlloyEditor.Core.Http.Exceptions;
+﻿using Bredinin.AlloyEditor.Common.Http;
+using Bredinin.AlloyEditor.Contracts.Common.HeatTreatment;
 using Bredinin.AlloyEditor.DAL;
 using Microsoft.EntityFrameworkCore;
 

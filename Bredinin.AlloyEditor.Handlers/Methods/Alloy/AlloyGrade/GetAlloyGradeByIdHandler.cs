@@ -1,8 +1,8 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
+﻿using Bredinin.AlloyEditor.Common.Http;
+using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions;
 using Bredinin.AlloyEditor.Contracts.Common.HeatTreatment;
 using Bredinin.AlloyEditor.Contracts.Common.MechenicalProperties;
-using Bredinin.AlloyEditor.Core.Http.Exceptions;
 using Bredinin.AlloyEditor.DAL;
 using Microsoft.EntityFrameworkCore;
 

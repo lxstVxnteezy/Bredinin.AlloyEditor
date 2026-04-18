@@ -1,5 +1,5 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common.MechenicalProperties;
-using Bredinin.AlloyEditor.Core.Http.Exceptions;
+﻿using Bredinin.AlloyEditor.Common.Http;
+using Bredinin.AlloyEditor.Contracts.Common.MechenicalProperties;
 using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Domain.Dictionaries;
 using Microsoft.EntityFrameworkCore;

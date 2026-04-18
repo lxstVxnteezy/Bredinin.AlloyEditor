@@ -6,15 +6,15 @@ namespace Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces
     public interface ITokenService
     {
         /// <summary>
-        /// Генерирует access token для пользователя
+        /// Генерирует access токен
         /// </summary>
         string GenerateAccessToken(User user);
-
+        
         /// <summary>
-        /// Генерирует случайный refresh token (просто строку)
+        /// Генерирует refresh токен (случайную строку)
         /// </summary>
         string GenerateRefreshToken();
-
+        
         /// <summary>
         /// Создаёт объект ответа с токенами
         /// </summary>
