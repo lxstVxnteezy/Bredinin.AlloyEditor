@@ -1,19 +1,23 @@
 ﻿using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
 using Bredinin.AlloyEditor.Identity.Service.Contracts.Queries.Auth;
 using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
-using MediatR;
+using Bredinin.AlloyEditor.Identity.Service.Handler.Identity.Base;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
 {
     public class GetJwtTokenQueryHandler(
         ITokenService tokenService,
         IdentityDbContext context,
-        IPasswordHasher passwordHasher) : IRequestHandler<GetJwtTokenQuery, AuthResponse>
+        IDistributedCache cache,
+        IPasswordHasher passwordHasher)
+        : BaseAuthHandler<GetJwtTokenQuery>(tokenService, context, cache)
     {
-        public async Task<AuthResponse> Handle(GetJwtTokenQuery request, CancellationToken cancellationToken)
+
+        public override async Task<AuthResponse> Handle(GetJwtTokenQuery request, CancellationToken cancellationToken)
         {
-            var user = await context.Users
+            var user = await Context.Users
                 .AsNoTracking()
                 .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
@@ -22,9 +26,14 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
             if (user == null || !passwordHasher.VerifyPassword(request.Password, user.Hash))
                 throw new UnauthorizedAccessException("Invalid credentials");
 
-            var response = await tokenService.GenerateTokensAsync(user);
+            var accessToken = TokenService.GenerateAccessToken(user);
+            var refreshToken = TokenService.GenerateRefreshToken();
 
-            return response;
+            var expires = DateTime.UtcNow.AddDays(7);
+            
+            await SaveRefreshTokenAsync(refreshToken, user.Id, expires, cancellationToken);
+
+            return CreateTokenResponse(accessToken, refreshToken);
         }
     }
 }

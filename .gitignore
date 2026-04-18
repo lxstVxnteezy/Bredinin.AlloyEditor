@@ -122,3 +122,5 @@ $RECYCLE.BIN/
 .Trash-*
 .nfs*
 /Bredinin.AlloyEditor.WebApi/appsettings.json
+/project_tree.txt
+/project_structure.txt

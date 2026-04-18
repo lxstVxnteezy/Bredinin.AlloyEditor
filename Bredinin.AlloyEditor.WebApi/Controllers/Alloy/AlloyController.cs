@@ -1,10 +1,13 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions;
+using Bredinin.AlloyEditor.Contracts.Common.HeatTreatment;
+using Bredinin.AlloyEditor.Contracts.Common.MechenicalProperties;
 using Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade;
 using Bredinin.AlloyEditor.Handlers.Methods.Alloy.ChemicalCompositions;
+using Bredinin.AlloyEditor.Handlers.Methods.Alloy.MechanicalProperties;
+using Bredinin.AlloyEditor.Handlers.Methods.HeatTreatment;
 using Bredinin.AlloyEditor.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
-#pragma warning disable CS1573 // Parameter has no matching param tag in the XML comment (but other parameters do)
 
 namespace Bredinin.AlloyEditor.WebAPI.Controllers.Alloy
 {
@@ -14,69 +17,97 @@ namespace Bredinin.AlloyEditor.WebAPI.Controllers.Alloy
     [Route("api/alloys")]
     public class AlloyController : BaseApiController
     {
+        #region Базовые методы сплавов
+
         /// <summary>
         /// Получить все сплавы.
         /// </summary>
-        /// <remarks>
-        /// Возвращает список всех зарегистрированных сплавов.
-        /// </remarks>
-        /// <returns>Массив объектов <see cref="AlloyGradeResponse"/>.</returns>
-        /// <response code="200">Список сплавов успешно получен.</response>
-        /// <response code="400">Нету зарегистрированных сплавов.</response>
         [HttpGet]
         [ProducesResponseType(typeof(AlloyGradeResponse[]), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public Task<AlloyGradeResponse[]> GetGrades(
             [FromServices] ISearchAlloyGradeHandler handler,
             CancellationToken ctn)
+            => handler.Handle(ctn);
+
+        /// <summary>
+        /// Получить сплав по идентификатору.
+        /// </summary>
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(AlloyGradeResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<AlloyGradeResponse>> GetAlloyGradeById(
+            [FromServices] IGetAlloyGradeByIdHandler handler,
+            Guid id,
+            CancellationToken ctn)
         {
-            return handler.Handle(ctn);
+            var result = await handler.Handle(id, ctn);
+            return Ok(result);
         }
 
         /// <summary>
         /// Создать новый сплав.
         /// </summary>
-        /// <param name="request">Данные для создания сплава.</param>
-        /// <returns>Идентификатор созданного сплава.</returns>
-        /// <response code="201">Сплав успешно создан.</response>
-        /// <response code="400">Переданы некорректные данные.</response>
         [HttpPost]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public Task<Guid> CreateAlloyGrade(
+        public async Task<ActionResult<Guid>> CreateAlloyGrade(
             [FromServices] ICreateAlloyGradeHandler handler,
             [FromBody] CreateAlloyGradeRequest request,
             CancellationToken ctn)
         {
-            return handler.Handle(request, ctn);
+            var id = await handler.Handle(request, ctn);
+            return CreatedAtAction(nameof(GetAlloyGradeById), new { id }, id);
+        }
+
+        /// <summary>
+        /// Обновить основную информацию сплава.
+        /// </summary>
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> UpdateAlloyGrade(
+            [FromServices] IUpdateAlloyGradeHandler handler,
+            Guid id,
+            [FromBody] UpdateAlloyGradeRequest request,
+            CancellationToken ctn)
+        {
+            await handler.Handle(id, request, ctn);
+            return NoContent();
         }
 
         /// <summary>
         /// Удалить сплав по идентификатору.
         /// </summary>
-        /// <param name="id">Идентификатор сплава.</param>
-        /// <response code="204">Сплав удалён.</response>
-        /// <response code="404">Сплав не найден.</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public Task<ActionResult> Delete(
+        public Task<ActionResult> DeleteAlloyGrade(
             [FromServices] IDeleteAlloyGradeHandler handler,
-            [FromRoute] Guid id,
+            Guid id,
             CancellationToken ctn)
-        {
-            return handler.Handle(id, ctn);
-        }
+            => handler.Handle(id, ctn);
+
+        /// <summary>
+        /// Получить список сплавов по идентификатору системы сплавов.
+        /// </summary>
+        [HttpGet("for-main-element/{id}")]
+        [ProducesResponseType(typeof(InfoAlloyGradeByMainResponse[]), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public Task<InfoAlloyGradeByMainResponse[]> GetAlloysForMainElement(
+            [FromServices] IGetAlloysByMainElementHandler handler,
+            Guid id,
+            CancellationToken ctn)
+            => handler.Handle(id, ctn);
+
+        #endregion
+
+        #region Химический состав
 
         /// <summary>
         /// Изменить химический состав сплава.
         /// </summary>
-        /// <param name="id">Идентификатор сплава.</param>
-        /// <param name="request">Массив изменений химического состава.</param>
-        /// <returns>Обновлённый массив химического состава.</returns>
-        /// <response code="200">Химический состав успешно изменён.</response>
-        /// <response code="404">Сплав не найден.</response>
-        [HttpPut("chemical-compositions/{id}")]
+        [HttpPut("{id}/chemical-compositions")]
         [ProducesResponseType(typeof(ChemicalCompositionsDto[]), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public Task<ChemicalCompositionsDto[]> EditChemicalCompositions(
@@ -84,26 +115,108 @@ namespace Bredinin.AlloyEditor.WebAPI.Controllers.Alloy
             [FromBody] ChemicalCompositionsRequest[] request,
             [FromServices] IEditChemicalCompositionsAlloyGradeHandler handler,
             CancellationToken ctn)
+            => handler.Handle(id, request, ctn);
+
+        #endregion
+
+        #region Термообработка
+
+        /// <summary>
+        /// Добавить режим термообработки к сплаву.
+        /// </summary>
+        [HttpPost("{id}/heat-treatments")]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Guid>> AddHeatTreatment(
+            [FromServices] IAddHeatTreatmentToAlloyHandler handler,
+            Guid id,
+            [FromBody] CreateHeatTreatmentRequest request,
+            CancellationToken ctn)
         {
-            return handler.Handle(id, request, ctn);
+            var treatmentId = await handler.Handle(id, request, ctn);
+            return CreatedAtAction(nameof(GetAlloyGradeById), new { id }, treatmentId);
         }
 
         /// <summary>
-        /// Получить список сплавов по идентификатору базового элемента.
+        /// Обновить режим термообработки.
         /// </summary>
-        /// <param name="id">Идентификатор базового элемента.</param>
-        /// <returns>Список сплавов, связанных с базовым элементом.</returns>
-        /// <response code="200">Список сплавов успешно получен.</response>
-        /// <response code="404">Сплавы не найдены.</response>
-        [HttpGet("for-main-element/{id}")]
-        [ProducesResponseType(typeof(InfoAlloyGradeByMainResponse[]), StatusCodes.Status200OK)]
+        [HttpPut("heat-treatments/{treatmentId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public Task<InfoAlloyGradeByMainResponse[]> GetAlloysForMainElement(
-            [FromRoute] Guid id,
-            [FromServices] IGetAlloysByMainElementHandler handler,
+        public async Task<ActionResult> UpdateHeatTreatment(
+            [FromServices] IUpdateHeatTreatmentHandler handler,
+            Guid treatmentId,
+            [FromBody] UpdateHeatTreatmentRequest request,
             CancellationToken ctn)
         {
-            return handler.Handle(id, ctn);
+            await handler.Handle(treatmentId, request, ctn);
+            return NoContent();
         }
+
+        /// <summary>
+        /// Удалить режим термообработки.
+        /// </summary>
+        [HttpDelete("heat-treatments/{treatmentId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public Task<ActionResult> DeleteHeatTreatment(
+            [FromServices] IDeleteHeatTreatmentHandler handler,
+            Guid treatmentId,
+            CancellationToken ctn)
+            => handler.Handle(treatmentId, ctn);
+
+        #endregion
+
+        #region Механические свойства
+
+        /// <summary>
+        /// Добавить механическое свойство к сплаву.
+        /// </summary>
+        [HttpPost("{id}/mechanical-properties")]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Guid>> AddMechanicalProperty(
+            [FromServices] IAddMechanicalPropertyToAlloyHandler handler,
+            Guid id,
+            [FromBody] CreateMechanicalPropertyRequest request,
+            CancellationToken ctn)
+        {
+            var propertyId = await handler.Handle(id, request, ctn);
+            return CreatedAtAction(nameof(GetAlloyGradeById), new { id }, propertyId);
+        }
+
+        /// <summary>
+        /// Обновить механическое свойство.
+        /// </summary>
+        [HttpPut("mechanical-properties/{propertyId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> UpdateMechanicalProperty(
+            [FromServices] IUpdateMechanicalPropertyHandler handler,
+            Guid propertyId,
+            [FromBody] UpdateMechanicalPropertyRequest request,
+            CancellationToken ctn)
+        {
+            await handler.Handle(propertyId, request, ctn);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Удалить механическое свойство.
+        /// </summary>
+        [HttpDelete("mechanical-properties/{propertyId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public Task<ActionResult> DeleteMechanicalProperty(
+            [FromServices] IDeleteMechanicalPropertyHandler handler,
+            Guid propertyId,
+            CancellationToken ctn)
+            => handler.Handle(propertyId, ctn);
+
+        #endregion
     }
 }

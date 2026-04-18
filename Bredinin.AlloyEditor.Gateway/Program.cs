@@ -48,7 +48,7 @@ builder.Services.AddClients(builder.Configuration);
 var app = builder.Build();
 
 
-app.UseServiceSwaggerUi(uiTitle: "API Gateway");
+app.UseServiceSwaggerUi(uiTitle: "API Gateway", routePrefix: "swagger");
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
