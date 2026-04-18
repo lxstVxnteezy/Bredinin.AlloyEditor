@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Contracts\Bredinin.AlloyEditor.Common.Contracts.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Http\Bredinin.AlloyEditor.Common.Http.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Common\Bredinin.AlloyEditor.Common.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Contracts\Bredinin.AlloyEditor.Contracts.csproj" />

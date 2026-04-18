@@ -1,4 +1,5 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
+﻿using Bredinin.AlloyEditor.Contracts.Common;
+using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions;
 using Bredinin.AlloyEditor.Contracts.Common.HeatTreatment;
 using Bredinin.AlloyEditor.Contracts.Common.MechenicalProperties;
@@ -23,11 +24,15 @@ namespace Bredinin.AlloyEditor.WebAPI.Controllers.Alloy
         /// Получить все сплавы.
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(AlloyGradeResponse[]), StatusCodes.Status200OK)]
-        public Task<AlloyGradeResponse[]> GetGrades(
+        [ProducesResponseType(typeof(PagedResponse<AlloyGradeResponse>), StatusCodes.Status200OK)]
+        public Task<PagedResponse<AlloyGradeResponse>> GetGrades(
             [FromServices] ISearchAlloyGradeHandler handler,
-            CancellationToken ctn)
-            => handler.Handle(ctn);
+            [FromQuery] string? search = null,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20,
+            CancellationToken ctn = default)
+             => handler.Handle(search, page, pageSize, ctn);
+
 
         /// <summary>
         /// Получить сплав по идентификатору.

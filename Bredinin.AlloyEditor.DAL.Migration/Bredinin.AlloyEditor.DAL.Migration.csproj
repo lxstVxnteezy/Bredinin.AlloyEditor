@@ -8,6 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Include="Migrations\2026_03_06_2256_FixMechanicalPropertiesUniqueConstraint.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="EPPlus" Version="8.0.5" />
       <PackageReference Include="FluentMigrator" Version="7.1.0" />
       <PackageReference Include="FluentMigrator.Extensions.Postgres" Version="7.1.0" />

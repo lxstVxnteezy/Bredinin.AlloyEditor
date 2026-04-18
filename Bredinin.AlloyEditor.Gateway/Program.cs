@@ -43,7 +43,7 @@ builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 
 
-builder.Services.AddClients(builder.Configuration);
+builder.Services.AddClients(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 

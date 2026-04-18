@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.3.11520.95 d18.3
+VisualStudioVersion = 18.3.11520.95
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{02425232-BB73-42C4-9D5D-30D4F64E795C}"
 EndProject
@@ -96,6 +96,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Common.Http", "Bredinin.AlloyEditor.Common.Http\Bredinin.AlloyEditor.Common.Http.csproj", "{CF3683F1-6C5D-43AE-AB64-96D4534916D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Common", "Bredinin.AlloyEditor.Common\Bredinin.AlloyEditor.Common.csproj", "{B2AE9B35-F5EB-479D-9C13-3D95CD6D009E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bredinin.AlloyEditor.Common.Contracts", "Bredinin.AlloyEditor.Common.Contracts\Bredinin.AlloyEditor.Common.Contracts.csproj", "{CD8B0F9D-1F4C-4936-AEC0-B104774E461C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -207,6 +209,10 @@ Global
 		{B2AE9B35-F5EB-479D-9C13-3D95CD6D009E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2AE9B35-F5EB-479D-9C13-3D95CD6D009E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2AE9B35-F5EB-479D-9C13-3D95CD6D009E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD8B0F9D-1F4C-4936-AEC0-B104774E461C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD8B0F9D-1F4C-4936-AEC0-B104774E461C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD8B0F9D-1F4C-4936-AEC0-B104774E461C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD8B0F9D-1F4C-4936-AEC0-B104774E461C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -257,6 +263,7 @@ Global
 		{10CA312D-47CC-4C1A-A824-522620F8F1A5} = {A68B54CE-1D5B-466C-9CD8-53DA45451DE1}
 		{CF3683F1-6C5D-43AE-AB64-96D4534916D5} = {A68B54CE-1D5B-466C-9CD8-53DA45451DE1}
 		{B2AE9B35-F5EB-479D-9C13-3D95CD6D009E} = {A68B54CE-1D5B-466C-9CD8-53DA45451DE1}
+		{CD8B0F9D-1F4C-4936-AEC0-B104774E461C} = {A68B54CE-1D5B-466C-9CD8-53DA45451DE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C26E2A09-E1AD-476E-B186-078798D09813}

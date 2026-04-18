@@ -56,8 +56,6 @@ var app = builder.Build();
 app.UseSerilogRequestLogging();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
 app.UseServiceSwaggerUi(uiTitle: "Alloy Editor API");
 app.UseDatabaseMigrations();
 app.UseEndpoints(endpoints =>
