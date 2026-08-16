@@ -64,7 +64,8 @@ namespace Bredinin.AlloyEditor.Core.Validation.Validators.AlloyGrade
             return ChemicalCompositionValidationExtensions.IsTotalRangeValid(
                 compositions,
                 x => x.MinValue,
-                x => x.MaxValue);
+                x => x.MaxValue,
+                x => x.ExactValue);   // добавили третий селектор
         }
     }
 }

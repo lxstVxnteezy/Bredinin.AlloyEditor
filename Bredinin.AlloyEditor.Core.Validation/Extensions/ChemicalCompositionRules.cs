@@ -32,19 +32,15 @@ public static class ChemicalCompositionValidationExtensions
         exactValue.HasValue || (minValue.HasValue && maxValue.HasValue);
 
     /// <summary>
-    /// Проверяет, что сумма значений в допустимых пределах
+    /// Проверяет, что сумма значений (с учётом ExactValue и диапазонов) в допустимых пределах
     /// </summary>
-    public static bool IsTotalRangeValid<T>(IEnumerable<T> compositions, 
-        Func<T, decimal?> minSelector, 
-        Func<T, decimal?> maxSelector) where T : class
+    public static bool IsTotalRangeValid<T>(IEnumerable<T> compositions,
+        Func<T, decimal?> minSelector,
+        Func<T, decimal?> maxSelector,
+        Func<T, decimal?> exactSelector) where T : class
     {
-        var totalMin = compositions
-            .Where(x => minSelector(x).HasValue)
-            .Sum(x => minSelector(x)!.Value);
-
-        var totalMax = compositions
-            .Where(x => maxSelector(x).HasValue)
-            .Sum(x => maxSelector(x)!.Value);
+        var totalMin = compositions.Sum(x => minSelector(x) ?? exactSelector(x) ?? 0);
+        var totalMax = compositions.Sum(x => maxSelector(x) ?? exactSelector(x) ?? 0);
 
         return totalMin <= MaxPercent && totalMax <= MaxPercent;
     }

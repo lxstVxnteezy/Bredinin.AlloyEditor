@@ -23,6 +23,12 @@ Log.Logger = new LoggerConfiguration()
 builder.Services.Configure<CacheSettings>(
     builder.Configuration.GetSection(CacheSettings.SectionName));
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "AlloyEditor:"; 
+});
+
 builder.Services.AddOpenTelemetry()
     .WithMetrics(opt =>
 

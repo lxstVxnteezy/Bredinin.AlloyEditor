@@ -20,9 +20,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
             
             if (entry == null)
                 throw new UnauthorizedAccessException("Invalid or expired refresh token");
-
-            await RemoveRefreshTokenAsync(request.RefreshToken, cancellationToken);
-
+            
             var user = await GetUserWithRolesAsync(entry.UserId, cancellationToken);
             
             if (user == null)
@@ -34,6 +32,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
             var expires = DateTime.UtcNow.AddDays(jwtOptionsAccessor.Value.RefreshTokenExpiryDays);
           
             await SaveRefreshTokenAsync(refreshToken, user.Id, expires, cancellationToken);
+            await RemoveOldRefreshTokenAsync(request.RefreshToken, cancellationToken);
 
             return CreateTokenResponse(accessToken, refreshToken);
         }

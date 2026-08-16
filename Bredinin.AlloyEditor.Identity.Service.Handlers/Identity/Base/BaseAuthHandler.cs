@@ -56,7 +56,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity.Base
             return entry;
         }
 
-        protected async Task RemoveRefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
+        protected async Task RemoveOldRefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
         {
             await Cache.RemoveAsync(RefreshTokenPrefix + refreshToken, cancellationToken);
         }

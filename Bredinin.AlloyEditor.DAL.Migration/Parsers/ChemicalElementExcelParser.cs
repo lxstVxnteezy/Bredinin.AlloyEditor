@@ -26,7 +26,7 @@ namespace Bredinin.AlloyEditor.DAL.Migration.Parsers
             for (int row = 2; row <= rowCount; row++)
             {
                 var atomicWeightText = worksheet.Cells[row, 6].Text.Replace(".", ",");
-                var density = worksheet.Cells[row, 6].Text.Replace(".", ",");
+                var density = worksheet.Cells[row, 9].Text.Replace(".", ",");
 
                 elements.Add(new DictChemicalElement
                 {
