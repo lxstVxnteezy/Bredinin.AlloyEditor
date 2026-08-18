@@ -14,7 +14,7 @@ public interface IGetHeatTreatmentTypesHandler : IHandler
     Task<HeatTreatmentTypeDto[]> Handle(CancellationToken ctn);
 }
 
-internal sealed class GetHeatTreatmentTypesHandler(
+public sealed class GetHeatTreatmentTypesHandler(
     ServiceDbContext context,
     IDistributedCache cache,
     IOptions<CacheSettings> cacheSettings
