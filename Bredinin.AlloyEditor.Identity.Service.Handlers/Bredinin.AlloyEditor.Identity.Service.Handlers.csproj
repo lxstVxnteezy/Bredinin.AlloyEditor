@@ -9,9 +9,11 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="13.0.0" />
+    <PackageReference Include="StackExchange.Redis" Version="3.1.31" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Http\Bredinin.AlloyEditor.Common.Http.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Core.Authentication\Bredinin.AlloyEditor.Identity.Service.Core.Authentication.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Contracts\Bredinin.AlloyEditor.Identity.Service.Contracts.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.DAL.Context\Bredinin.AlloyEditor.Identity.Service.DAL.Context.csproj" />

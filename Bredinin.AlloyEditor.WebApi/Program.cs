@@ -1,5 +1,6 @@
 using Bredinin.AlloyEditor.Common.Configurations;
 using Bredinin.AlloyEditor.Common.Http;
+using Bredinin.AlloyEditor.Common.Http.Middlewares;
 using Bredinin.AlloyEditor.Common.Swagger;
 using Bredinin.AlloyEditor.Core.Metrics;
 using Bredinin.AlloyEditor.Core.Validation;
@@ -62,6 +63,9 @@ var app = builder.Build();
 app.UseSerilogRequestLogging();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseRouting();
+app.UseAuthentication();
+app.UseMiddleware<TokenRevocationMiddleware>();
+app.UseAuthorization();
 app.UseServiceSwaggerUi(uiTitle: "Alloy Editor API");
 app.UseDatabaseMigrations();
 app.UseEndpoints(endpoints =>

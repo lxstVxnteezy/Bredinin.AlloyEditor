@@ -50,6 +50,13 @@ namespace Bredinin.AlloyEditor.Identity.Service.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Поменять пароль пользователя по ID
+        /// </summary>
+        /// <param name="command">Хранит ID пользователя и новый пароль</param>
+        /// <returns>Данные пользователя</returns>
+        /// <response code="200">Успешно</response>
+        /// <response code="404">Не успешно</response>
         [HttpPost("password-reset")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordUserCommand command)
         {

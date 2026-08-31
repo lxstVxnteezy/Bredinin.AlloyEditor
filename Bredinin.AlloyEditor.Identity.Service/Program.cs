@@ -9,6 +9,8 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using Serilog;
 using Bredinin.AlloyEditor.Common.Http;
+using Bredinin.AlloyEditor.Common.Http.Middlewares;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,7 +62,8 @@ builder.Services.AddServiceSwagger("Bredinin.Identity.Service",true);
 builder.Services.AddDataAccess(builder.Configuration);
 builder.Services.AddDatabaseMigrations(builder.Configuration);
 builder.Services.AddApplicationHandlers();
-
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+    ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")!));
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
@@ -72,8 +75,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseServiceSwaggerUi(uiTitle: "Identity Service API");
-app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseDatabaseMigrations();
+app.UseAuthentication();
+app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<TokenRevocationMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

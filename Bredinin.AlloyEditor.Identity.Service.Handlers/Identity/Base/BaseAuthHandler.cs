@@ -7,23 +7,25 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 using Bredinin.AlloyEditor.Services.Common;
+using StackExchange.Redis;
 
 namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity.Base
 {
-    public abstract class BaseAuthHandler<TContract>(
+    public abstract class BaseAuthHandler<TContract, TResponse>(
         ITokenService tokenService,
         IdentityDbContext context,
         IDistributedCache cache,
+        IConnectionMultiplexer redis,  
         JwtOptionsAccessor  jwtOptionsAccessor)
-        : IRequestHandler<TContract, AuthResponse>
-        where TContract : IRequest<AuthResponse>
+        : IRequestHandler<TContract, TResponse>
+        where TContract : IRequest<TResponse>
     {
         protected const string RefreshTokenPrefix = "refresh_";
         protected readonly ITokenService TokenService = tokenService;
         protected readonly IdentityDbContext Context = context;
         protected readonly IDistributedCache Cache = cache;
 
-        public abstract Task<AuthResponse> Handle(TContract request, CancellationToken cancellationToken);
+        public abstract Task<TResponse> Handle(TContract request, CancellationToken cancellationToken);
 
         protected async Task SaveRefreshTokenAsync(string refreshToken, Guid userId, DateTime expires, CancellationToken cancellationToken)
         {
@@ -37,6 +39,28 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity.Base
                 RefreshTokenPrefix + refreshToken,
                 JsonSerializer.Serialize(entry),
                 new DistributedCacheEntryOptions { AbsoluteExpiration = expires },
+                cancellationToken);
+            
+            await AddTokenToUserIndexAsync(userId, refreshToken, cancellationToken);
+        }
+
+        protected async Task RevokeTokenByUserId(Guid userId, CancellationToken cancellationToken)
+        {
+            var tokens = await GetUserTokenAsync(userId, cancellationToken);
+            var db = redis.GetDatabase();
+
+            foreach (var token in tokens)
+                await Cache.RemoveAsync(RefreshTokenPrefix + token, cancellationToken);
+            
+            await db.KeyDeleteAsync($"user_tokens:{userId}");
+            
+            await Cache.SetStringAsync(
+                $"revoked:{userId}",
+                DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),
+                new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(jwtOptionsAccessor.Value.AccessTokenExpiryMinutes)
+                },
                 cancellationToken);
         }
 
@@ -66,11 +90,25 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity.Base
             return await Context.Users
                 .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
-                .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+                .SingleOrDefaultAsync(u => u.Id == userId, cancellationToken);
         }
         protected AuthResponse CreateTokenResponse(string accessToken, string refreshToken)
         {
             return TokenService.CreateAuthResponse(accessToken, refreshToken);
+        }
+
+        private async Task AddTokenToUserIndexAsync(Guid userId, string refreshToken, CancellationToken cancellationToken)
+        {
+            var db = redis.GetDatabase(); 
+            await db.SetAddAsync($"user_tokens:{userId}", refreshToken);
+        }
+
+        private async Task<string[]> GetUserTokenAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            var db = redis.GetDatabase();
+            var members = await db.SetMembersAsync($"user_tokens:{userId}");
+                
+            return members.Select(m => m.ToString()).ToArray();
         }
     }
 }

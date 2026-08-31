@@ -40,5 +40,20 @@ namespace Bredinin.AlloyEditor.Identity.Service.Controllers
 
             return response;
         }
+        
+        
+        /// <summary>
+        /// Отозвать сессии юзера по ID
+        /// </summary>
+        /// <param name="userId">ID пользователя</param>
+        /// <response code="200">Успешно</response>
+        /// <response code="404">Не успешно</response>
+        [HttpPost("{userId}/revoke-access")]
+        public async Task<IActionResult> RevokeToken(Guid userId)
+        {
+            await _mediator.Send(new RevokeTokenQuery(userId));
+
+            return Ok();
+        }
     }
 }

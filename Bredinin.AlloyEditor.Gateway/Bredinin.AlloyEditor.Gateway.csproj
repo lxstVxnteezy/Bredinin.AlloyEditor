@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.11" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="MMLib.SwaggerForOcelot" Version="9.0.0" />
     <PackageReference Include="Ocelot" Version="24.0.0" />
@@ -23,10 +24,12 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.12.0" />
+    <PackageReference Include="StackExchange.Redis" Version="3.1.31" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Http\Bredinin.AlloyEditor.Common.Http.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Swagger\Bredinin.AlloyEditor.Common.Swagger.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Gateway.Core.Authentication\Bredinin.AlloyEditor.Gateway.Core.Authentication.csproj" />
     <ProjectReference Include="..\Bredinin.AlloyEditor.Gateway.Core.Clients\Bredinin.AlloyEditor.Gateway.Core.Clients.csproj" />

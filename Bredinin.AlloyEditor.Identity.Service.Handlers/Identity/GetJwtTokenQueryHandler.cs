@@ -5,6 +5,7 @@ using Bredinin.AlloyEditor.Identity.Service.Handler.Identity.Base;
 using Bredinin.AlloyEditor.Services.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
 
 namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
 {
@@ -13,8 +14,9 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
         IdentityDbContext context,
         IDistributedCache cache,
         IPasswordHasher passwordHasher,
+        IConnectionMultiplexer redis,
         JwtOptionsAccessor  jwtOptionsAccessor)
-        : BaseAuthHandler<GetJwtTokenQuery>(tokenService, context, cache,jwtOptionsAccessor)
+        : BaseAuthHandler<GetJwtTokenQuery,AuthResponse>(tokenService, context, cache,redis,jwtOptionsAccessor)
     {
 
         public override async Task<AuthResponse> Handle(GetJwtTokenQuery request, CancellationToken cancellationToken)

@@ -4,6 +4,7 @@ using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
 using Bredinin.AlloyEditor.Identity.Service.Handler.Identity.Base;
 using Bredinin.AlloyEditor.Services.Common;
 using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
 
 namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
 {
@@ -11,8 +12,9 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity
         ITokenService tokenService,
         IdentityDbContext context,
         IDistributedCache cache,
+        IConnectionMultiplexer redis,
         JwtOptionsAccessor  jwtOptionsAccessor)
-        : BaseAuthHandler<RefreshTokenQuery>(tokenService, context, cache, jwtOptionsAccessor)
+        : BaseAuthHandler<RefreshTokenQuery,AuthResponse>(tokenService, context, cache, redis, jwtOptionsAccessor)
     {
         public override async Task<AuthResponse> Handle(RefreshTokenQuery request, CancellationToken cancellationToken)
         {

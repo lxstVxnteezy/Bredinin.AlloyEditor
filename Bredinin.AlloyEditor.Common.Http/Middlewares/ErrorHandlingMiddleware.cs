@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Bredinin.AlloyEditor.Common.Http;
+namespace Bredinin.AlloyEditor.Common.Http.Middlewares;
 
 public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
 {

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Moq;
+using StackExchange.Redis;
 using Xunit;
 
 namespace Bredinin.AlloyEditor.Identity.Tests;
@@ -61,6 +62,7 @@ public class AuthTests
             .Returns(new AuthResponse("new-access-token", newRefreshToken));
 
         var cacheMock = new Mock<IDistributedCache>();
+        var redisMock = new Mock<IConnectionMultiplexer>();
         var sequence = new MockSequence();
  
         var existingEntry = new RefreshTokenCacheEntry
@@ -88,6 +90,7 @@ public class AuthTests
             tokenServiceMock.Object,
             context,
             cacheMock.Object,
+            redisMock.Object,
             jwtOptionsAccessor);
  
         // Act
@@ -101,9 +104,6 @@ public class AuthTests
                 "refresh_" + newRefreshToken, It.IsAny<byte[]>(), It.IsAny<DistributedCacheEntryOptions>(), It.IsAny<CancellationToken>()),
             Times.Once);
         cacheMock.Verify(c => c.RemoveAsync("refresh_" + oldRefreshToken, It.IsAny<CancellationToken>()), Times.Once);
-
-
-
     }
 }
 

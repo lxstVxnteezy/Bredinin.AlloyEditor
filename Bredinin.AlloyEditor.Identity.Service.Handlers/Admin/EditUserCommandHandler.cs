@@ -1,4 +1,5 @@
-﻿using Bredinin.AlloyEditor.Identity.Service.Contracts.Commands.Admin;
+﻿using Bredinin.AlloyEditor.Common.Http;
+using Bredinin.AlloyEditor.Identity.Service.Contracts.Commands.Admin;
 using Bredinin.AlloyEditor.Identity.Service.Contracts.DTO;
 using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
 using Bredinin.AlloyEditor.Identity.Service.Domain;
@@ -19,7 +20,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Admin
                 .SingleOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (foundUser == null)
-                throw new InvalidOperationException($"User with id '{request.Id}' not found in db");
+                throw new BusinessException($"User with id '{request.Id}' not found in db");
 
             foundUser.UserRoles.Clear();
 

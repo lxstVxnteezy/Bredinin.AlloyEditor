@@ -21,5 +21,13 @@ namespace Bredinin.AlloyEditor.Gateway.Controllers
             var response = await client.RefreshToken(query, cancellationToken);
             return Ok(response);
         }
+
+        [HttpPost("{userId}/revoke-access")]
+        public async Task<IActionResult> RevokeToken(Guid userId, CancellationToken cancellationToken)
+        {
+            await client.RevokeToken(userId, new RevokeTokenQuery(userId), cancellationToken);
+            return Ok();
+        }
+
     }
 }

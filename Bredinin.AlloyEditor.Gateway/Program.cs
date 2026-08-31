@@ -1,3 +1,4 @@
+using Bredinin.AlloyEditor.Common.Http.Middlewares;
 using Bredinin.AlloyEditor.Common.Swagger;
 using Bredinin.AlloyEditor.Gateway.Core.Authentication;
 using Bredinin.AlloyEditor.Gateway.Core.Clients;
@@ -42,15 +43,23 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
+    options.Configuration = redisConnectionString;
+    options.InstanceName = "auth_:";
+});
 
 builder.Services.AddClients(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 
-
+ 
 app.UseServiceSwaggerUi(uiTitle: "API Gateway", routePrefix: "swagger");
 app.UseRouting();
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseAuthentication();
+app.UseMiddleware<TokenRevocationMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

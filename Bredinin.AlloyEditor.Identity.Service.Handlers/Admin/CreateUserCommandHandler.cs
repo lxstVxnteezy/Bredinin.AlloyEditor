@@ -1,4 +1,5 @@
-﻿using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
+﻿using Bredinin.AlloyEditor.Common.Http;
+using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
 using Bredinin.AlloyEditor.Identity.Service.Contracts.Commands.Admin;
 using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
 using Bredinin.AlloyEditor.Identity.Service.Domain;
@@ -16,14 +17,14 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Admin
             if (await context.Users
                     .AnyAsync(u => u.Login == request.Login, cancellationToken))
 
-                throw new InvalidOperationException($"User with login '{request.Login}' already exists");
+                throw new BusinessException($"User with login '{request.Login}' already exists");
 
             var existingRolesCount = await context.Roles
                 .Where(r => request.RoleIds.Contains(r.Id))
                 .CountAsync(cancellationToken);
 
             if (existingRolesCount != request.RoleIds.Length)
-                throw new ArgumentException("One or more specified roles don't exist");
+                throw new BusinessException("One or more specified roles don't exist");
 
             var user = new User
             {
