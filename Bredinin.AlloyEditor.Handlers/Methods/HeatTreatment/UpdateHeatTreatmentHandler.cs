@@ -1,4 +1,4 @@
-﻿using Bredinin.AlloyEditor.Common.Http;
+using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Contracts.Common.HeatTreatment;
 using Bredinin.AlloyEditor.DAL;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +18,9 @@ internal sealed class UpdateHeatTreatmentHandler(ServiceDbContext context) : IUp
             .FirstOrDefaultAsync(x => x.Id == id, ctn);
 
         if (treatment == null)
+        {
             throw new BusinessException($"Heat treatment not found: {id}");
+        }
 
         if (request.HeatTreatmentTypeId.HasValue)
         {
@@ -26,7 +28,9 @@ internal sealed class UpdateHeatTreatmentHandler(ServiceDbContext context) : IUp
                 .AnyAsync(x => x.Id == request.HeatTreatmentTypeId, ctn);
 
             if (!typeExists)
+            {
                 throw new BusinessException($"Heat treatment type not found: {request.HeatTreatmentTypeId}");
+            }
 
             treatment.HeatTreatmentTypeId = request.HeatTreatmentTypeId.Value;
         }

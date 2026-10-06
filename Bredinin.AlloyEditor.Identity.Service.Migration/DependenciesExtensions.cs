@@ -1,64 +1,65 @@
-﻿using FluentMigrator.Runner;
+using FluentMigrator.Runner;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 
-namespace Bredinin.AlloyEditor.Identity.Service.Migration
+namespace Bredinin.AlloyEditor.Identity.Service.Migration;
+
+public static class DependenciesExtensions
 {
-    public static class DependenciesExtensions
+    public static IServiceCollection AddDatabaseMigrations(this IServiceCollection services,
+        IConfiguration configuration)
     {
-        public static IServiceCollection AddDatabaseMigrations(this IServiceCollection services,
-            IConfiguration configuration)
-        {
-            services.AddFluentMigratorCore()
-                .ConfigureRunner(rb => ConfigureRunner(rb, configuration))
-                .AddLogging(lb => lb.AddFluentMigratorConsole());
+        services.AddFluentMigratorCore()
+            .ConfigureRunner(rb => ConfigureRunner(rb, configuration))
+            .AddLogging(lb => lb.AddFluentMigratorConsole());
 
-            return services;
+        return services;
+    }
+
+    private static void ConfigureRunner(IMigrationRunnerBuilder runnerBuilder, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        if (connectionString == null)
+        {
+            throw new Exception("Not found connectionString ");
         }
 
-        private static void ConfigureRunner(IMigrationRunnerBuilder runnerBuilder, IConfiguration configuration)
+        EnsureDatabaseExists(connectionString);
+
+        runnerBuilder
+            .AddPostgres()
+            .WithGlobalConnectionString(connectionString)
+            .ScanIn(typeof(DependenciesExtensions).Assembly).For.Migrations();
+    }
+
+    private static void EnsureDatabaseExists(string connectionString)
+    {
+        var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionString);
+        var databaseName = connectionStringBuilder.Database;
+
+        connectionStringBuilder.Database = "postgres";
+
+        using var connection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
+        connection.Open();
+
+        using var cmdCheckDb = new NpgsqlCommand(
+            $"SELECT 1 FROM pg_database WHERE datname = '{databaseName}'", connection);
+        var exists = cmdCheckDb.ExecuteScalar() != null;
+
+        if (!exists)
         {
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            var commandBuilder = new NpgsqlCommandBuilder();
 
-            if (connectionString == null)
-                throw new Exception("Not found connectionString ");
+            var safeDatabaseName = commandBuilder.QuoteIdentifier(databaseName);
 
-            EnsureDatabaseExists(connectionString);
+            using var cmdCreateDb = new NpgsqlCommand(
+                $"CREATE DATABASE {safeDatabaseName}",
+                connection);
 
-            runnerBuilder
-                .AddPostgres()
-                .WithGlobalConnectionString(connectionString)
-                .ScanIn(typeof(DependenciesExtensions).Assembly).For.Migrations();
-        }
+            cmdCreateDb.ExecuteNonQuery();
 
-        private static void EnsureDatabaseExists(string connectionString)
-        {
-            var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionString);
-            var databaseName = connectionStringBuilder.Database;
-
-            connectionStringBuilder.Database = "postgres";
-
-            using var connection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
-            connection.Open();
-
-            using var cmdCheckDb = new NpgsqlCommand(
-                $"SELECT 1 FROM pg_database WHERE datname = '{databaseName}'", connection);
-            var exists = cmdCheckDb.ExecuteScalar() != null;
-
-            if (!exists)
-            {
-                var commandBuilder = new NpgsqlCommandBuilder();
-
-                var safeDatabaseName = commandBuilder.QuoteIdentifier(databaseName);
-
-                using var cmdCreateDb = new NpgsqlCommand(
-                    $"CREATE DATABASE {safeDatabaseName}",
-                    connection);
-
-                cmdCreateDb.ExecuteNonQuery();
-
-            }
         }
     }
 }

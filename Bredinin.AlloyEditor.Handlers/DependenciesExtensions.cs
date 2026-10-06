@@ -1,24 +1,23 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Bredinin.AlloyEditor.Handlers
+namespace Bredinin.AlloyEditor.Handlers;
+
+public static class DependenciesExtensions
 {
-    public static class DependenciesExtensions
+    public static IServiceCollection AddHandlers(this IServiceCollection services)
     {
-        public static IServiceCollection AddHandlers(this IServiceCollection services)
+        var assembly = Assembly.GetExecutingAssembly();
+
+        var serviceType = typeof(IHandler);
+
+        foreach (var implementationType in assembly.GetTypes()
+                     .Where(type => serviceType.IsAssignableFrom(type) && !type.GetTypeInfo().IsAbstract))
         {
-            var assembly = Assembly.GetExecutingAssembly();
-
-            var serviceType = typeof(IHandler);
-
-            foreach (var implementationType in assembly.GetTypes()
-                         .Where(type => serviceType.IsAssignableFrom(type) && !type.GetTypeInfo().IsAbstract))
-            {
-                var handlerInterface = implementationType.GetInterfaces().Single(x => x != serviceType);
-                services.AddTransient(handlerInterface, implementationType);
-            }
-
-            return services;
+            var handlerInterface = implementationType.GetInterfaces().Single(x => x != serviceType);
+            services.AddTransient(handlerInterface, implementationType);
         }
+
+        return services;
     }
 }

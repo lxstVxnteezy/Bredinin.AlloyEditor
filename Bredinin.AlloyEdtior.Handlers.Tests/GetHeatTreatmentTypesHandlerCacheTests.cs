@@ -24,11 +24,11 @@ public class GetHeatTreatmentTypesHandlerCacheTests
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
         var context = new ServiceDbContext(dbOptions);
-        
+
         var cacheMock = new Mock<IDistributedCache>();
 
         var cacheSettingsMock = new Mock<IOptions<CacheSettings>>();
-        
+
         var cachedData = new HeatTreatmentTypeDto[]
         {
             new(Guid.NewGuid(), "Закалка", "Описание", "HARD", 800, 900, "Вода")
@@ -46,7 +46,7 @@ public class GetHeatTreatmentTypesHandlerCacheTests
             DefaultTemperatureMax = 900,
             DefaultCoolingMedium = "Вода"
         });
-        
+
         context.DictTypesOfHeatTreatments.Add(new DictTypeOfHeatTreatment
         {
             Id = Guid.NewGuid(),
@@ -57,10 +57,10 @@ public class GetHeatTreatmentTypesHandlerCacheTests
             DefaultTemperatureMax = 400,
             DefaultCoolingMedium = "Воздух"
         });
-        
+
         await context.SaveChangesAsync();
 
-        var handler = new GetHeatTreatmentTypesHandler(context, cacheMock.Object,cacheSettingsMock.Object);
+        var handler = new GetHeatTreatmentTypesHandler(context, cacheMock.Object, cacheSettingsMock.Object);
 
         //Act
         var result = await handler.Handle(CancellationToken.None);
@@ -68,28 +68,28 @@ public class GetHeatTreatmentTypesHandlerCacheTests
         //Assert
         result.Should().HaveCount(1);
         result![0].Name.Should().Be("Закалка");
-        
+
         cacheMock.Verify(c => c.SetAsync(
                 It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<DistributedCacheEntryOptions>(), It.IsAny<CancellationToken>()),
             Times.Never);
     }
-   
+
     [Fact]
     public async Task Handle_WhenCacheIsEmpty_ShouldReturnFromDbAndPopulateCache()
     {
-         //Arange
+        //Arange
         var cacheKey = nameof(GetHeatTreatmentTypesHandler);
 
         var dbOptions = new DbContextOptionsBuilder<ServiceDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
         var context = new ServiceDbContext(dbOptions);
-        
+
         var cacheMock = new Mock<IDistributedCache>();
 
         var cacheSettingsMock = new Mock<IOptions<CacheSettings>>();
         cacheSettingsMock.Setup(c => c.Value).Returns(new CacheSettings { ExpirationMinutes = 10 });
-        
+
         cacheMock.Setup(c => c.GetAsync(cacheKey, It.IsAny<CancellationToken>()))
             .ReturnsAsync((byte[]?)null);
 
@@ -103,7 +103,7 @@ public class GetHeatTreatmentTypesHandlerCacheTests
             DefaultTemperatureMax = 900,
             DefaultCoolingMedium = "Вода"
         });
-        
+
         context.DictTypesOfHeatTreatments.Add(new DictTypeOfHeatTreatment
         {
             Id = Guid.NewGuid(),
@@ -114,18 +114,18 @@ public class GetHeatTreatmentTypesHandlerCacheTests
             DefaultTemperatureMax = 400,
             DefaultCoolingMedium = "Воздух"
         });
-        
+
         await context.SaveChangesAsync();
 
-        var handler = new GetHeatTreatmentTypesHandler(context, cacheMock.Object,cacheSettingsMock.Object);
+        var handler = new GetHeatTreatmentTypesHandler(context, cacheMock.Object, cacheSettingsMock.Object);
 
         //Act
         var result = await handler.Handle(CancellationToken.None);
 
         //Assert
         result.Should().HaveCount(2);
-        result!.Select(x => x.Name).Should().Equal("Закалка", "Отпуск"); 
-        
+        result!.Select(x => x.Name).Should().Equal("Закалка", "Отпуск");
+
         cacheMock.Verify(c => c.SetAsync(
                 It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<DistributedCacheEntryOptions>(), It.IsAny<CancellationToken>()),
             Times.Once);

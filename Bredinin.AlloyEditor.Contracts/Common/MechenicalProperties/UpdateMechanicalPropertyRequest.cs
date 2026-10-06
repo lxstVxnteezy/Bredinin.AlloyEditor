@@ -1,4 +1,4 @@
-﻿namespace Bredinin.AlloyEditor.Contracts.Common.MechenicalProperties;
+namespace Bredinin.AlloyEditor.Contracts.Common.MechenicalProperties;
 
 public record UpdateMechanicalPropertyRequest(
     Guid? PropertyTypeId,

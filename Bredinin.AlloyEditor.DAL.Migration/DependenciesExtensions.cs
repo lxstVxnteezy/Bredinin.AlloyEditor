@@ -1,4 +1,4 @@
-﻿using FluentMigrator.Runner;
+using FluentMigrator.Runner;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
@@ -21,7 +21,9 @@ public static class DependenciesExtensions
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
         if (connectionString == null)
+        {
             throw new Exception("Not found connectionString ");
+        }
 
         EnsureDatabaseExists(connectionString);
 

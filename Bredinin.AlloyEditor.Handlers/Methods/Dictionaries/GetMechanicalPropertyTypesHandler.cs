@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Bredinin.AlloyEditor.Common.Configurations;
 using Bredinin.AlloyEditor.Contracts.Common.Dictionaries;
 using Bredinin.AlloyEditor.DAL;
@@ -23,10 +23,12 @@ internal sealed class GetMechanicalPropertyTypesHandler(
     public async Task<MechanicalPropertyTypeDto[]> Handle(CancellationToken ctn)
     {
         var cached = await cache.GetStringAsync(CacheKey, ctn);
-            
+
         if (cached is not null)
+        {
             return JsonSerializer.Deserialize<MechanicalPropertyTypeDto[]>(cached)!;
-        
+        }
+
         var response = await context.DictMechanicalPropertyTypes
             .AsNoTracking()
             .OrderBy(x => x.Name)
@@ -41,15 +43,15 @@ internal sealed class GetMechanicalPropertyTypesHandler(
                 x.MaxPossible
             ))
             .ToArrayAsync(ctn);
-        
-        await cache.SetStringAsync(CacheKey, 
-            JsonSerializer.Serialize(response), 
+
+        await cache.SetStringAsync(CacheKey,
+            JsonSerializer.Serialize(response),
             new DistributedCacheEntryOptions()
             {
-                AbsoluteExpirationRelativeToNow  = TimeSpan.FromMinutes(cacheSettings.Value.ExpirationMinutes)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(cacheSettings.Value.ExpirationMinutes)
             },
             ctn);
-          
+
         return response;
     }
 }

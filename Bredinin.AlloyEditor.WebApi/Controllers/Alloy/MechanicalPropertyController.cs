@@ -1,4 +1,4 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common.Dictionaries;
+using Bredinin.AlloyEditor.Contracts.Common.Dictionaries;
 using Bredinin.AlloyEditor.Handlers.Methods.Dictionaries;
 using Bredinin.AlloyEditor.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;

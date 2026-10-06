@@ -1,16 +1,15 @@
-﻿using MediatR;
+using MediatR;
 
-namespace Bredinin.AlloyEditor.Identity.Service.Contracts.Queries.Admin
-{
-  public record SearchUserQuery(
-      Guid Id,
-      string Login,
-      string FirstName,
-      string LastName,
-      string SecondName,
-      int Age,
-      Guid[] RoleIds
-  );
+namespace Bredinin.AlloyEditor.Identity.Service.Contracts.Queries.Admin;
 
-    public record GetAllSearchUserQueries : IRequest<SearchUserQuery[]>;
-}
+public record SearchUserQuery(
+    Guid Id,
+    string Login,
+    string FirstName,
+    string LastName,
+    string SecondName,
+    int Age,
+    Guid[] RoleIds
+);
+
+public record GetAllSearchUserQueries : IRequest<SearchUserQuery[]>;

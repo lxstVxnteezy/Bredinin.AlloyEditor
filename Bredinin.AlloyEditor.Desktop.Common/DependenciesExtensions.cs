@@ -1,29 +1,28 @@
-using Bredinin.AlloyEditor.Common.Desktop.Api.Alloys;
 using System.Net.Http;
+using Bredinin.AlloyEditor.Common.Desktop.Api.Alloys;
 using Refit;
 
-namespace Bredinin.AlloyEditor.Common.Desktop
+namespace Bredinin.AlloyEditor.Common.Desktop;
+
+public static class DependenciesExtensions
 {
-    public static class DependenciesExtensions
+    public static IContainerRegistry AddApiServices(this IContainerRegistry container, string baseApiUrl)
     {
-        public static IContainerRegistry AddApiServices(this IContainerRegistry container, string baseApiUrl)
+        container.Register<HttpClient>(() => new HttpClient()
         {
-            container.Register<HttpClient>(() => new HttpClient()
-            {
-                BaseAddress = new Uri(baseApiUrl)
-            });
+            BaseAddress = new Uri(baseApiUrl)
+        });
 
-            container.RegisterSingleton<IAlloyApiService>(provider =>
-                RestService.For<IAlloyApiService>(
-                    provider.Resolve<HttpClient>(),
-                    new RefitSettings
-                    {
-                        ContentSerializer = new SystemTextJsonContentSerializer()
-                    }
-                ));
+        container.RegisterSingleton<IAlloyApiService>(provider =>
+            RestService.For<IAlloyApiService>(
+                provider.Resolve<HttpClient>(),
+                new RefitSettings
+                {
+                    ContentSerializer = new SystemTextJsonContentSerializer()
+                }
+            ));
 
-            return container;
-        }
-
+        return container;
     }
+
 }

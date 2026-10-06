@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Bredinin.AlloyEditor.Common.Configurations;
 using Bredinin.AlloyEditor.Contracts.Common.Dictionaries.DictChemicalElements;
 using Bredinin.AlloyEditor.Contracts.Common.HeatTreatment;
@@ -25,10 +25,12 @@ public sealed class GetHeatTreatmentTypesHandler(
     public async Task<HeatTreatmentTypeDto[]> Handle(CancellationToken ctn)
     {
         var cached = await cache.GetStringAsync(CacheKey, ctn);
-            
+
         if (cached is not null)
+        {
             return JsonSerializer.Deserialize<HeatTreatmentTypeDto[]>(cached)!;
-        
+        }
+
         var response = await context.DictTypesOfHeatTreatments
             .AsNoTracking()
             .OrderBy(x => x.Name)
@@ -42,15 +44,15 @@ public sealed class GetHeatTreatmentTypesHandler(
                 x.DefaultCoolingMedium
             ))
             .ToArrayAsync(ctn);
-        
-        await cache.SetStringAsync(CacheKey, 
-            JsonSerializer.Serialize(response), 
+
+        await cache.SetStringAsync(CacheKey,
+            JsonSerializer.Serialize(response),
             new DistributedCacheEntryOptions()
             {
-                AbsoluteExpirationRelativeToNow  = TimeSpan.FromMinutes(cacheSettings.Value.ExpirationMinutes)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(cacheSettings.Value.ExpirationMinutes)
             },
             ctn);
-          
+
         return response;
     }
 }

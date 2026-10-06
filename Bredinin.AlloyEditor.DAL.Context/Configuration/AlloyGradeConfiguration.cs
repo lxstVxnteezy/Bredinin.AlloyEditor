@@ -1,19 +1,18 @@
-﻿using Bredinin.AlloyEditor.Domain.Alloys;
+using Bredinin.AlloyEditor.Domain.Alloys;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Bredinin.AlloyEditor.DAL.Configuration
-{
-    internal class AlloyGradeConfiguration : IEntityTypeConfiguration<AlloyGrade>
-    {
-        public void Configure(EntityTypeBuilder<AlloyGrade> builder)
-        {
-            builder.ToTable("alloy_grades");
+namespace Bredinin.AlloyEditor.DAL.Configuration;
 
-            builder.Property(x => x.Id).HasColumnName("id");
-            builder.Property(x => x.Name).HasColumnName("name");
-            builder.Property(x => x.Description).HasColumnName("description");
-            builder.Property(x => x.AlloySystemId).HasColumnName("alloy_system_id");
-        }
+internal class AlloyGradeConfiguration : IEntityTypeConfiguration<AlloyGrade>
+{
+    public void Configure(EntityTypeBuilder<AlloyGrade> builder)
+    {
+        builder.ToTable("alloy_grades");
+
+        builder.Property(x => x.Id).HasColumnName("id");
+        builder.Property(x => x.Name).HasColumnName("name");
+        builder.Property(x => x.Description).HasColumnName("description");
+        builder.Property(x => x.AlloySystemId).HasColumnName("alloy_system_id");
     }
 }

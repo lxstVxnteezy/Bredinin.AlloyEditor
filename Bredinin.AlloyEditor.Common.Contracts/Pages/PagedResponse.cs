@@ -1,4 +1,4 @@
-﻿namespace Bredinin.AlloyEditor.Contracts.Common;
+namespace Bredinin.AlloyEditor.Contracts.Common;
 
 public record PagedResponse<T>(
     T[] Items,

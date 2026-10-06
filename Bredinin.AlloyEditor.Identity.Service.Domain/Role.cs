@@ -1,11 +1,10 @@
-﻿using Bredinin.AlloyEditor.Identity.Service.Domain.Base;
+using Bredinin.AlloyEditor.Identity.Service.Domain.Base;
 
-namespace Bredinin.AlloyEditor.Identity.Service.Domain
+namespace Bredinin.AlloyEditor.Identity.Service.Domain;
+
+public class Role : BaseEntity
 {
-    public class Role : BaseEntity
-    {
-        public required string Name { get; set; }
+    public required string Name { get; set; }
 
-        public required string Description { get; set; }
-    }
+    public required string Description { get; set; }
 }

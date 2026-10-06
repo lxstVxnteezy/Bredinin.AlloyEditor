@@ -1,4 +1,4 @@
-﻿namespace Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
+namespace Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 
 public record UpdateAlloyGradeRequest(
     string? Name,

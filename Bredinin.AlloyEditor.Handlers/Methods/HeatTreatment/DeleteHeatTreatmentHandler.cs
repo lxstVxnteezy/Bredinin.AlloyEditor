@@ -1,4 +1,4 @@
-﻿using Bredinin.AlloyEditor.DAL;
+using Bredinin.AlloyEditor.DAL;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +18,9 @@ internal sealed class DeleteHeatTreatmentHandler(ServiceDbContext context) : IDe
             .FirstOrDefaultAsync(x => x.Id == id, ctn);
 
         if (treatment == null)
+        {
             return new NotFoundResult();
+        }
 
         // При каскадном удалении свойства удалятся автоматически
         context.AlloyHeatTreatments.Remove(treatment);

@@ -1,10 +1,9 @@
-﻿using MediatR;
+using MediatR;
 
-namespace Bredinin.AlloyEditor.Identity.Service.Contracts.Commands.Admin
+namespace Bredinin.AlloyEditor.Identity.Service.Contracts.Commands.Admin;
+
+public record ResetPasswordUserCommand : IRequest
 {
-    public record ResetPasswordUserCommand : IRequest 
-    {
-        public Guid UserId { get; set; }
-        public required string Password { get; set; }
-    }
+    public Guid UserId { get; set; }
+    public required string Password { get; set; }
 }

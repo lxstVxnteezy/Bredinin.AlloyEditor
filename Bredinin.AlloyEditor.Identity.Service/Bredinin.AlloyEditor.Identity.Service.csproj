@@ -8,7 +8,8 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>$(NoWarn);1591</NoWarn>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-	</PropertyGroup>
+	  <UserSecretsId>4d982d93-eb5b-4d94-b272-72e66d2fe2b2</UserSecretsId>
+  </PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="FluentMigrator.Runner.Core" Version="7.1.0" />

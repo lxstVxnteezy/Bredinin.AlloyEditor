@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace Bredinin.AlloyEditor.Common.Http.Middlewares;
 
-public class TokenRevocationMiddleware(RequestDelegate next,IDistributedCache cache)
+public class TokenRevocationMiddleware(RequestDelegate next, IDistributedCache cache)
 {
     public async Task InvokeAsync(HttpContext context)
     {
@@ -17,7 +17,7 @@ public class TokenRevocationMiddleware(RequestDelegate next,IDistributedCache ca
             if (userId != null && iatClaim != null)
             {
                 var revokedAtStr = await cache.GetStringAsync($"revoked:{userId}");
-                
+
                 if (revokedAtStr != null)
                 {
                     var revokedAt = long.Parse(revokedAtStr);
@@ -26,11 +26,11 @@ public class TokenRevocationMiddleware(RequestDelegate next,IDistributedCache ca
                     if (tokenIssuedAt < revokedAt)
                     {
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                        return; 
+                        return;
                     }
                 }
             }
-            
+
         }
         await next(context);
     }

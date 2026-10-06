@@ -47,14 +47,14 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
     options.Configuration = redisConnectionString;
-    options.InstanceName = "auth_:";
+    options.InstanceName = "AlloyEditor";
 });
 
 builder.Services.AddClients(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 
- 
+
 app.UseServiceSwaggerUi(uiTitle: "API Gateway", routePrefix: "swagger");
 app.UseRouting();
 app.UseMiddleware<ErrorHandlingMiddleware>();

@@ -27,7 +27,7 @@ builder.Services.Configure<CacheSettings>(
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
-    options.InstanceName = "AlloyEditor:"; 
+    options.InstanceName = "AlloyEditor";
 });
 
 builder.Services.AddOpenTelemetry()
@@ -39,7 +39,7 @@ builder.Services.AddOpenTelemetry()
                     autoGenerateServiceInstanceId: true))
             .AddAspNetCoreInstrumentation()
             .AddRuntimeInstrumentation()
-            .AddConsoleExporter() 
+            .AddConsoleExporter()
             .AddProcessInstrumentation()
             .AddOtlpExporter(opts =>
             {

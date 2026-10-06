@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -27,10 +27,10 @@ public class TokenService(
         {
             new("userId", user.Id.ToString()),
             new("userLogin", user.Login),
-            new(JwtRegisteredClaimNames.Iat, 
-                DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), 
+            new(JwtRegisteredClaimNames.Iat,
+                DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),
                 ClaimValueTypes.Integer64)
-            
+
         };
 
         claims.AddRange(user.UserRoles.Select(ur => new Claim(ClaimTypes.Role, ur.Role.Name)));

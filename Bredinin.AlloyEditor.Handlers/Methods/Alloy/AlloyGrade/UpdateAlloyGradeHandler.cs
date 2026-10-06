@@ -1,4 +1,4 @@
-﻿using Bredinin.AlloyEditor.Common.Http;
+using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.DAL;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +18,9 @@ internal class UpdateAlloyGradeHandler(ServiceDbContext context) : IUpdateAlloyG
             .FirstOrDefaultAsync(x => x.Id == id, ctn);
 
         if (alloy == null)
+        {
             throw new BusinessException($"Alloy grade not found: {id}");
+        }
 
         // Проверка уникальности имени, если оно меняется
         if (!string.IsNullOrWhiteSpace(request.Name) && request.Name != alloy.Name)
@@ -27,7 +29,9 @@ internal class UpdateAlloyGradeHandler(ServiceDbContext context) : IUpdateAlloyG
                 .AnyAsync(x => x.Name == request.Name && x.Id != id, ctn);
 
             if (nameExists)
+            {
                 throw new BusinessException($"Alloy grade with name '{request.Name}' already exists");
+            }
         }
 
         alloy.Name = request.Name?.Trim() ?? alloy.Name;

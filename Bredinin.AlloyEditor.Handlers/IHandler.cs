@@ -1,6 +1,5 @@
-﻿namespace Bredinin.AlloyEditor.Handlers
+namespace Bredinin.AlloyEditor.Handlers;
+
+public interface IHandler
 {
-    public interface IHandler
-    {
-    }
 }

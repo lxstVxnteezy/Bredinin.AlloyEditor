@@ -1,7 +1,6 @@
-﻿namespace Bredinin.AlloyEditor.Identity.Service.Domain.Base
+namespace Bredinin.AlloyEditor.Identity.Service.Domain.Base;
+
+public abstract class BaseEntity
 {
-    public abstract class BaseEntity
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }

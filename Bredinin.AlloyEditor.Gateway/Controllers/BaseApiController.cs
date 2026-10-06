@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Bredinin.AlloyEditor.Gateway.Controllers
+namespace Bredinin.AlloyEditor.Gateway.Controllers;
+
+[ApiController]
+public class BaseApiController : ControllerBase
 {
-    [ApiController]
-    public class BaseApiController : ControllerBase
-    {
-    }
 }

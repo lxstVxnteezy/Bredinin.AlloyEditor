@@ -1,16 +1,15 @@
-﻿using FluentMigrator.Runner;
+using FluentMigrator.Runner;
 
-namespace Bredinin.AlloyEditor.WebAPI
+namespace Bredinin.AlloyEditor.WebAPI;
+
+public static class DependenciesExtensions
 {
-    public static class DependenciesExtensions
+    public static IApplicationBuilder UseDatabaseMigrations(this IApplicationBuilder app)
     {
-        public static IApplicationBuilder UseDatabaseMigrations(this IApplicationBuilder app)
-        {
-            using var scope = app.ApplicationServices.CreateScope();
-            var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-            runner.MigrateUp();
+        using var scope = app.ApplicationServices.CreateScope();
+        var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+        runner.MigrateUp();
 
-            return app;
-        }
+        return app;
     }
 }

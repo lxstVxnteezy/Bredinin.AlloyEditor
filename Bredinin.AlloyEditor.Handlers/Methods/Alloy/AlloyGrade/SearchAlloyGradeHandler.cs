@@ -1,4 +1,4 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common;
+using Bredinin.AlloyEditor.Contracts.Common;
 using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions;
 using Bredinin.AlloyEditor.Contracts.Common.HeatTreatment;

@@ -1,4 +1,4 @@
-﻿using Bredinin.AlloyEditor.Common.Http;
+using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Domain.Alloys;
@@ -11,7 +11,7 @@ public interface ICreateAlloyGradeHandler : IHandler
     Task<Guid> Handle(CreateAlloyGradeRequest request, CancellationToken ctn);
 }
 
-internal class CreateAlloyGradeHandler(ServiceDbContext context) : ICreateAlloyGradeHandler
+public class CreateAlloyGradeHandler(ServiceDbContext context) : ICreateAlloyGradeHandler
 {
     public async Task<Guid> Handle(CreateAlloyGradeRequest request, CancellationToken ctn)
     {
@@ -20,13 +20,17 @@ internal class CreateAlloyGradeHandler(ServiceDbContext context) : ICreateAlloyG
             .SingleOrDefaultAsync(s => s.Id == request.AlloySystemId, ctn);
 
         if (alloySystem == null)
+        {
             throw new BusinessException($"Alloy system not found: {request.AlloySystemId}");
+        }
 
         var baseElementExist = request.ChemicalCompositions
            .Any(e => e.ChemicalElementId == alloySystem.BaseElementId);
 
         if (!baseElementExist)
+        {
             throw new BusinessException($"Base element for alloy creation is not added. '{request.Name}");
+        }
 
         ArgumentNullException.ThrowIfNull(request);
 
@@ -35,7 +39,9 @@ internal class CreateAlloyGradeHandler(ServiceDbContext context) : ICreateAlloyG
             .AnyAsync(x => x.Name == request.Name, ctn);
 
         if (alloyExists)
+        {
             throw new BusinessException($"Alloy grade '{request.Name}' already exists");
+        }
 
         var elementIds = request.ChemicalCompositions
             .Select(x => x.ChemicalElementId)
@@ -51,8 +57,10 @@ internal class CreateAlloyGradeHandler(ServiceDbContext context) : ICreateAlloyG
         var missingElements = elementIds.Except(existingElements).ToArray();
 
         if (missingElements.Length > 0)
+        {
             throw new BusinessException(
                 $"Chemical elements not found: {string.Join(", ", missingElements)}");
+        }
 
         var chemicalCompositions = request.ChemicalCompositions
             .Select(MapToEntity)

@@ -1,4 +1,4 @@
-﻿using Bredinin.AlloyEditor.Domain.Alloys;
+using Bredinin.AlloyEditor.Domain.Alloys;
 using Bredinin.AlloyEditor.Domain.Dictionaries;
 using Microsoft.EntityFrameworkCore;
 

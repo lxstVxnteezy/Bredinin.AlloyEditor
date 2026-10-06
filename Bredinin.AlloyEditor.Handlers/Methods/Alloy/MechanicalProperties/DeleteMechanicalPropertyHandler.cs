@@ -1,4 +1,4 @@
-﻿using Bredinin.AlloyEditor.DAL;
+using Bredinin.AlloyEditor.DAL;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,4 +1,4 @@
-﻿namespace Bredinin.AlloyEditor.Contracts.Common.HeatTreatment;
+namespace Bredinin.AlloyEditor.Contracts.Common.HeatTreatment;
 
 public record HeatTreatmentDto(
     Guid Id,

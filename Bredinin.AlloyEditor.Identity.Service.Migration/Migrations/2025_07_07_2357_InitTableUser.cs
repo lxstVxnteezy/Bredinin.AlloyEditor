@@ -1,13 +1,13 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 
-namespace Bredinin.AlloyEditor.Identity.Service.Migration.Migrations
+namespace Bredinin.AlloyEditor.Identity.Service.Migration.Migrations;
+
+[Migration(202507072357)]
+public class InitTableUser_07_07_2025_2357 : ForwardOnlyMigration
 {
-    [Migration(202507072357)]
-    public class InitTableUser_07_07_2025_2357 : ForwardOnlyMigration
+    public override void Up()
     {
-        public override void Up()
-        {
-            Execute.Sql(@"
+        Execute.Sql(@"
             CREATE TABLE users (
                 id         UUID PRIMARY KEY,
                 login      VARCHAR(60) NOT NULL UNIQUE,
@@ -18,6 +18,5 @@ namespace Bredinin.AlloyEditor.Identity.Service.Migration.Migrations
                 hash       VARCHAR NOT NULL
             );
         ");
-        }
     }
 }

@@ -1,3 +1,3 @@
-﻿namespace Bredinin.AlloyEditor.Common.Http;
+namespace Bredinin.AlloyEditor.Common.Http;
 
-public record ErrorResponse(int StatusCode,string Message, string? Detail = null);
+public record ErrorResponse(int StatusCode, string Message, string? Detail = null);

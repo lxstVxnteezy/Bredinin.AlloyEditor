@@ -1,4 +1,4 @@
-﻿using Bredinin.AlloyEditor.Identity.Service.Contracts.Commands.Admin;
+using Bredinin.AlloyEditor.Identity.Service.Contracts.Commands.Admin;
 using Bredinin.AlloyEditor.Identity.Service.Contracts.DTO;
 using Bredinin.AlloyEditor.Identity.Service.Contracts.Queries.Admin;
 using Refit;

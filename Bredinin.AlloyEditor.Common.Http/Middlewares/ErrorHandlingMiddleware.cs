@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -30,7 +30,7 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
     private async Task HandleBusinessExceptionAsync(HttpContext context, BusinessException ex)
     {
         context.Response.ContentType = "application/json";
-        
+
         var statusCode = (int)ex.StatusCode;
         context.Response.StatusCode = statusCode;
 
@@ -39,7 +39,7 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
             Message: GetDefaultMessageForStatusCode(statusCode),
             Detail: ex.Message
         );
-        
+
         logger.LogWarning("Business exception: {Message}, StatusCode: {StatusCode}", ex.Message, statusCode);
 
         await JsonSerializer.SerializeAsync(context.Response.Body, response);
@@ -69,10 +69,10 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
             Message: "An unexpected error occurred",
             Detail: ex.Message // В production лучше скрыть детали
         );
-        
+
         await JsonSerializer.SerializeAsync(context.Response.Body, response);
     }
-    
+
     private static string GetDefaultMessageForStatusCode(int statusCode)
     {
         return statusCode switch

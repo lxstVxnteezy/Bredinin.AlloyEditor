@@ -1,4 +1,4 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyBaseSystem;
+using Bredinin.AlloyEditor.Contracts.Common.AlloyBaseSystem;
 using Refit;
 
 namespace Bredinin.AlloyEditor.Gateway.Core.Clients.ApiClients;

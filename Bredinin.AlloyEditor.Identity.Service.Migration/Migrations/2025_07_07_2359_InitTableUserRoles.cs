@@ -1,13 +1,13 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 
-namespace Bredinin.AlloyEditor.Identity.Service.Migration.Migrations
+namespace Bredinin.AlloyEditor.Identity.Service.Migration.Migrations;
+
+[Migration(202507072359)]
+public class InitTableUserRoles_2025_07_07_2359 : ForwardOnlyMigration
 {
-    [Migration(202507072359)]
-    public class InitTableUserRoles_2025_07_07_2359 : ForwardOnlyMigration
+    public override void Up()
     {
-        public override void Up()
-        {
-            Execute.Sql(@"
+        Execute.Sql(@"
         CREATE TABLE user_roles (
             id       UUID PRIMARY KEY,
             user_id  UUID NOT NULL,
@@ -27,6 +27,5 @@ namespace Bredinin.AlloyEditor.Identity.Service.Migration.Migrations
                 ON DELETE CASCADE
         );
     ");
-        }
     }
 }

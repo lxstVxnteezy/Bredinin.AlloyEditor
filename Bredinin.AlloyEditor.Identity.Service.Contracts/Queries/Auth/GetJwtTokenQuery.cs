@@ -1,10 +1,9 @@
-﻿using MediatR;
+using MediatR;
 
-namespace Bredinin.AlloyEditor.Identity.Service.Contracts.Queries.Auth
+namespace Bredinin.AlloyEditor.Identity.Service.Contracts.Queries.Auth;
+
+public record GetJwtTokenQuery : IRequest<AuthResponse>
 {
-    public record GetJwtTokenQuery : IRequest<AuthResponse>
-    {
-        public required string Login { get; set; } 
-        public required string Password { get; set; }
-    }
+    public required string Login { get; set; }
+    public required string Password { get; set; }
 }

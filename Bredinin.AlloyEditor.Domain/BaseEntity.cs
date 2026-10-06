@@ -1,4 +1,4 @@
-﻿namespace Bredinin.AlloyEditor.Domain;
+namespace Bredinin.AlloyEditor.Domain;
 
 public abstract class BaseEntity
 {

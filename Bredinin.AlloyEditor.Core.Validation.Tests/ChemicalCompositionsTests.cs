@@ -6,7 +6,7 @@ namespace Bredinin.AlloyEditor.Core.Validation.Tests;
 
 public class ChemicalCompositionsTests
 {
-    private CreateAlloyGradeRequestValidator _validator = new();
+    private readonly CreateAlloyGradeRequestValidator _validator = new();
 
     [Fact]
     public void Validate_WhenChemicalCompositionSumOver100Percent_ShouldHaveValidationError()
@@ -17,7 +17,7 @@ public class ChemicalCompositionsTests
             new CreateChemicalCompositionRequest(MinValue: null, MaxValue: null, ExactValue: 60, ChemicalElementId: Guid.NewGuid()),
             new CreateChemicalCompositionRequest(MinValue: null, MaxValue: null, ExactValue: 60, ChemicalElementId: Guid.NewGuid())
         ];
-        
+
         var testRequest = new CreateAlloyGradeRequest(
             Name: "test",
             Description: "test",
@@ -28,11 +28,11 @@ public class ChemicalCompositionsTests
 
         //Act 
         var result = _validator.TestValidate(testRequest);
-        
+
         //Assert
         result.ShouldHaveValidationErrorFor(x => x.ChemicalCompositions);
     }
-    
+
     [Fact]
     public void Validate_WhenChemicalCompositionSumIsValid_ShouldNotHaveValidationError()
     {
@@ -42,7 +42,7 @@ public class ChemicalCompositionsTests
             new CreateChemicalCompositionRequest(MinValue: null, MaxValue: null, ExactValue: 60, ChemicalElementId: Guid.NewGuid()),
             new CreateChemicalCompositionRequest(MinValue: null, MaxValue: null, ExactValue: 21, ChemicalElementId: Guid.NewGuid())
         ];
-        
+
         var testRequest = new CreateAlloyGradeRequest(
             Name: "test",
             Description: "test",
@@ -53,7 +53,7 @@ public class ChemicalCompositionsTests
 
         //Act 
         var result = _validator.TestValidate(testRequest);
-        
+
         //Assert
         result.ShouldNotHaveValidationErrorFor(x => x.ChemicalCompositions);
     }

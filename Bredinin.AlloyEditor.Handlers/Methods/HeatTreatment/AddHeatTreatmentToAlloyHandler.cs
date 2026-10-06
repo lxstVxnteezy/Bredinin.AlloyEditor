@@ -1,4 +1,4 @@
-﻿using Bredinin.AlloyEditor.Common.Http;
+using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Contracts.Common.HeatTreatment;
 using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Domain.Alloys;
@@ -21,13 +21,17 @@ internal class AddHeatTreatmentToAlloyHandler(
             .FirstOrDefaultAsync(x => x.Id == alloyId, ctn);
 
         if (alloy == null)
+        {
             throw new BusinessException($"Alloy grade not found: {alloyId}");
+        }
 
         var typeExists = await context.DictTypesOfHeatTreatments
             .AnyAsync(x => x.Id == request.HeatTreatmentTypeId, ctn);
 
         if (!typeExists)
+        {
             throw new BusinessException($"Heat treatment type not found: {request.HeatTreatmentTypeId}");
+        }
 
         var heatTreatment = new AlloyHeatTreatment
         {
