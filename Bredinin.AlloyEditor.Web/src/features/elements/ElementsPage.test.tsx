@@ -36,6 +36,16 @@ describe("ElementsPage", () => {
     expect(within(table).getByText("Углерод")).toBeInTheDocument();
   });
 
+  it("shows no-match state for search without results", async () => {
+    server.use(http.get(URL, () => HttpResponse.json(data)));
+    const user = userEvent.setup();
+    renderWithProviders(<ElementsPage />);
+    await screen.findByText("Железо");
+    await user.type(screen.getByLabelText("Поиск"), "zzz");
+    expect(screen.getByText("Ничего не найдено")).toBeInTheDocument();
+    expect(screen.queryByText("Нет данных")).not.toBeInTheDocument();
+  });
+
   it("shows empty state", async () => {
     server.use(http.get(URL, () => HttpResponse.json([])));
     renderWithProviders(<ElementsPage />);

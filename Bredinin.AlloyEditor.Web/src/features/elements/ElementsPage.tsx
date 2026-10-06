@@ -33,8 +33,10 @@ export function ElementsPage() {
         <CircularProgress aria-label="Загрузка" />
       ) : error ? (
         <ErrorAlert error={error} />
-      ) : rows.length === 0 ? (
+      ) : !data || data.length === 0 ? (
         <Typography color="text.secondary">Нет данных</Typography>
+      ) : rows.length === 0 ? (
+        <Typography color="text.secondary">Ничего не найдено</Typography>
       ) : (
         <TableContainer component={Paper}>
           <Table size="small">

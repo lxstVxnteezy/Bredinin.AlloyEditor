@@ -69,7 +69,15 @@ export function SystemsPage() {
                   key={s.id}
                   hover
                   selected={s.id === selected}
+                  tabIndex={0}
+                  aria-selected={s.id === selected}
                   onClick={() => setSelected(s.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setSelected(s.id);
+                    }
+                  }}
                   sx={{ cursor: "pointer" }}
                 >
                   <TableCell>{s.name}</TableCell>

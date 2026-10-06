@@ -44,6 +44,22 @@ describe("SystemsPage", () => {
     expect(screen.getByText("конструкционная")).toBeInTheDocument();
   });
 
+  it("selects a system via keyboard", async () => {
+    setup();
+    server.use(
+      http.get("/api/gateway/alloy-grade/for-main-element/e1", () =>
+        HttpResponse.json([{ id: "g1", name: "Сталь 45", chemicalCompositions: [] }]),
+      ),
+    );
+    const user = userEvent.setup();
+    renderWithProviders(<SystemsPage />);
+    const row = (await screen.findByText("Стали")).closest("tr") as HTMLElement;
+    row.focus();
+    await user.keyboard("{Enter}");
+    expect(await screen.findByText("Сталь 45")).toBeInTheDocument();
+    expect(row).toHaveAttribute("aria-selected", "true");
+  });
+
   it("shows error for grades query", async () => {
     setup();
     server.use(
