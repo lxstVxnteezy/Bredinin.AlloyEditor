@@ -7,6 +7,21 @@ import { clearRefreshToken, getRefreshToken, setRefreshToken } from "./tokenStor
 // Role name from identity seed migration (2025_08_25_2116_InsertValuesInTables.cs): "admin".
 const ADMIN_ROLE = "admin";
 
+let inflight: Promise<AuthResponse> | null = null;
+
+// Single flight over the stored refresh token: refresh tokens rotate on the backend,
+// so the mount exchange and 401-triggered refreshes must share one request.
+function exchangeStored(): Promise<AuthResponse> {
+  inflight ??= (async () => {
+    const stored = getRefreshToken();
+    if (!stored) throw new Error("No refresh token");
+    return apiRefresh(stored);
+  })().finally(() => {
+    inflight = null;
+  });
+  return inflight;
+}
+
 interface Session {
   roles: string[];
   userId: string | null;
@@ -14,6 +29,7 @@ interface Session {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const accessRef = useRef<string | null>(null);
+  const genRef = useRef(0);
   const [status, setStatus] = useState<AuthContextValue["status"]>(() =>
     getRefreshToken() ? "loading" : "anonymous",
   );
@@ -27,6 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const reset = useCallback(() => {
+    genRef.current++;
     accessRef.current = null;
     clearRefreshToken();
     setSession({ roles: [], userId: null });
@@ -38,9 +55,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthHandlers({
       getAccessToken: () => accessRef.current,
       refresh: async () => {
-        const stored = getRefreshToken();
-        if (!stored) throw new Error("No refresh token");
-        const r = await apiRefresh(stored);
+        const gen = genRef.current;
+        const r = await exchangeStored();
+        if (gen !== genRef.current) throw new Error("Signed out during refresh");
         apply(r);
         return r.accessToken;
       },
@@ -49,19 +66,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [apply, reset]);
 
   useEffect(() => {
-    const stored = getRefreshToken();
-    if (!stored) return;
-    let cancelled = false;
-    apiRefresh(stored)
+    if (!getRefreshToken()) return;
+    const gen = genRef.current;
+    exchangeStored()
       .then((r) => {
-        if (!cancelled) apply(r);
+        if (gen === genRef.current) apply(r);
       })
       .catch(() => {
-        if (!cancelled) reset();
+        if (gen === genRef.current) reset();
       });
-    return () => {
-      cancelled = true;
-    };
   }, [apply, reset]);
 
   const value = useMemo<AuthContextValue>(
@@ -70,7 +83,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       roles: session.roles,
       userId: session.userId,
       isAdmin: session.roles.some((r) => r.toLowerCase() === ADMIN_ROLE),
-      login: async (l, p) => apply(await apiLogin(l, p)),
+      login: async (l, p) => {
+        const gen = genRef.current;
+        const r = await apiLogin(l, p);
+        if (gen === genRef.current) apply(r);
+      },
       logout: reset,
     }),
     [status, session, apply, reset],
