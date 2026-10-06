@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NotificationsProvider } from "../components/Notifications";
 import { AuthContext, type AuthContextValue } from "./useAuth";
 import { AppRoutes } from "../router";
 
@@ -15,11 +17,15 @@ function renderAt(path: string, auth: Partial<AuthContextValue>) {
     ...auth,
   };
   return render(
-    <AuthContext.Provider value={value}>
-      <MemoryRouter initialEntries={[path]}>
-        <AppRoutes />
-      </MemoryRouter>
-    </AuthContext.Provider>,
+    <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+      <NotificationsProvider>
+        <AuthContext.Provider value={value}>
+          <MemoryRouter initialEntries={[path]}>
+            <AppRoutes />
+          </MemoryRouter>
+        </AuthContext.Provider>
+      </NotificationsProvider>
+    </QueryClientProvider>,
   );
 }
 

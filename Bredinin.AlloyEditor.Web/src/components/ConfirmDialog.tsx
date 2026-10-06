@@ -6,9 +6,10 @@ interface Props {
   text: string;
   onConfirm(): void;
   onCancel(): void;
+  confirmDisabled?: boolean;
 }
 
-export function ConfirmDialog({ open, title, text, onConfirm, onCancel }: Props) {
+export function ConfirmDialog({ open, title, text, onConfirm, onCancel, confirmDisabled }: Props) {
   return (
     <Dialog open={open} onClose={onCancel}>
       <DialogTitle>{title}</DialogTitle>
@@ -17,7 +18,7 @@ export function ConfirmDialog({ open, title, text, onConfirm, onCancel }: Props)
       </DialogContent>
       <DialogActions>
         <Button onClick={onCancel}>Отмена</Button>
-        <Button onClick={onConfirm} color="error" variant="contained">
+        <Button onClick={onConfirm} disabled={confirmDisabled} color="error" variant="contained">
           Подтвердить
         </Button>
       </DialogActions>
