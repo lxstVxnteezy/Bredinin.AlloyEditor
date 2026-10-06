@@ -6,17 +6,21 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteUser, getUsers, revokeAccess, toApiError, type User } from "../../api";
+import { useAuth } from "../../auth/useAuth";
 import { ConfirmDialog } from "../../components/ConfirmDialog";
 import { ErrorAlert } from "../../components/ErrorAlert";
 import { useNotify } from "../../components/Notifications";
 import { roleName } from "./roles";
 import { UserDialog } from "./UserDialog";
 
+const SELF_HINT = "Нельзя применить к своей учётной записи";
+
 const fullName = (u: User) => [u.lastName, u.firstName, u.secondName].filter(Boolean).join(" ");
 
 export function UsersPage() {
   const users = useQuery({ queryKey: ["users"], queryFn: getUsers });
   const { notify } = useNotify();
+  const { userId } = useAuth();
   const queryClient = useQueryClient();
 
   const [search, setSearch] = useState("");
@@ -44,6 +48,8 @@ export function UsersPage() {
     onError: (e) => notify(toApiError(e).message || "Не удалось отозвать доступ", "error"),
     onSettled: () => setToRevoke(null),
   });
+
+  const isSelf = (u: User) => userId !== null && u.id.toLowerCase() === userId.toLowerCase();
 
   const query = search.trim().toLowerCase();
   const filtered = (users.data ?? []).filter(
@@ -98,9 +104,13 @@ export function UsersPage() {
                     <Button size="small" onClick={() => setEditing(u)}>
                       Изменить
                     </Button>
-                    <Button size="small" onClick={() => setToRevoke(u)}>
-                      Отозвать доступ
-                    </Button>
+                    <Tooltip title={isSelf(u) ? SELF_HINT : ""}>
+                      <span>
+                        <Button size="small" disabled={isSelf(u)} onClick={() => setToRevoke(u)}>
+                          Отозвать доступ
+                        </Button>
+                      </span>
+                    </Tooltip>
                     <Tooltip title="Недоступно: на сервере нет обработчика">
                       <span>
                         <Button size="small" disabled>
@@ -108,9 +118,13 @@ export function UsersPage() {
                         </Button>
                       </span>
                     </Tooltip>
-                    <IconButton aria-label="Удалить" size="small" onClick={() => setToDelete(u)}>
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
+                    <Tooltip title={isSelf(u) ? SELF_HINT : ""}>
+                      <span>
+                        <IconButton aria-label="Удалить" size="small" disabled={isSelf(u)} onClick={() => setToDelete(u)}>
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </span>
+                    </Tooltip>
                   </TableCell>
                 </TableRow>
               ))}

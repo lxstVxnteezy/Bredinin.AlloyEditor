@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { screen, waitFor, within } from "@testing-library/react";
+import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { server } from "../../test/server";
 import { renderWithProviders } from "../../test/renderWithProviders";
 import { NotificationsProvider } from "../../components/Notifications";
+import { AuthContext, type AuthContextValue } from "../../auth/useAuth";
 import { UsersPage } from "./UsersPage";
 
 const ADMIN = "1798a758-829b-4839-9180-0a205545a450";
@@ -13,12 +14,18 @@ const USER = "7a593027-99d0-4a47-91b1-5c73049cecc1";
 const admin = { id: "u1", login: "admin", firstName: "Иван", lastName: "Петров", secondName: "Сергеевич", age: 40, roleIds: [ADMIN] };
 const bob = { id: "u2", login: "bob", firstName: "Боб", lastName: "Смит", secondName: "Джонович", age: 30, roleIds: [USER] };
 
-const renderPage = () =>
-  renderWithProviders(
+const renderPage = (userId: string | null = null) => {
+  const auth: AuthContextValue = {
+    status: "authenticated", roles: ["admin"], userId, isAdmin: true, login: async () => {}, logout: () => {},
+  };
+  return renderWithProviders(
     <NotificationsProvider>
-      <UsersPage />
+      <AuthContext.Provider value={auth}>
+        <UsersPage />
+      </AuthContext.Provider>
     </NotificationsProvider>,
   );
+};
 
 const rowOf = async (login: string) => (await screen.findByText(login)).closest("tr") as HTMLElement;
 
@@ -221,5 +228,55 @@ describe("UsersPage", () => {
     server.use(http.get("/api/gateway/admin/search-users", () => HttpResponse.json([bob])));
     renderPage();
     expect(within(await rowOf("bob")).getByRole("button", { name: "Сбросить пароль" })).toBeDisabled();
+  });
+
+  it("disables delete and revoke on the current user's own row only", async () => {
+    let requests = 0;
+    server.use(
+      http.get("/api/gateway/admin/search-users", () => HttpResponse.json([admin, bob])),
+      http.delete("/api/gateway/admin/:id", () => {
+        requests++;
+        return new HttpResponse(null, { status: 204 });
+      }),
+      http.post("/api/gateway/identity/:id/revoke-access", () => {
+        requests++;
+        return new HttpResponse(null, { status: 204 });
+      }),
+    );
+    renderPage("U1");
+    const own = await rowOf("admin");
+    const other = await rowOf("bob");
+    expect(within(own).getByRole("button", { name: "Удалить" })).toBeDisabled();
+    expect(within(own).getByRole("button", { name: "Отозвать доступ" })).toBeDisabled();
+    expect(within(own).getByRole("button", { name: "Изменить" })).toBeEnabled();
+    expect(within(other).getByRole("button", { name: "Удалить" })).toBeEnabled();
+    expect(within(other).getByRole("button", { name: "Отозвать доступ" })).toBeEnabled();
+    fireEvent.click(within(own).getByRole("button", { name: "Удалить" }));
+    fireEvent.click(within(own).getByRole("button", { name: "Отозвать доступ" }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(requests).toBe(0);
+  });
+
+  it("does not disable anything when the current user id is unknown", async () => {
+    server.use(http.get("/api/gateway/admin/search-users", () => HttpResponse.json([admin])));
+    renderPage(null);
+    const row = await rowOf("admin");
+    expect(within(row).getByRole("button", { name: "Удалить" })).toBeEnabled();
+    expect(within(row).getByRole("button", { name: "Отозвать доступ" })).toBeEnabled();
+  });
+
+  it("keeps the row and notifies when revoke fails", async () => {
+    server.use(
+      http.get("/api/gateway/admin/search-users", () => HttpResponse.json([bob])),
+      http.post("/api/gateway/identity/u2/revoke-access", () =>
+        HttpResponse.json({ message: "Сбой отзыва" }, { status: 500 }),
+      ),
+    );
+    const user = userEvent.setup();
+    renderPage();
+    await user.click(within(await rowOf("bob")).getByRole("button", { name: "Отозвать доступ" }));
+    await user.click(screen.getByRole("button", { name: "Подтвердить" }));
+    expect(await screen.findByText("Сбой отзыва")).toBeInTheDocument();
+    expect(screen.getByText("bob")).toBeInTheDocument();
   });
 });
