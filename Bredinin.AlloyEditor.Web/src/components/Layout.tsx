@@ -9,8 +9,9 @@ const links = [
 ];
 
 export function Layout() {
-  const { isAdmin, userId, logout } = useAuth();
+  const { isAdmin, userId, userLogin, logout } = useAuth();
   const items = isAdmin ? [...links, { to: "/users", label: "Пользователи" }] : links;
+  const roleLabel = isAdmin ? "администратор" : "пользователь";
   return (
     <Box>
       <AppBar position="static">
@@ -24,9 +25,9 @@ export function Layout() {
             </Button>
           ))}
           <Box sx={{ flexGrow: 1 }} />
-          {userId && (
+          {(userLogin || userId) && (
             <Typography variant="body2">
-              {userId} ({isAdmin ? "администратор" : "пользователь"})
+              {userLogin ? `${userLogin} (${roleLabel})` : roleLabel}
             </Typography>
           )}
           <Button color="inherit" onClick={logout}>

@@ -4,6 +4,7 @@ import { act, render, screen, waitFor } from "@testing-library/react";
 import { http as mswHttp, HttpResponse } from "msw";
 import { server } from "../test/server";
 import { AuthProvider } from "./AuthProvider";
+import { QueryClient } from "@tanstack/react-query";
 import { useAuth, type AuthContextValue } from "./useAuth";
 import { http } from "../api";
 
@@ -55,6 +56,32 @@ describe("AuthProvider", () => {
     );
     await waitFor(() => expect(screen.getByText("anonymous:false")).toBeInTheDocument());
     expect(localStorage.getItem("alloy.refreshToken")).toBeNull();
+  });
+
+  it("keeps the stored token and goes anonymous on transient (500) exchange failure", async () => {
+    localStorage.setItem("alloy.refreshToken", "r1");
+    server.use(
+      mswHttp.post("/api/gateway/identity/refresh-token", () => new HttpResponse(null, { status: 500 })),
+    );
+    render(
+      <AuthProvider>
+        <Probe />
+      </AuthProvider>,
+    );
+    await waitFor(() => expect(screen.getByText("anonymous:false")).toBeInTheDocument());
+    expect(localStorage.getItem("alloy.refreshToken")).toBe("r1");
+  });
+
+  it("keeps the stored token on network error during exchange", async () => {
+    localStorage.setItem("alloy.refreshToken", "r1");
+    server.use(mswHttp.post("/api/gateway/identity/refresh-token", () => HttpResponse.error()));
+    render(
+      <AuthProvider>
+        <Probe />
+      </AuthProvider>,
+    );
+    await waitFor(() => expect(screen.getByText("anonymous:false")).toBeInTheDocument());
+    expect(localStorage.getItem("alloy.refreshToken")).toBe("r1");
   });
 
   describe("single flight and logout", () => {
@@ -145,6 +172,114 @@ describe("AuthProvider", () => {
       await pending;
       expect(screen.getByText("anonymous")).toBeInTheDocument();
       expect(localStorage.getItem("alloy.refreshToken")).toBeNull();
+    });
+
+    it("401 on data request with failing (500) refresh goes anonymous but keeps the token", async () => {
+      localStorage.setItem("alloy.refreshToken", "r1");
+      let first = true;
+      server.use(
+        mswHttp.post(REFRESH, () => {
+          if (first) {
+            first = false;
+            return HttpResponse.json({ accessToken: "a.e30.s", refreshToken: "r2" });
+          }
+          return new HttpResponse(null, { status: 502 });
+        }),
+        mswHttp.get("/api/gateway/data", () => new HttpResponse(null, { status: 401 })),
+      );
+      render(
+        <AuthProvider>
+          <Capture />
+        </AuthProvider>,
+      );
+      await screen.findByText("authenticated");
+      await expect(http.get("/api/gateway/data")).rejects.toMatchObject({ status: 401 });
+      await screen.findByText("anonymous");
+      expect(localStorage.getItem("alloy.refreshToken")).toBe("r2");
+    });
+
+    it("401 on data request with rejected (401) refresh clears the token", async () => {
+      localStorage.setItem("alloy.refreshToken", "r1");
+      let first = true;
+      server.use(
+        mswHttp.post(REFRESH, () => {
+          if (first) {
+            first = false;
+            return HttpResponse.json({ accessToken: "a.e30.s", refreshToken: "r2" });
+          }
+          return new HttpResponse(null, { status: 401 });
+        }),
+        mswHttp.get("/api/gateway/data", () => new HttpResponse(null, { status: 401 })),
+      );
+      render(
+        <AuthProvider>
+          <Capture />
+        </AuthProvider>,
+      );
+      await screen.findByText("authenticated");
+      await expect(http.get("/api/gateway/data")).rejects.toMatchObject({ status: 401 });
+      await screen.findByText("anonymous");
+      expect(localStorage.getItem("alloy.refreshToken")).toBeNull();
+    });
+
+    it("login supersedes a still-pending failing startup exchange", async () => {
+      localStorage.setItem("alloy.refreshToken", "r1");
+      server.use(
+        mswHttp.post(REFRESH, async () => {
+          await new Promise((r) => setTimeout(r, 60));
+          return new HttpResponse(null, { status: 401 });
+        }),
+        mswHttp.post("/api/gateway/identity/login", () =>
+          HttpResponse.json({ accessToken: "a.e30.s", refreshToken: "rL" }),
+        ),
+      );
+      render(
+        <AuthProvider>
+          <Capture />
+        </AuthProvider>,
+      );
+      await act(() => auth.login("u", "p"));
+      await new Promise((r) => setTimeout(r, 120));
+      expect(screen.getByText("authenticated")).toBeInTheDocument();
+      expect(localStorage.getItem("alloy.refreshToken")).toBe("rL");
+    });
+
+    it("clears cached query data on logout", async () => {
+      localStorage.setItem("alloy.refreshToken", "r1");
+      const client = new QueryClient();
+      server.use(
+        rotating({ n: 0 }),
+        mswHttp.get("/api/gateway/data", () => new HttpResponse(null, { status: 401 })),
+      );
+      render(
+        <AuthProvider onSessionEnd={() => client.clear()}>
+          <Capture />
+        </AuthProvider>,
+      );
+      await screen.findByText("authenticated");
+      client.setQueryData(["users"], [1]);
+      act(() => auth.logout());
+      expect(client.getQueryData(["users"])).toBeUndefined();
+    });
+
+    it("clears cached query data on forced logout", async () => {
+      localStorage.setItem("alloy.refreshToken", "r1");
+      const client = new QueryClient();
+      server.use(
+        rotating({ n: 0 }),
+        mswHttp.get("/api/gateway/data", () => new HttpResponse(null, { status: 401 })),
+      );
+      render(
+        <AuthProvider onSessionEnd={() => client.clear()}>
+          <Capture />
+        </AuthProvider>,
+      );
+      await screen.findByText("authenticated");
+      client.setQueryData(["users"], [1]);
+      // stored token is now r2, so the rotating mock rejects the refresh with 401
+      await expect(http.get("/api/gateway/data")).rejects.toMatchObject({ status: 401 });
+      await screen.findByText("anonymous");
+      expect(client.getQueryData(["users"])).toBeUndefined();
     });
 
     it("logout during pending mount refresh leaves user anonymous", async () => {

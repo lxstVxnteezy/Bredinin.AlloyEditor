@@ -257,6 +257,17 @@ describe("UsersPage", () => {
     expect(requests).toBe(0);
   });
 
+  it("disables the admin role checkbox when editing your own account", async () => {
+    server.use(http.get("/api/gateway/admin/search-users", () => HttpResponse.json([admin, bob])));
+    const user = userEvent.setup();
+    renderPage("U1");
+    await user.click(within(await rowOf("admin")).getByRole("button", { name: "Изменить" }));
+    expect(within(screen.getByRole("dialog")).getByRole("checkbox", { name: "Администратор" })).toBeDisabled();
+    await user.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Отмена" }));
+    await user.click(within(await rowOf("bob")).getByRole("button", { name: "Изменить" }));
+    expect(within(screen.getByRole("dialog")).getByRole("checkbox", { name: "Администратор" })).toBeEnabled();
+  });
+
   it("does not disable anything when the current user id is unknown", async () => {
     server.use(http.get("/api/gateway/admin/search-users", () => HttpResponse.json([admin])));
     renderPage(null);

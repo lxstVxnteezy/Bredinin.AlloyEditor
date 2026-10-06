@@ -7,12 +7,12 @@ import { server } from "../test/server";
 
 const REFRESH = "/api/gateway/identity/refresh-token";
 let token: string | null;
-let onAuthFailure: Mock<() => void>;
+let onAuthFailure: Mock<(e?: unknown) => void>;
 let refresh: Mock<() => Promise<string>>;
 
 beforeEach(() => {
   token = "old";
-  onAuthFailure = vi.fn<() => void>();
+  onAuthFailure = vi.fn<(e?: unknown) => void>();
   refresh = vi.fn<() => Promise<string>>(async () => {
     const r = await http.post<{ accessToken: string }>(REFRESH, { refreshToken: "r" });
     token = r.data.accessToken;
@@ -68,6 +68,16 @@ describe("refresh interceptor", () => {
     );
     await expect(http.get("/api/gateway/data")).rejects.toBeInstanceOf(ApiError);
     expect(onAuthFailure).toHaveBeenCalledTimes(1);
+  });
+
+  it("(c2) transient refresh failure (500) still notifies with the error", async () => {
+    server.use(
+      dataHandler(),
+      mswHttp.post(REFRESH, () => new HttpResponse(null, { status: 500 })),
+    );
+    await expect(http.get("/api/gateway/data")).rejects.toBeInstanceOf(ApiError);
+    expect(onAuthFailure).toHaveBeenCalledTimes(1);
+    expect(onAuthFailure.mock.calls[0]![0]).toMatchObject({ status: 500 });
   });
 
   it("(d) repeated 401 after successful refresh does not loop", async () => {

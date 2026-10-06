@@ -10,15 +10,18 @@ function makeToken(payload: object): string {
 
 describe("parseJwt", () => {
   it("reads a single role string", () => {
-    expect(parseJwt(makeToken({ [ROLE]: "Admin", userId: "u1" }))).toEqual({ userId: "u1", roles: ["Admin"] });
+    expect(parseJwt(makeToken({ [ROLE]: "Admin", userId: "u1" }))).toEqual({ userId: "u1", login: null, roles: ["Admin"] });
   });
   it("reads a roles array", () => {
     expect(parseJwt(makeToken({ [ROLE]: ["admin", "user"] })).roles).toEqual(["admin", "user"]);
   });
   it("returns empty roles without claim and falls back to sub", () => {
-    expect(parseJwt(makeToken({ sub: "s1" }))).toEqual({ userId: "s1", roles: [] });
+    expect(parseJwt(makeToken({ sub: "s1" }))).toEqual({ userId: "s1", login: null, roles: [] });
+  });
+  it("reads the userLogin claim", () => {
+    expect(parseJwt(makeToken({ userId: "u1", userLogin: "ivan" })).login).toBe("ivan");
   });
   it("handles garbage tokens", () => {
-    expect(parseJwt("garbage")).toEqual({ userId: null, roles: [] });
+    expect(parseJwt("garbage")).toEqual({ userId: null, login: null, roles: [] });
   });
 });

@@ -4,7 +4,8 @@ import { toApiError } from "./errors";
 export interface AuthHandlers {
   getAccessToken(): string | null;
   refresh(): Promise<string>;
-  onAuthFailure(): void;
+  /** Called when the refresh attempt failed; `error` is the refresh failure. */
+  onAuthFailure(error?: unknown): void;
 }
 
 type RetriableConfig = InternalAxiosRequestConfig & { _retried?: boolean };
@@ -54,8 +55,8 @@ http.interceptors.response.use(
       let newToken: string;
       try {
         newToken = await refreshOnce(h);
-      } catch {
-        h.onAuthFailure();
+      } catch (refreshError) {
+        h.onAuthFailure(refreshError);
         throw toApiError(e);
       }
       config.headers.Authorization = `Bearer ${newToken}`;

@@ -23,7 +23,7 @@ export default function App() {
       <CssBaseline />
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
-          <AuthProvider>
+          <AuthProvider onSessionEnd={() => queryClient.clear()}>
             <NotificationsProvider>
               <BrowserRouter>
                 <AppRoutes />

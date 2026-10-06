@@ -4,6 +4,29 @@ import { validateComposition } from "./compositionValidation";
 const BASE = "al";
 
 describe("validateComposition", () => {
+  it("accepts an exact-100 total despite float error (0.2 + 83.9 + 15.9)", () => {
+    const errors = validateComposition(
+      [
+        { chemicalElementId: BASE, exactValue: 83.9 },
+        { chemicalElementId: "si", exactValue: 0.2 },
+        { chemicalElementId: "fe", exactValue: 15.9 },
+      ],
+      BASE,
+    );
+    expect(errors).toEqual([]);
+  });
+
+  it("still rejects totals above 100", () => {
+    const errors = validateComposition(
+      [
+        { chemicalElementId: BASE, exactValue: 99.9 },
+        { chemicalElementId: "si", exactValue: 0.100001 },
+      ],
+      BASE,
+    );
+    expect(errors.some((e) => e.includes("100"))).toBe(true);
+  });
+
   it("rejects empty list", () => {
     expect(validateComposition([], BASE).length).toBeGreaterThan(0);
   });

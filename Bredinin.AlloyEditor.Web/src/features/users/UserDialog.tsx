@@ -1,12 +1,13 @@
 import { useState } from "react";
 import {
   Alert, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel,
-  FormGroup, FormLabel, Stack, TextField,
+  FormGroup, FormLabel, Stack, TextField, Tooltip,
 } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createUser, toApiError, updateUser, type User } from "../../api";
+import { useAuth } from "../../auth/useAuth";
 import { useNotify } from "../../components/Notifications";
-import { ROLES } from "./roles";
+import { ADMIN_ROLE_ID, ROLES, SELF_HINT } from "./roles";
 
 interface Props {
   /** Existing user to edit; omit to create a new one. */
@@ -17,6 +18,8 @@ interface Props {
 export function UserDialog({ user, onClose }: Props) {
   const { notify } = useNotify();
   const queryClient = useQueryClient();
+  const { userId } = useAuth();
+  const isSelf = !!user && !!userId && user.id.toLowerCase() === userId.toLowerCase();
   const editing = user !== undefined;
 
   const [login, setLogin] = useState(user?.login ?? "");
@@ -119,11 +122,20 @@ export function UserDialog({ user, onClose }: Props) {
           <FormGroup>
             <FormLabel component="legend">Роли</FormLabel>
             {ROLES.map((r) => (
-              <FormControlLabel
-                key={r.id}
-                label={r.name}
-                control={<Checkbox checked={roleIds.includes(r.id)} disabled={busy} onChange={() => toggleRole(r.id)} />}
-              />
+              <Tooltip key={r.id} title={isSelf && r.id === ADMIN_ROLE_ID ? SELF_HINT : ""}>
+                <span>
+                  <FormControlLabel
+                    label={r.name}
+                    control={
+                      <Checkbox
+                        checked={roleIds.includes(r.id)}
+                        disabled={busy || (isSelf && r.id === ADMIN_ROLE_ID)}
+                        onChange={() => toggleRole(r.id)}
+                      />
+                    }
+                  />
+                </span>
+              </Tooltip>
             ))}
           </FormGroup>
           {errors.length > 0 && (

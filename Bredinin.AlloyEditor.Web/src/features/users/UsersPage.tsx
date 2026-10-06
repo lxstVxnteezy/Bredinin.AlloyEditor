@@ -10,10 +10,8 @@ import { useAuth } from "../../auth/useAuth";
 import { ConfirmDialog } from "../../components/ConfirmDialog";
 import { ErrorAlert } from "../../components/ErrorAlert";
 import { useNotify } from "../../components/Notifications";
-import { roleName } from "./roles";
+import { roleName, SELF_HINT } from "./roles";
 import { UserDialog } from "./UserDialog";
-
-const SELF_HINT = "Нельзя применить к своей учётной записи";
 
 const fullName = (u: User) => [u.lastName, u.firstName, u.secondName].filter(Boolean).join(" ");
 

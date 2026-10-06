@@ -53,6 +53,12 @@ describe("route guards", () => {
     expect(screen.getByText("Недостаточно прав")).toBeInTheDocument();
   });
 
+  it("shows the login in the header instead of the raw id", () => {
+    renderAt("/grades", { ...user, userLogin: "ivan" });
+    expect(screen.getByText("ivan (пользователь)")).toBeInTheDocument();
+    expect(screen.queryByText(/u1/)).not.toBeInTheDocument();
+  });
+
   it("hides the Users menu item from non-admin", () => {
     renderAt("/grades", user);
     expect(screen.getByRole("link", { name: "Марки" })).toBeInTheDocument();

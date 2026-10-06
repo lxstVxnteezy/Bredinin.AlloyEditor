@@ -410,7 +410,7 @@ npm run build     # production-сборка в dist/
 
 `docker compose up` собирает образ `web` (nginx со статикой), и главный nginx отдаёт интерфейс на http://localhost/ ; запросы `/api/*` по-прежнему идут на Gateway.
 
-Вход выполняется через Gateway (`/api/identity/login`), роли пользователя берутся из JWT.
+Вход выполняется через Gateway (`/api/gateway/identity/login`), роли пользователя берутся из JWT.
 
 ---
 

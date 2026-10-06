@@ -20,6 +20,19 @@ describe("toApiError", () => {
     expect(r.status).toBe(500);
     expect(r.message).toBe("x");
   });
+  it("ignores HTML string bodies (proxy error pages) for 502", () => {
+    const r = toApiError(axiosErr(502, "<html><body><h1>502 Bad Gateway</h1></body></html>"));
+    expect(r.status).toBe(502);
+    expect(r.message).toBe("Ошибка сервера (502)");
+  });
+  it("ignores text/html content-type bodies", () => {
+    const e = axiosErr(504, "Gateway Timeout");
+    e.response!.headers = { "content-type": "text/html; charset=utf-8" };
+    expect(toApiError(e).message).toBe("Ошибка сервера (504)");
+  });
+  it("passes plain-text 400 body through", () => {
+    expect(toApiError(axiosErr(400, "a < b не допускается")).message).toBe("a < b не допускается");
+  });
   it("maps network error", () => {
     const r = toApiError(new AxiosError("Network Error"));
     expect(r.status).toBe(0);

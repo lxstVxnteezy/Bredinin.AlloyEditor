@@ -9,8 +9,11 @@ export class ApiError extends Error {
   }
 }
 
-function extractMessage(data: unknown): string | null {
-  if (typeof data === "string" && data.trim()) return data;
+function extractMessage(data: unknown, contentType?: unknown): string | null {
+  if (typeof data === "string") {
+    const isHtml = data.trimStart().startsWith("<") || (typeof contentType === "string" && /text\/html/i.test(contentType));
+    return data.trim() && !isHtml ? data : null;
+  }
   if (data && typeof data === "object") {
     const d = data as Record<string, unknown>;
     for (const key of ["message", "title", "detail"]) {
@@ -25,10 +28,10 @@ export function toApiError(e: unknown): ApiError {
   if (e instanceof ApiError) return e;
   if (isAxiosError(e)) {
     if (!e.response) return new ApiError(0, "Нет связи с сервером");
-    const { status, data } = e.response;
+    const { status, data, headers } = e.response;
     if (status === 429) return new ApiError(status, "Слишком много запросов, повторите позже");
     if (status === 403) return new ApiError(status, "Недостаточно прав");
-    return new ApiError(status, extractMessage(data) ?? `Ошибка сервера (${status})`);
+    return new ApiError(status, extractMessage(data, (headers as Record<string, unknown> | undefined)?.["content-type"]) ?? `Ошибка сервера (${status})`);
   }
   return new ApiError(0, e instanceof Error ? e.message : "Неизвестная ошибка");
 }

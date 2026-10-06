@@ -6,4 +6,8 @@ export const ROLES = [
   { id: "7a593027-99d0-4a47-91b1-5c73049cecc1", name: "Пользователь" },
 ] as const;
 
+export const ADMIN_ROLE_ID = ROLES[0].id;
+
+export const SELF_HINT = "Нельзя применить к своей учётной записи";
+
 export const roleName = (id: string): string => ROLES.find((r) => r.id === id)?.name ?? id;

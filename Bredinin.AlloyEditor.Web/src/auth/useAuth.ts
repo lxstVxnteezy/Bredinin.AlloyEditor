@@ -4,6 +4,8 @@ export interface AuthContextValue {
   status: "loading" | "authenticated" | "anonymous";
   roles: string[];
   userId: string | null;
+  /** Login name from the JWT `userLogin` claim, if present. */
+  userLogin?: string | null;
   login(l: string, p: string): Promise<void>;
   logout(): void;
   isAdmin: boolean;
