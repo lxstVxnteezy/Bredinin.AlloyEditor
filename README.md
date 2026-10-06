@@ -383,6 +383,37 @@ Bredinin.AlloyEditor/
 
 ---
 
+## 🖥 Веб-интерфейс
+
+React + TypeScript + Vite, исходники в `Bredinin.AlloyEditor.Web/`.
+
+### Локальная разработка
+
+```bash
+cd Bredinin.AlloyEditor.Web
+cp .env.example .env   # при необходимости задать VITE_PROXY_TARGET
+npm install
+npm run dev
+```
+
+`VITE_PROXY_TARGET` — адрес, на который dev-сервер проксирует `/api` (по умолчанию `http://localhost`, т.е. nginx из docker compose).
+
+### Тесты, линт, сборка
+
+```bash
+npm test          # vitest
+npm run lint      # eslint + tsc --noEmit
+npm run build     # production-сборка в dist/
+```
+
+### Запуск в Docker
+
+`docker compose up` собирает образ `web` (nginx со статикой), и главный nginx отдаёт интерфейс на http://localhost/ ; запросы `/api/*` по-прежнему идут на Gateway.
+
+Вход выполняется через Gateway (`/api/identity/login`), роли пользователя берутся из JWT.
+
+---
+
 ## 🤝 Contributing
 
 Pull requests приветствуются.

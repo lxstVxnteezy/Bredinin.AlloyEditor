@@ -211,6 +211,16 @@ services:
       - api_gateway1
       - api_gateway2
       - api_gateway3
+      - web
+    networks:
+      - monitoring
+    restart: unless-stopped
+
+  # === WEB (React SPA, статика за nginx) ===
+  web:
+    build:
+      context: ./Bredinin.AlloyEditor.Web
+    container_name: alloyeditor_web
     networks:
       - monitoring
     restart: unless-stopped
