@@ -10,6 +10,7 @@ import { useElements, useGrades, useSystems } from "../../api/queries";
 import { ConfirmDialog } from "../../components/ConfirmDialog";
 import { ErrorAlert } from "../../components/ErrorAlert";
 import { useNotify } from "../../components/Notifications";
+import { CreateGradeDialog } from "./CreateGradeDialog";
 import { GradeDetails } from "./GradeDetails";
 
 const ALL = "";
@@ -25,6 +26,7 @@ export function GradesPage() {
   const [systemId, setSystemId] = useState(ALL);
   const [openId, setOpenId] = useState<string | null>(null);
   const [toDelete, setToDelete] = useState<AlloyGrade | null>(null);
+  const [creating, setCreating] = useState(false);
 
   const remove = useMutation({
     mutationFn: deleteGrade,
@@ -73,6 +75,9 @@ export function GradesPage() {
             </MenuItem>
           ))}
         </TextField>
+        <Button variant="contained" onClick={() => setCreating(true)}>
+          Создать
+        </Button>
         <Tooltip title="Недоступно: нет эндпоинта в Gateway">
           <span>
             <Button disabled>Редактировать</Button>
@@ -139,6 +144,7 @@ export function GradesPage() {
           </Table>
         </TableContainer>
       )}
+      {creating && <CreateGradeDialog open onClose={() => setCreating(false)} />}
       <GradeDetails
         grade={opened}
         systemName={opened ? systemName(opened.alloySystemId) : undefined}

@@ -138,12 +138,12 @@ describe("GradesPage", () => {
     expect(within(dialog).getByText("Твёрдость")).toBeInTheDocument();
   });
 
-  it("has disabled edit button and no create button", async () => {
+  it("has disabled edit button and an enabled create button", async () => {
     setup();
     renderPage();
     await screen.findByText("Сталь 45");
     expect(screen.getByRole("button", { name: "Редактировать" })).toBeDisabled();
-    expect(screen.queryByRole("button", { name: "Создать" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Создать" })).toBeEnabled();
   });
 
   it("deletes after confirmation and refetches list", async () => {
