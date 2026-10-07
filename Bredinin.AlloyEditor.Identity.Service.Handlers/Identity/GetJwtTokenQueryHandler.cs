@@ -1,3 +1,5 @@
+using System.Net;
+using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
 using Bredinin.AlloyEditor.Identity.Service.Contracts.Queries.Auth;
 using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
@@ -18,7 +20,6 @@ public class GetJwtTokenQueryHandler(
     JwtOptionsAccessor jwtOptionsAccessor)
     : BaseAuthHandler<GetJwtTokenQuery, AuthResponse>(tokenService, context, cache, redis, jwtOptionsAccessor)
 {
-
     public override async Task<AuthResponse> Handle(GetJwtTokenQuery request, CancellationToken cancellationToken)
     {
         var user = await Context.Users
@@ -29,7 +30,7 @@ public class GetJwtTokenQueryHandler(
 
         if (user == null || !passwordHasher.VerifyPassword(request.Password, user.Hash))
         {
-            throw new UnauthorizedAccessException("Invalid credentials");
+            throw new BusinessException("Invalid credentials", HttpStatusCode.Unauthorized);
         }
 
         var accessToken = TokenService.GenerateAccessToken(user);

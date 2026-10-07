@@ -3,6 +3,7 @@ import { Alert, Box, Button, Paper, TextField, Typography } from "@mui/material"
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/useAuth";
 import { toApiError } from "../../api/errors";
+import { temperGradient } from "../../theme";
 
 const WRONG_CREDENTIALS = "Неверный логин или пароль";
 const REQUIRED = "Обязательное поле";
@@ -37,33 +38,56 @@ export function LoginPage() {
   };
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", p: 2 }}>
-      <Paper component="form" noValidate onSubmit={onSubmit} sx={{ p: 4, width: 360, display: "grid", gap: 2 }}>
-        <Typography variant="h5" component="h1">
-          Вход
-        </Typography>
-        {error && <Alert severity="error">{error}</Alert>}
-        <TextField
-          label="Логин"
-          value={loginValue}
-          onChange={(e) => setLoginValue(e.target.value)}
-          error={touched && !loginValue.trim()}
-          helperText={touched && !loginValue.trim() ? REQUIRED : undefined}
-          autoComplete="username"
-          autoFocus
-        />
-        <TextField
-          label="Пароль"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error={touched && !password}
-          helperText={touched && !password ? REQUIRED : undefined}
-          autoComplete="current-password"
-        />
-        <Button type="submit" variant="contained" disabled={pending}>
-          Войти
-        </Button>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        p: 2,
+        bgcolor: "background.default",
+      }}
+    >
+      <Paper
+        component="form"
+        noValidate
+        onSubmit={onSubmit}
+        variant="outlined"
+        sx={{ width: 380, maxWidth: "100%", borderRadius: "16px", overflow: "hidden", display: "grid" }}
+      >
+        <Box aria-hidden sx={{ height: 4, background: temperGradient }} />
+        <Box sx={{ p: 4, display: "grid", gap: 2.5 }}>
+          <Box>
+            <Typography variant="h5" component="h1">
+              Вход
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              AlloyEditor — каталог марок и составов сплавов
+            </Typography>
+          </Box>
+          {error && <Alert severity="error">{error}</Alert>}
+          <TextField
+            label="Логин"
+            value={loginValue}
+            onChange={(e) => setLoginValue(e.target.value)}
+            error={touched && !loginValue.trim()}
+            helperText={touched && !loginValue.trim() ? REQUIRED : undefined}
+            autoComplete="username"
+            autoFocus
+          />
+          <TextField
+            label="Пароль"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            error={touched && !password}
+            helperText={touched && !password ? REQUIRED : undefined}
+            autoComplete="current-password"
+          />
+          <Button type="submit" variant="contained" size="large" disabled={pending}>
+            Войти
+          </Button>
+        </Box>
       </Paper>
     </Box>
   );

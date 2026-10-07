@@ -41,6 +41,14 @@ export interface MechanicalProperty {
   heatTreatmentId?: string | null;
 }
 
+export interface PagedResponse<T> {
+  items: T[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
 export interface AlloyGrade {
   id: string;
   name: string;

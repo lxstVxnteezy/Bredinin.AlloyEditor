@@ -1,3 +1,5 @@
+using System.Net;
+using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Identity.Service.Contracts.Commands.Admin;
 using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
 using MediatR;
@@ -9,7 +11,10 @@ internal class DeleteUserCommandHandler(IdentityDbContext context) : IRequestHan
 {
     public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        await context.Users.Where(x => x.Id == request.UserId)
+        var result = await context.Users.Where(x => x.Id == request.UserId)
             .ExecuteDeleteAsync(cancellationToken);
+
+        if (result == 0)
+            throw new BusinessException($"User not found: {request.UserId}", HttpStatusCode.NotFound);
     }
 }

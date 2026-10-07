@@ -8,6 +8,7 @@ import type {
   CreateUserRequest,
   EditUserRequest,
   InfoAlloyGradeByMain,
+  PagedResponse,
   UpdateUserResponse,
   User,
 } from "./types";
@@ -23,7 +24,18 @@ export const refreshToken = (t: string) =>
 export const revokeAccess = (userId: string) =>
   http.post(`${base}/identity/${userId}/revoke-access`).then(() => undefined);
 
-export const getGrades = () => http.get<AlloyGrade[]>(`${base}/alloy-grade`).then((r) => r.data);
+export interface GradesParams {
+  search?: string;
+  page: number;
+  pageSize: number;
+}
+
+export const getGrades = ({ search, page, pageSize }: GradesParams) =>
+  http
+    .get<PagedResponse<AlloyGrade>>(`${base}/alloy-grade`, {
+      params: { search: search || undefined, page, pageSize },
+    })
+    .then((r) => r.data);
 
 export const createGrade = (req: CreateAlloyGradeRequest) =>
   http.post<string>(`${base}/alloy-grade`, req).then((r) => r.data);

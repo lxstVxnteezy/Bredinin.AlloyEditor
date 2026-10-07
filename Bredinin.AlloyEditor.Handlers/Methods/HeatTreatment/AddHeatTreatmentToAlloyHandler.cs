@@ -1,3 +1,4 @@
+using System.Net;
 using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Contracts.Common.HeatTreatment;
 using Bredinin.AlloyEditor.DAL;
@@ -22,7 +23,7 @@ internal class AddHeatTreatmentToAlloyHandler(
 
         if (alloy == null)
         {
-            throw new BusinessException($"Alloy grade not found: {alloyId}");
+            throw new BusinessException($"Alloy grade not found: {alloyId}", HttpStatusCode.NotFound);
         }
 
         var typeExists = await context.DictTypesOfHeatTreatments
@@ -30,7 +31,8 @@ internal class AddHeatTreatmentToAlloyHandler(
 
         if (!typeExists)
         {
-            throw new BusinessException($"Heat treatment type not found: {request.HeatTreatmentTypeId}");
+            throw new BusinessException($"Heat treatment type not found: {request.HeatTreatmentTypeId}",
+                HttpStatusCode.NotFound);
         }
 
         var heatTreatment = new AlloyHeatTreatment

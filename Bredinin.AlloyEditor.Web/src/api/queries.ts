@@ -1,7 +1,19 @@
-import { useQuery } from "@tanstack/react-query";
-import { getElements, getGrades, getGradesForMainElement, getSystems } from "./index";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import {
+  getElements,
+  getGrades,
+  getGradesForMainElement,
+  getSystems,
+  type GradesParams,
+} from "./index";
 
-export const useGrades = () => useQuery({ queryKey: ["grades"], queryFn: getGrades });
+// Keeps the previous page on screen while the next one loads.
+export const useGrades = (params: GradesParams) =>
+  useQuery({
+    queryKey: ["grades", "list", params],
+    queryFn: () => getGrades(params),
+    placeholderData: keepPreviousData,
+  });
 
 export const useSystems = () => useQuery({ queryKey: ["systems"], queryFn: getSystems });
 

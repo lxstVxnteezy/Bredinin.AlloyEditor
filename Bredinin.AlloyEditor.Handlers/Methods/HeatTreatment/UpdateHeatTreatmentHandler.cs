@@ -1,3 +1,4 @@
+using System.Net;
 using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Contracts.Common.HeatTreatment;
 using Bredinin.AlloyEditor.DAL;
@@ -15,12 +16,11 @@ internal sealed class UpdateHeatTreatmentHandler(ServiceDbContext context) : IUp
     public async Task Handle(Guid id, UpdateHeatTreatmentRequest request, CancellationToken ctn)
     {
         var treatment = await context.AlloyHeatTreatments
-            .FirstOrDefaultAsync(x => x.Id == id, ctn);
+            .SingleOrDefaultAsync(x => x.Id == id, ctn);
 
         if (treatment == null)
-        {
-            throw new BusinessException($"Heat treatment not found: {id}");
-        }
+            throw new BusinessException($"Heat treatment not found: {id}", HttpStatusCode.NotFound);
+
 
         if (request.HeatTreatmentTypeId.HasValue)
         {
@@ -28,9 +28,9 @@ internal sealed class UpdateHeatTreatmentHandler(ServiceDbContext context) : IUp
                 .AnyAsync(x => x.Id == request.HeatTreatmentTypeId, ctn);
 
             if (!typeExists)
-            {
-                throw new BusinessException($"Heat treatment type not found: {request.HeatTreatmentTypeId}");
-            }
+                throw new BusinessException($"Heat treatment type not found: {request.HeatTreatmentTypeId}",
+                    HttpStatusCode.NotFound);
+
 
             treatment.HeatTreatmentTypeId = request.HeatTreatmentTypeId.Value;
         }

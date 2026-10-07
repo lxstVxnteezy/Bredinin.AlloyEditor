@@ -1,3 +1,4 @@
+using System.Net;
 using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions;
@@ -21,15 +22,14 @@ internal sealed class GetAlloyGradeByIdHandler(ServiceDbContext context) : IGetA
             .AsNoTracking()
             .Include(x => x.ChemicalCompositions)
             .Include(x => x.HeatTreatments)
-                .ThenInclude(ht => ht.HeatTreatmentType)
+            .ThenInclude(ht => ht.HeatTreatmentType)
             .Include(x => x.MechanicalProperties)
-                .ThenInclude(mp => mp.PropertyType)
-            .FirstOrDefaultAsync(x => x.Id == id, ctn);
+            .ThenInclude(mp => mp.PropertyType)
+            .SingleOrDefaultAsync(x => x.Id == id, ctn);
 
         if (alloy == null)
-        {
-            throw new BusinessException($"Alloy grade not found: {id}");
-        }
+            throw new BusinessException($"Alloy grade not found: {id}", HttpStatusCode.NotFound);
+
 
         return new AlloyGradeResponse(
             alloy.Id,

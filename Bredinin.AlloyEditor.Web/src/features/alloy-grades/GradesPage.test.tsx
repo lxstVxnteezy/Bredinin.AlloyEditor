@@ -3,6 +3,7 @@ import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { server } from "../../test/server";
+import { pagedGrades } from "../../test/paged";
 import { renderWithProviders } from "../../test/renderWithProviders";
 import { NotificationsProvider } from "../../components/Notifications";
 import { GradesPage } from "./GradesPage";
@@ -36,7 +37,7 @@ const gradeAl = {
 
 function setup(grades: unknown[] = [grade45, gradeAl]) {
   server.use(
-    http.get("/api/gateway/alloy-grade", () => HttpResponse.json(grades)),
+    http.get("/api/gateway/alloy-grade", ({ request }) => pagedGrades(grades as { name: string }[], request)),
     http.get("/api/gateway/alloy-system", () => HttpResponse.json(systems)),
     http.get("/api/gateway/dictionary/chemical-elements", () => HttpResponse.json(elements)),
   );
@@ -81,17 +82,67 @@ describe("GradesPage", () => {
     expect(await screen.findByText("Марок пока нет")).toBeInTheDocument();
   });
 
-  it("filters by trimmed case-insensitive search and shows no-match", async () => {
+  it("searches on the server with the trimmed text and shows no-match", async () => {
     setup();
+    const searches: (string | null)[] = [];
+    server.use(
+      http.get("/api/gateway/alloy-grade", ({ request }) => {
+        searches.push(new URL(request.url).searchParams.get("search"));
+        return pagedGrades([grade45, gradeAl], request);
+      }),
+    );
     const user = userEvent.setup();
     renderPage();
     await screen.findByText("Сталь 45");
-    await user.type(screen.getByLabelText("Поиск по названию"), "  сТАЛЬ ");
+    await user.type(screen.getByLabelText("Поиск по названию"), "  сталь ");
+    await waitFor(() => expect(screen.queryByText("АД31")).not.toBeInTheDocument());
     expect(screen.getByText("Сталь 45")).toBeInTheDocument();
-    expect(screen.queryByText("АД31")).not.toBeInTheDocument();
+    expect(searches).toContain("сталь");
+    expect(searches.filter((s) => s !== null && s !== "сталь" && s.includes(" "))).toEqual([]);
     await user.clear(screen.getByLabelText("Поиск по названию"));
     await user.type(screen.getByLabelText("Поиск по названию"), "нет такой");
-    expect(screen.getByText("Ничего не найдено")).toBeInTheDocument();
+    expect(await screen.findByText("Ничего не найдено")).toBeInTheDocument();
+  });
+
+  it("keeps the chosen page when the unchanged search box settles", async () => {
+    const many = Array.from({ length: 25 }, (_, i) => ({
+      ...grade45,
+      id: `m${i + 1}`,
+      name: `Марка ${String(i + 1).padStart(2, "0")}`,
+    }));
+    setup(many);
+    const user = userEvent.setup();
+    renderPage();
+    await screen.findByText("Марка 01");
+    await user.click(screen.getByRole("button", { name: "Следующая страница" }));
+    expect(await screen.findByText("Марка 21")).toBeInTheDocument();
+    // Longer than the search debounce: the pending timer from mount must not reset the page.
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    expect(screen.getByText("Марка 21")).toBeInTheDocument();
+    expect(screen.getByText("21–25 из 25")).toBeInTheDocument();
+  });
+
+  it("pages through the list and resets to the first page on a new search", async () => {
+    const many = Array.from({ length: 25 }, (_, i) => ({
+      ...grade45,
+      id: `m${i + 1}`,
+      name: `Марка ${String(i + 1).padStart(2, "0")}`,
+    }));
+    setup(many);
+    const user = userEvent.setup();
+    renderPage();
+    expect(await screen.findByText("Марка 01")).toBeInTheDocument();
+    expect(screen.getByText("Марка 20")).toBeInTheDocument();
+    expect(screen.queryByText("Марка 21")).not.toBeInTheDocument();
+    expect(screen.getByText("1–20 из 25")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Следующая страница" }));
+    expect(await screen.findByText("Марка 21")).toBeInTheDocument();
+    expect(screen.queryByText("Марка 01")).not.toBeInTheDocument();
+    expect(screen.getByText("21–25 из 25")).toBeInTheDocument();
+    await user.type(screen.getByLabelText("Поиск по названию"), "марка 0");
+    // The search is debounced, so give the request more time than the default under a loaded test run.
+    expect(await screen.findByText("Марка 01", {}, { timeout: 4000 })).toBeInTheDocument();
+    expect(await screen.findByText("1–9 из 9", {}, { timeout: 4000 })).toBeInTheDocument();
   });
 
   it("filters by alloy system", async () => {
@@ -151,7 +202,7 @@ describe("GradesPage", () => {
     let deleted = 0;
     setup();
     server.use(
-      http.get("/api/gateway/alloy-grade", () => HttpResponse.json(grades)),
+      http.get("/api/gateway/alloy-grade", ({ request }) => pagedGrades(grades, request)),
       http.delete("/api/gateway/alloy-grade/g1", () => {
         deleted++;
         grades = [gradeAl];
@@ -169,6 +220,31 @@ describe("GradesPage", () => {
     expect(deleted).toBe(1);
     expect(screen.getByText("АД31")).toBeInTheDocument();
     expect(await screen.findByText("Марка удалена")).toBeInTheDocument();
+  });
+
+  it("steps back a page when the last item of the last page is deleted", async () => {
+    let many = Array.from({ length: 21 }, (_, i) => ({
+      ...grade45,
+      id: `m${i + 1}`,
+      name: `Марка ${String(i + 1).padStart(2, "0")}`,
+    }));
+    setup();
+    server.use(
+      http.get("/api/gateway/alloy-grade", ({ request }) => pagedGrades(many, request)),
+      http.delete("/api/gateway/alloy-grade/m21", () => {
+        many = many.filter((g) => g.id !== "m21");
+        return new HttpResponse(null, { status: 204 });
+      }),
+    );
+    const user = userEvent.setup();
+    renderPage();
+    await screen.findByText("Марка 01");
+    await user.click(screen.getByRole("button", { name: "Следующая страница" }));
+    const row = (await screen.findByText("Марка 21")).closest("tr") as HTMLElement;
+    await user.click(within(row).getByRole("button", { name: "Удалить" }));
+    await user.click(screen.getByRole("button", { name: "Подтвердить" }));
+    expect(await screen.findByText("Марка 20")).toBeInTheDocument();
+    expect(screen.getByText("1–20 из 20")).toBeInTheDocument();
   });
 
   it("does not delete on cancel", async () => {

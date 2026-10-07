@@ -61,7 +61,9 @@ builder.Services.AddValidation();
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
+
 app.UseMiddleware<ErrorHandlingMiddleware>();
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseMiddleware<TokenRevocationMiddleware>();

@@ -1,3 +1,4 @@
+using System.Net;
 using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
 using Bredinin.AlloyEditor.Identity.Service.Contracts.Commands.Admin;
@@ -17,7 +18,7 @@ public class CreateUserCommandHandler(
         if (await context.Users
                 .AnyAsync(u => u.Login == request.Login, cancellationToken))
         {
-            throw new BusinessException($"User with login '{request.Login}' already exists");
+            throw new BusinessException($"User with login '{request.Login}' already exists", HttpStatusCode.Conflict);
         }
 
         var existingRolesCount = await context.Roles
@@ -26,7 +27,8 @@ public class CreateUserCommandHandler(
 
         if (existingRolesCount != request.RoleIds.Length)
         {
-            throw new BusinessException("One or more specified roles don't exist");
+            throw new BusinessException("One or more specified roles don't exist",
+                HttpStatusCode.NotFound);
         }
 
         var user = new User

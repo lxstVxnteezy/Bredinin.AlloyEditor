@@ -11,7 +11,6 @@ namespace Bredinin.AlloyEditor.WebAPI.Controllers.Alloy;
 [Route("api/alloys-systems")]
 public class AlloySystemController : BaseApiController
 {
-
     /// <summary>
     /// Получить все системы сплавов
     /// </summary>
@@ -30,5 +29,4 @@ public class AlloySystemController : BaseApiController
     {
         return handler.Handle(ctn);
     }
-
 }

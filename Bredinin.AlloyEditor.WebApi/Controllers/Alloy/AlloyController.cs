@@ -31,7 +31,7 @@ public class AlloyController : BaseApiController
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20,
         CancellationToken ctn = default)
-         => handler.Handle(search, page, pageSize, ctn);
+        => handler.Handle(search, page, pageSize, ctn);
 
 
     /// <summary>
@@ -87,11 +87,14 @@ public class AlloyController : BaseApiController
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public Task<ActionResult> DeleteAlloyGrade(
+    public async Task<ActionResult> DeleteAlloyGrade(
         [FromServices] IDeleteAlloyGradeHandler handler,
         Guid id,
         CancellationToken ctn)
-        => handler.Handle(id, ctn);
+    {
+        await handler.Handle(id, ctn);
+        return NoContent();
+    }
 
     /// <summary>
     /// Получить список сплавов по идентификатору системы сплавов.
@@ -166,11 +169,14 @@ public class AlloyController : BaseApiController
     [HttpDelete("heat-treatments/{treatmentId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public Task<ActionResult> DeleteHeatTreatment(
+    public async Task<ActionResult> DeleteHeatTreatment(
         [FromServices] IDeleteHeatTreatmentHandler handler,
         Guid treatmentId,
         CancellationToken ctn)
-        => handler.Handle(treatmentId, ctn);
+    {
+        await handler.Handle(treatmentId, ctn);
+        return NoContent();
+    }
 
     #endregion
 
@@ -216,11 +222,14 @@ public class AlloyController : BaseApiController
     [HttpDelete("mechanical-properties/{propertyId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public Task<ActionResult> DeleteMechanicalProperty(
+    public async Task<ActionResult> DeleteMechanicalProperty(
         [FromServices] IDeleteMechanicalPropertyHandler handler,
         Guid propertyId,
         CancellationToken ctn)
-        => handler.Handle(propertyId, ctn);
+    {
+        await handler.Handle(propertyId, ctn);
+        return NoContent();
+    }
 
     #endregion
 }

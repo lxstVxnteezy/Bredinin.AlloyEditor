@@ -1,3 +1,4 @@
+using System.Net;
 using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.DAL;
@@ -21,27 +22,28 @@ public class CreateAlloyGradeHandler(ServiceDbContext context) : ICreateAlloyGra
 
         if (alloySystem == null)
         {
-            throw new BusinessException($"Alloy system not found: {request.AlloySystemId}");
+            throw new BusinessException($"Alloy system not found: {request.AlloySystemId}",
+                HttpStatusCode.NotFound);
         }
 
         var baseElementExist = request.ChemicalCompositions
-           .Any(e => e.ChemicalElementId == alloySystem.BaseElementId);
+            .Any(e => e.ChemicalElementId == alloySystem.BaseElementId);
 
         if (!baseElementExist)
         {
-            throw new BusinessException($"Base element for alloy creation is not added. '{request.Name}");
+            throw new BusinessException($"Base element for alloy creation is not added. '{request.Name}",
+                HttpStatusCode.UnprocessableEntity);
         }
 
-        ArgumentNullException.ThrowIfNull(request);
+        var normalizedName = request.Name.Trim();
 
-        var alloyExists = await context.AlloyGrades
+        bool alloyExists = await context.AlloyGrades
             .AsNoTracking()
-            .AnyAsync(x => x.Name == request.Name, ctn);
+            .AnyAsync(x => x.Name == normalizedName, ctn);
 
         if (alloyExists)
-        {
-            throw new BusinessException($"Alloy grade '{request.Name}' already exists");
-        }
+            throw new BusinessException($"Alloy grade '{request.Name}' already exists",
+                HttpStatusCode.Conflict);
 
         var elementIds = request.ChemicalCompositions
             .Select(x => x.ChemicalElementId)
@@ -59,7 +61,8 @@ public class CreateAlloyGradeHandler(ServiceDbContext context) : ICreateAlloyGra
         if (missingElements.Length > 0)
         {
             throw new BusinessException(
-                $"Chemical elements not found: {string.Join(", ", missingElements)}");
+                $"Chemical elements not found: {string.Join(", ", missingElements)}",
+                HttpStatusCode.NotFound);
         }
 
         var chemicalCompositions = request.ChemicalCompositions

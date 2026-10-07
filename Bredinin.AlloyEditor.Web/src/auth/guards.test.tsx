@@ -55,7 +55,8 @@ describe("route guards", () => {
 
   it("shows the login in the header instead of the raw id", () => {
     renderAt("/grades", { ...user, userLogin: "ivan" });
-    expect(screen.getByText("ivan (пользователь)")).toBeInTheDocument();
+    expect(screen.getByText("ivan")).toBeInTheDocument();
+    expect(screen.getByText("пользователь")).toBeInTheDocument();
     expect(screen.queryByText(/u1/)).not.toBeInTheDocument();
   });
 

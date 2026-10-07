@@ -1,3 +1,5 @@
+using System.Net;
+using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.DAL;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,26 +8,19 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.HeatTreatment;
 
 public interface IDeleteHeatTreatmentHandler : IHandler
 {
-    Task<ActionResult> Handle(Guid id, CancellationToken ctn);
+    Task Handle(Guid id, CancellationToken ctn);
 }
 
 internal sealed class DeleteHeatTreatmentHandler(ServiceDbContext context) : IDeleteHeatTreatmentHandler
 {
-    public async Task<ActionResult> Handle(Guid id, CancellationToken ctn)
+    public async Task Handle(Guid id, CancellationToken ctn)
     {
-        var treatment = await context.AlloyHeatTreatments
-            .Include(x => x.MechanicalProperties)
-            .FirstOrDefaultAsync(x => x.Id == id, ctn);
+        var deleted = await context.DictTypesOfHeatTreatments
+            .Where(x => x.Id == id)
+            .ExecuteDeleteAsync(ctn);
 
-        if (treatment == null)
-        {
-            return new NotFoundResult();
-        }
+        if (deleted == 0)
+            throw new BusinessException($"Heat treatment not found: {id}", HttpStatusCode.NotFound);
 
-        // При каскадном удалении свойства удалятся автоматически
-        context.AlloyHeatTreatments.Remove(treatment);
-        await context.SaveChangesAsync(ctn);
-
-        return new NoContentResult();
     }
 }

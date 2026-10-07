@@ -1,3 +1,4 @@
+using System.Net;
 using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
 using Bredinin.AlloyEditor.Identity.Service.Contracts.Queries.Auth;
@@ -11,11 +12,13 @@ using StackExchange.Redis;
 
 namespace Bredinin.AlloyEditor.Identity.Service.Handler.Identity;
 
-public class RevokeAccessTokenHandler(ITokenService tokenService,
+public class RevokeAccessTokenHandler(
+    ITokenService tokenService,
     IdentityDbContext context,
     IDistributedCache cache,
     IConnectionMultiplexer redis,
-    JwtOptionsAccessor jwtOptionsAccessor) : BaseAuthHandler<RevokeTokenQuery, Unit>(tokenService, context, cache, redis, jwtOptionsAccessor)
+    JwtOptionsAccessor jwtOptionsAccessor)
+    : BaseAuthHandler<RevokeTokenQuery, Unit>(tokenService, context, cache, redis, jwtOptionsAccessor)
 {
     public override async Task<Unit> Handle(RevokeTokenQuery request, CancellationToken cancellationToken)
     {
@@ -23,7 +26,7 @@ public class RevokeAccessTokenHandler(ITokenService tokenService,
 
         if (!exists)
         {
-            throw new BusinessException("User not found");
+            throw new BusinessException("User not found", HttpStatusCode.NotFound);
         }
 
         await RevokeTokenByUserId(request.UserId, cancellationToken);

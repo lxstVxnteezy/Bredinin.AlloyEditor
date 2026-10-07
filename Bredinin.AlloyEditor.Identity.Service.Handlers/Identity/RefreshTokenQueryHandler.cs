@@ -1,3 +1,5 @@
+using System.Net;
+using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Identity.Service.Authentication.Interfaces;
 using Bredinin.AlloyEditor.Identity.Service.Contracts.Queries.Auth;
 using Bredinin.AlloyEditor.Identity.Service.DAL.Context;
@@ -22,14 +24,14 @@ public class RefreshTokenQueryHandler(
 
         if (entry == null)
         {
-            throw new UnauthorizedAccessException("Invalid or expired refresh token");
+            throw new BusinessException("Invalid or expired refresh token", HttpStatusCode.Unauthorized);
         }
 
         var user = await GetUserWithRolesAsync(entry.UserId, cancellationToken);
 
         if (user == null)
         {
-            throw new UnauthorizedAccessException("User not found");
+            throw new BusinessException("User not found", HttpStatusCode.NotFound);
         }
 
         var accessToken = TokenService.GenerateAccessToken(user);

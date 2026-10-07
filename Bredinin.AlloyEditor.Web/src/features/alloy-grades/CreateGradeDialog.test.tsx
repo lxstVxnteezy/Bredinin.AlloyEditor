@@ -3,6 +3,7 @@ import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { http, HttpResponse } from "msw";
 import { server } from "../../test/server";
+import { pagedGrades } from "../../test/paged";
 import { renderWithProviders } from "../../test/renderWithProviders";
 import { NotificationsProvider } from "../../components/Notifications";
 import { GradesPage } from "./GradesPage";
@@ -17,7 +18,7 @@ function setup() {
   let grades: unknown[] = [];
   const posts: unknown[] = [];
   server.use(
-    http.get("/api/gateway/alloy-grade", () => HttpResponse.json(grades)),
+    http.get("/api/gateway/alloy-grade", ({ request }) => pagedGrades(grades as { name: string }[], request)),
     http.get("/api/gateway/alloy-system", () => HttpResponse.json(systems)),
     http.get("/api/gateway/dictionary/chemical-elements", () => HttpResponse.json(elements)),
     http.post("/api/gateway/alloy-grade", async ({ request }) => {
