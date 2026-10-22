@@ -1,7 +1,7 @@
 ﻿using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Contracts.Common.MechenicalProperties;
 using Bredinin.AlloyEditor.DAL;
-using Bredinin.AlloyEditor.Domain.Dictionaries;
+using Bredinin.AlloyEditor.Handlers.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.MechanicalProperties;
@@ -42,14 +42,10 @@ internal sealed class UpdateMechanicalPropertyHandler(ServiceDbContext context) 
             var type = await context.DictMechanicalPropertyTypes
                 .FirstAsync(x => x.Id == property.PropertyTypeId, ctn);
 
-            if (type.ValueType == PropertyValueType.Exact &&
-                (request.ValueExact ?? property.ValueExact) == null)
-                throw new BusinessException($"Exact value required for property type {type.Name}");
-
-            if (type.ValueType == PropertyValueType.Range &&
-                ((request.ValueMin ?? property.ValueMin) == null ||
-                 (request.ValueMax ?? property.ValueMax) == null))
-                throw new BusinessException($"Min and Max values required for property type {type.Name}");
+            MechanicalPropertyValueChecker.Assert(type,
+                request.ValueMin ?? property.ValueMin,
+                request.ValueMax ?? property.ValueMax,
+                request.ValueExact ?? property.ValueExact);
         }
 
         property.ValueMin = request.ValueMin ?? property.ValueMin;

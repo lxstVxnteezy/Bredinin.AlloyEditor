@@ -1,4 +1,6 @@
-﻿namespace Bredinin.AlloyEditor.Domain.Dictionaries
+using Bredinin.AlloyEditor.Contracts.Common.Dictionaries;
+
+namespace Bredinin.AlloyEditor.Domain.Dictionaries
 {
     /// <summary>
     /// Справочник типов механических свойств
@@ -39,11 +41,5 @@
         /// Максимально возможное значение (для валидации)
         /// </summary>
         public decimal? MaxPossible { get; set; }
-    }
-
-    public enum PropertyValueType
-    {
-        Range,  // можно указывать min/max
-        Exact   // только точное значение
     }
 }

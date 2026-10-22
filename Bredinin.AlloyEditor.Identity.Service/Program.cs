@@ -10,6 +10,7 @@ using OpenTelemetry.Resources;
 using Serilog;
 using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Common.Http.Middlewares;
+using Bredinin.AlloyEditor.Core.Validation;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -54,6 +55,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 builder.Services.AddSerilog();
 builder.Services.AddControllers();
+builder.Services.AddValidation();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAddAuthenticationCustom(builder.Configuration);

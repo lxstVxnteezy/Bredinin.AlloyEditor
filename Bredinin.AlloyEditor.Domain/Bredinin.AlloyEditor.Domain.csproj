@@ -7,4 +7,8 @@
         <RootNamespace>Bredinin.AlloyEditor.Domain</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\Bredinin.AlloyEditor.Common.Contracts\Bredinin.AlloyEditor.Common.Contracts.csproj" />
+    </ItemGroup>
+
 </Project>

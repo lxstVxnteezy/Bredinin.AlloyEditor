@@ -1,16 +1,25 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
+using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.Core.Validation.Extensions;
+using Bredinin.AlloyEditor.Core.Validation.Validators.ChemicalCompositionRequests;
+using Bredinin.AlloyEditor.Core.Validation.Validators.HeatTreatment;
+using Bredinin.AlloyEditor.Core.Validation.Validators.MechanicalProperty;
 using FluentValidation;
 
 namespace Bredinin.AlloyEditor.Core.Validation.Validators.AlloyGrade
 {
     public class CreateAlloyGradeRequestValidator : AbstractValidator<CreateAlloyGradeRequest>
     {
+        public const int NameMaxLength = 100;
+        public const int DescriptionMaxLength = 1000;
+
         public CreateAlloyGradeRequestValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .MaximumLength(100);
+                .MaximumLength(NameMaxLength);
+
+            RuleFor(x => x.Description)
+                .MaximumLength(DescriptionMaxLength);
 
             RuleFor(x => x.AlloySystemId)
                 .NotEmpty();
@@ -20,43 +29,25 @@ namespace Bredinin.AlloyEditor.Core.Validation.Validators.AlloyGrade
                 .WithMessage("Chemical compositions are required");
 
             RuleForEach(x => x.ChemicalCompositions)
-                .ChildRules(comp =>
-                {
-                    comp.RuleFor(x => x.ChemicalElementId)
-                        .NotEmpty();
+                .SetValidator(new CreateChemicalCompositionItemValidator());
 
-                    comp.RuleFor(x => x.MinValue)
-                        .Must(ChemicalCompositionValidationExtensions.IsValidValueRange)
-                        .WithMessage($"MinValue must be between 0 and {ChemicalCompositionValidationExtensions.GetMaxElementValue()}")
-                        .When(x => x.MinValue.HasValue);
-
-                    comp.RuleFor(x => x.MaxValue)
-                        .Must(ChemicalCompositionValidationExtensions.IsValidValueRange)
-                        .WithMessage($"MaxValue must be between 0 and {ChemicalCompositionValidationExtensions.GetMaxElementValue()}")
-                        .Must((request, maxValue) => 
-                            ChemicalCompositionValidationExtensions.IsValidMinMaxRange(request.MinValue, maxValue))
-                        .WithMessage("MaxValue must be greater than or equal to MinValue")
-                        .When(x => x.MaxValue.HasValue);
-
-                    comp.RuleFor(x => x.ExactValue)
-                        .Must(ChemicalCompositionValidationExtensions.IsValidExactValue)
-                        .WithMessage($"ExactValue must be between 0 and {ChemicalCompositionValidationExtensions.GetMaxElementValue()}")
-                        .When(x => x.ExactValue.HasValue);
-
-                    comp.RuleFor(x => x)
-                        .Must(x => ChemicalCompositionValidationExtensions.IsEitherExactOrRange(
-                            x.ExactValue, x.MinValue, x.MaxValue))
-                        .WithMessage("Either ExactValue or Min/Max must be specified");
-
-                    comp.RuleFor(x => x)
-                        .Must(x => ChemicalCompositionValidationExtensions.AreMinAndMaxDifferent(
-                            x.MinValue, x.MaxValue))
-                        .WithMessage("MinValue and MaxValue must be different");
-                });
+            RuleFor(x => x.ChemicalCompositions)
+                .Must(c => ChemicalCompositionValidationExtensions.HasUniqueElements(c, x => x.ChemicalElementId))
+                .WithMessage("Chemical elements must not be repeated")
+                .When(x => x.ChemicalCompositions is { Length: > 0 });
 
             RuleFor(x => x.ChemicalCompositions)
                 .Must(BeValidTotalRange)
-                .WithMessage($"The sum of Min/Max values must not exceed {ChemicalCompositionValidationExtensions.GetMaxPercent()}");
+                .WithMessage($"The sum of minimum values must not exceed {ChemicalCompositionValidationExtensions.GetMaxPercent()}")
+                .When(x => x.ChemicalCompositions is { Length: > 0 });
+
+            RuleForEach(x => x.HeatTreatments)
+                .SetValidator(new CreateHeatTreatmentRequestValidator())
+                .When(x => x.HeatTreatments != null);
+
+            RuleForEach(x => x.DefaultMechanicalProperties)
+                .SetValidator(new CreateMechanicalPropertyRequestValidator())
+                .When(x => x.DefaultMechanicalProperties != null);
         }
 
         private static bool BeValidTotalRange(CreateChemicalCompositionRequest[] compositions)
@@ -65,7 +56,17 @@ namespace Bredinin.AlloyEditor.Core.Validation.Validators.AlloyGrade
                 compositions,
                 x => x.MinValue,
                 x => x.MaxValue,
-                x => x.ExactValue);   // добавили третий селектор
+                x => x.ExactValue);
+        }
+
+        // internal: чтобы MVC не запускал валидатор повторно для вложенных элементов
+        internal sealed class CreateChemicalCompositionItemValidator
+            : ChemicalCompositionItemValidator<CreateChemicalCompositionRequest>
+        {
+            public CreateChemicalCompositionItemValidator()
+                : base(x => x.ChemicalElementId, x => x.MinValue, x => x.MaxValue, x => x.ExactValue)
+            {
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.DAL;
-using Bredinin.AlloyEditor.Handlers.Helpers;
+using Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
@@ -32,7 +32,12 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
                     x.Name,
                     x.Description,
                     x.ChemicalCompositions
-                        .Select(ChemicalCompositionHelper.Convert)
+                        .Select(cc => new ChemicalCompositionsDto(
+                            cc.Id,
+                            cc.MinValue,
+                            cc.MaxValue,
+                            cc.ExactValue,
+                            cc.ChemicalElementId))
                         .ToArray()
                 ))
                 .ToArrayAsync(ctn);

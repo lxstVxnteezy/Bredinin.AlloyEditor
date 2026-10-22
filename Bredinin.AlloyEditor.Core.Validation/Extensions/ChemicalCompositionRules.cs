@@ -1,10 +1,9 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common.ChemicalCompositions;
-
 namespace Bredinin.AlloyEditor.Core.Validation.Extensions;
 
 public static class ChemicalCompositionValidationExtensions
 {
-    private const decimal MaxElementValue = 99;
+    // Базовый элемент (например, Al в сплаве 99.99% Al) может занимать до 100%
+    private const decimal MaxElementValue = 100;
     private const decimal MaxPercent = 100;
 
     /// <summary>
@@ -32,7 +31,14 @@ public static class ChemicalCompositionValidationExtensions
         exactValue.HasValue || (minValue.HasValue && maxValue.HasValue);
 
     /// <summary>
-    /// Проверяет, что сумма значений (с учётом ExactValue и диапазонов) в допустимых пределах
+    /// Проверяет, что ExactValue не указан одновременно с Min/Max
+    /// </summary>
+    public static bool IsExactNotMixedWithRange(decimal? exactValue, decimal? minValue, decimal? maxValue) =>
+        !exactValue.HasValue || (!minValue.HasValue && !maxValue.HasValue);
+
+    /// <summary>
+    /// Проверяет, что сумма нижних границ (Min, а для точных значений — Exact) не превышает 100%.
+    /// Сумма верхних границ не ограничивается: максимумы элементов в марке не достигаются одновременно.
     /// </summary>
     public static bool IsTotalRangeValid<T>(IEnumerable<T> compositions,
         Func<T, decimal?> minSelector,
@@ -40,9 +46,8 @@ public static class ChemicalCompositionValidationExtensions
         Func<T, decimal?> exactSelector) where T : class
     {
         var totalMin = compositions.Sum(x => minSelector(x) ?? exactSelector(x) ?? 0);
-        var totalMax = compositions.Sum(x => maxSelector(x) ?? exactSelector(x) ?? 0);
 
-        return totalMin <= MaxPercent && totalMax <= MaxPercent;
+        return totalMin <= MaxPercent;
     }
 
     /// <summary>
@@ -50,6 +55,12 @@ public static class ChemicalCompositionValidationExtensions
     /// </summary>
     public static bool IsValidExactValue(decimal? exactValue) =>
         !exactValue.HasValue || (exactValue.Value >= 0 && exactValue.Value <= MaxElementValue);
+
+    /// <summary>
+    /// Проверяет, что в составе нет повторяющихся элементов
+    /// </summary>
+    public static bool HasUniqueElements<T>(IEnumerable<T> compositions, Func<T, Guid> elementSelector) =>
+        compositions.Select(elementSelector).Distinct().Count() == compositions.Count();
 
     /// <summary>
     /// Получает максимально допустимое значение для элемента

@@ -8,11 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Domain\Bredinin.AlloyEditor.Identity.Service.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using Bredinin.AlloyEditor.Domain.Dictionaries;
+using System.Globalization;
 using OfficeOpenXml;
 
 namespace Bredinin.AlloyEditor.DAL.Migration.Parsers
@@ -25,8 +26,8 @@ namespace Bredinin.AlloyEditor.DAL.Migration.Parsers
 
             for (int row = 2; row <= rowCount; row++)
             {
-                var atomicWeightText = worksheet.Cells[row, 6].Text.Replace(".", ",");
-                var density = worksheet.Cells[row, 9].Text.Replace(".", ",");
+                var atomicWeightText = worksheet.Cells[row, 6].Text;
+                var density = worksheet.Cells[row, 9].Text;
 
                 elements.Add(new DictChemicalElement
                 {
@@ -36,8 +37,8 @@ namespace Bredinin.AlloyEditor.DAL.Migration.Parsers
                     IsBaseForAlloySystem = bool.Parse(worksheet.Cells[row, 3].Text),
                     Description = worksheet.Cells[row, 4].Text,
                     AtomicNumber = int.Parse(worksheet.Cells[row, 5].Text),
-                    AtomicWeight = decimal.Parse(atomicWeightText),
-                    Density = decimal.Parse(density),
+                    AtomicWeight = ParseDecimal(atomicWeightText),
+                    Density = ParseDecimal(density),
                     Group = int.Parse(worksheet.Cells[row, 7].Text),
                     Period = int.Parse(worksheet.Cells[row, 8].Text),
                 });
@@ -45,5 +46,11 @@ namespace Bredinin.AlloyEditor.DAL.Migration.Parsers
 
             return elements;
         }
+
+        /// <summary>
+        /// Разбирает число независимо от культуры сервера: в ячейке разделителем может быть и точка, и запятая
+        /// </summary>
+        private static decimal ParseDecimal(string text) =>
+            decimal.Parse(text.Trim().Replace(',', '.'), NumberStyles.Number, CultureInfo.InvariantCulture);
     }
 }

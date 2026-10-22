@@ -1,5 +1,4 @@
 ﻿using Bredinin.AlloyEditor.Identity.Service.Contracts.Queries.Auth;
-using Microsoft.AspNetCore.Mvc;
 using Refit;
 
 namespace Bredinin.AlloyEditor.Gateway.Core.Clients.ApiClients;

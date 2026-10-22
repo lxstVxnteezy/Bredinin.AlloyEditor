@@ -16,6 +16,10 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
         {
             await HandleBusinessExceptionAsync(context, ex);
         }
+        catch (UnauthorizedAccessException ex)
+        {
+            await HandleUnauthorizedAsync(context, ex);
+        }
         catch (Exception ex)
         {
             logger.LogError(ex, "Unexpected error: {Message}", ex.Message);
@@ -41,6 +45,20 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
         await JsonSerializer.SerializeAsync(context.Response.Body, response);
     }
 
+    private static async Task HandleUnauthorizedAsync(HttpContext context, UnauthorizedAccessException ex)
+    {
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+        var response = new ErrorResponse(
+            StatusCode: StatusCodes.Status401Unauthorized,
+            Message: "Unauthorized",
+            Detail: ex.Message
+        );
+
+        await JsonSerializer.SerializeAsync(context.Response.Body, response);
+    }
+
     private async Task HandleUnexpectedExceptionAsync(HttpContext context, Exception ex)
     {
         context.Response.ContentType = "application/json";
@@ -60,6 +78,7 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
         return statusCode switch
         {
             StatusCodes.Status400BadRequest => "Bad request",
+            StatusCodes.Status401Unauthorized => "Unauthorized",
             StatusCodes.Status404NotFound => "Resource not found",
             StatusCodes.Status409Conflict => "Resource conflict",
             StatusCodes.Status422UnprocessableEntity => "Validation error",
