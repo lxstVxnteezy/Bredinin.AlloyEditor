@@ -54,7 +54,7 @@ namespace Bredinin.AlloyEditor.Identity.Service.Handler.Admin
             var missingRoles = request.RoleIds.Except(existingRoleIds).ToArray();
 
             if (missingRoles.Any())
-                throw new InvalidOperationException(
+                throw new BusinessException(
                     $"Roles not found: {string.Join(", ", missingRoles)}");
         }
     }

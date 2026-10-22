@@ -63,6 +63,7 @@ public class AuthTests
 
         var cacheMock = new Mock<IDistributedCache>();
         var redisMock = new Mock<IConnectionMultiplexer>();
+        redisMock.Setup(r => r.GetDatabase(It.IsAny<int>(), It.IsAny<object>())).Returns(Mock.Of<IDatabase>());
         var sequence = new MockSequence();
  
         var existingEntry = new RefreshTokenCacheEntry

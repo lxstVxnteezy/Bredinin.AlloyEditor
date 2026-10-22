@@ -1,4 +1,5 @@
-﻿using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
+﻿using Bredinin.AlloyEditor.Contracts.Common;
+using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
 using Bredinin.AlloyEditor.Gateway.Core.Clients.ApiClients;
 using Microsoft.AspNetCore.Mvc;
 using Refit;
@@ -9,9 +10,13 @@ namespace Bredinin.AlloyEditor.Gateway.Controllers
     public class AlloyGradeGatewayController(IAlloyClient alloyClient) : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<AlloyGradeResponse[]>> GetGrades(CancellationToken ctn)
+        public async Task<ActionResult<PagedResponse<AlloyGradeResponse>>> GetGrades(
+            [FromQuery] string? search = null,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20,
+            CancellationToken ctn = default)
         {
-            var response = await alloyClient.GetGrades(ctn);
+            var response = await alloyClient.GetGrades(search, page, pageSize, ctn);
             return Ok(response);
         }
 

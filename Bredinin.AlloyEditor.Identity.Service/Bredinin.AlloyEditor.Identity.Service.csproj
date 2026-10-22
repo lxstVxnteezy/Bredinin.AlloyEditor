@@ -32,6 +32,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Bredinin.AlloyEditor.Core.Validation\Bredinin.AlloyEditor.Core.Validation.csproj" />
 		<ProjectReference Include="..\Bredinin.AlloyEditor.Common.Http\Bredinin.AlloyEditor.Common.Http.csproj" />
 		<ProjectReference Include="..\Bredinin.AlloyEditor.Common.Swagger\Bredinin.AlloyEditor.Common.Swagger.csproj" />
 		<ProjectReference Include="..\Bredinin.AlloyEditor.Identity.Service.Core.Authentication\Bredinin.AlloyEditor.Identity.Service.Core.Authentication.csproj" />

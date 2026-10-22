@@ -42,16 +42,14 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.ChemicalCompositions
                 .Select(rc => MapToEntity(rc, foundAlloy.Id))
                 .ToArray();
 
-            foundAlloy.ChemicalCompositions.Clear();
-
-            foreach (var cc in chemicalCompositions)
-            {
-                foundAlloy.ChemicalCompositions.Add(cc);
-            }
+            // Явные Remove/Add: строки с заранее выданным Guid, добавленные через навигацию,
+            // EF считает уже существующими (Modified) и SaveChanges падает с DbUpdateConcurrencyException
+            context.AlloyChemicalCompositions.RemoveRange(foundAlloy.ChemicalCompositions.ToArray());
+            await context.AlloyChemicalCompositions.AddRangeAsync(chemicalCompositions, ctn);
 
             await context.SaveChangesAsync(ctn);
 
-            return foundAlloy.ChemicalCompositions.Select(MapToResponse).ToArray();
+            return chemicalCompositions.Select(MapToResponse).ToArray();
         }
 
         private AlloyChemicalCompositions MapToEntity(ChemicalCompositionsRequest chemicalComposition, Guid alloyGradeId)

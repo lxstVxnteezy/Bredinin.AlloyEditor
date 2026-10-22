@@ -2,7 +2,7 @@
 using Bredinin.AlloyEditor.Contracts.Common.MechenicalProperties;
 using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Domain.Alloys;
-using Bredinin.AlloyEditor.Domain.Dictionaries;
+using Bredinin.AlloyEditor.Handlers.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.MechanicalProperties;
@@ -39,12 +39,7 @@ internal class AddMechanicalPropertyToAlloyHandler(
         }
 
         // Валидация на основе типа свойства
-        if (propertyType.ValueType == PropertyValueType.Exact && request.ValueExact == null)
-            throw new BusinessException($"Exact value required for property type {propertyType.Name}");
-
-        if (propertyType.ValueType == PropertyValueType.Range &&
-            (request.ValueMin == null || request.ValueMax == null))
-            throw new BusinessException($"Min and Max values required for property type {propertyType.Name}");
+        MechanicalPropertyValueChecker.Assert(propertyType, request.ValueMin, request.ValueMax, request.ValueExact);
 
         var property = new AlloyMechanicalProperty
         {

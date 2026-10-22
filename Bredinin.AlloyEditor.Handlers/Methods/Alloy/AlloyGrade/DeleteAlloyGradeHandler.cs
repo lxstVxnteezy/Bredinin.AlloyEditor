@@ -14,11 +14,11 @@ namespace Bredinin.AlloyEditor.Handlers.Methods.Alloy.AlloyGrade
     {
         public async Task<ActionResult> Handle(Guid id, CancellationToken ctn)
         {
-            await context.AlloyGrades
+            var deleted = await context.AlloyGrades
                 .Where(x => x.Id == id)
                 .ExecuteDeleteAsync(ctn);
 
-            return new ContentResult();
+            return deleted > 0 ? new NoContentResult() : new NotFoundResult();
         }
     }
 }
