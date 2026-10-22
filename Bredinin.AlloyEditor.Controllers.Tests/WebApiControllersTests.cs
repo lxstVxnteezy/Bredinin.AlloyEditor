@@ -81,13 +81,14 @@ public class WebApiAlloyControllerTests
     }
 
     [Fact]
-    public async Task Delete_ShouldReturnWhatHandlerReturns()
+    public async Task Delete_ShouldDelegateAndReturnNoContent()
     {
         var handler = new Mock<IDeleteAlloyGradeHandler>();
         var id = Guid.NewGuid();
-        handler.Setup(h => h.Handle(id, Ct)).ReturnsAsync(new NotFoundResult());
+        handler.Setup(h => h.Handle(id, Ct)).Returns(Task.CompletedTask);
 
-        (await _sut.DeleteAlloyGrade(handler.Object, id, Ct)).Should().BeOfType<NotFoundResult>();
+        (await _sut.DeleteAlloyGrade(handler.Object, id, Ct)).Should().BeOfType<NoContentResult>();
+        handler.Verify(h => h.Handle(id, Ct), Times.Once);
     }
 
     [Fact]
@@ -133,7 +134,7 @@ public class WebApiAlloyControllerTests
         var id = Guid.NewGuid();
         var update = new Mock<IUpdateHeatTreatmentHandler>();
         var delete = new Mock<IDeleteHeatTreatmentHandler>();
-        delete.Setup(h => h.Handle(id, Ct)).ReturnsAsync(new NoContentResult());
+        delete.Setup(h => h.Handle(id, Ct)).Returns(Task.CompletedTask);
         var request = new UpdateHeatTreatmentRequest(null, null, null, null, null, null, null, null, null, null, null);
 
         (await _sut.UpdateHeatTreatment(update.Object, id, request, Ct)).Should().BeOfType<NoContentResult>();
@@ -161,11 +162,11 @@ public class WebApiAlloyControllerTests
         var id = Guid.NewGuid();
         var update = new Mock<IUpdateMechanicalPropertyHandler>();
         var delete = new Mock<IDeleteMechanicalPropertyHandler>();
-        delete.Setup(h => h.Handle(id, Ct)).ReturnsAsync(new NotFoundResult());
+        delete.Setup(h => h.Handle(id, Ct)).Returns(Task.CompletedTask);
         var request = new UpdateMechanicalPropertyRequest(null, null, null, null, null, null, null);
 
         (await _sut.UpdateMechanicalProperty(update.Object, id, request, Ct)).Should().BeOfType<NoContentResult>();
-        (await _sut.DeleteMechanicalProperty(delete.Object, id, Ct)).Should().BeOfType<NotFoundResult>();
+        (await _sut.DeleteMechanicalProperty(delete.Object, id, Ct)).Should().BeOfType<NoContentResult>();
     }
 }
 

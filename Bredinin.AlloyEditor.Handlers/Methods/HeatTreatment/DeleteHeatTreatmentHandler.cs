@@ -1,7 +1,6 @@
 using System.Net;
 using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.DAL;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bredinin.AlloyEditor.Handlers.Methods.HeatTreatment;
@@ -15,7 +14,7 @@ internal sealed class DeleteHeatTreatmentHandler(ServiceDbContext context) : IDe
 {
     public async Task Handle(Guid id, CancellationToken ctn)
     {
-        var deleted = await context.DictTypesOfHeatTreatments
+        var deleted = await context.AlloyHeatTreatments
             .Where(x => x.Id == id)
             .ExecuteDeleteAsync(ctn);
 

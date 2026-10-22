@@ -120,19 +120,18 @@ public class HeatTreatmentHandlersTests : HandlerTestBase
         });
         await Db.SaveChangesAsync();
 
-        var result = await Handler<IDeleteHeatTreatmentHandler>().Handle(entity.Id, CancellationToken.None);
+        await Handler<IDeleteHeatTreatmentHandler>().Handle(entity.Id, CancellationToken.None);
 
-        result.Should().BeOfType<NoContentResult>();
         var fresh = FreshDb();
         (await fresh.AlloyHeatTreatments.AnyAsync()).Should().BeFalse();
         (await fresh.AlloyMechanicalProperties.AnyAsync()).Should().BeFalse();
     }
 
     [Fact]
-    public async Task Delete_WhenMissing_ShouldReturnNotFound()
+    public async Task Delete_WhenMissing_ShouldThrowNotFound()
     {
-        var result = await Handler<IDeleteHeatTreatmentHandler>().Handle(Guid.NewGuid(), CancellationToken.None);
+        var act = () => Handler<IDeleteHeatTreatmentHandler>().Handle(Guid.NewGuid(), CancellationToken.None);
 
-        result.Should().BeOfType<NotFoundResult>();
+        (await act.Should().ThrowAsync<BusinessException>()).WithMessage("Heat treatment not found*");
     }
 }

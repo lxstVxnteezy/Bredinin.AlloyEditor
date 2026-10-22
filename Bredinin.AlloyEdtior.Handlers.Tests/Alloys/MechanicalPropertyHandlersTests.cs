@@ -190,12 +190,15 @@ public class MechanicalPropertyHandlersTests : HandlerTestBase
     }
 
     [Fact]
-    public async Task Delete_ShouldReturnNoContentThenNotFound()
+    public async Task Delete_ShouldRemoveThenThrowNotFound()
     {
         var entity = await Seed(AddPropertyType(), 1, 2, null);
         var handler = Handler<IDeleteMechanicalPropertyHandler>();
 
-        (await handler.Handle(entity.Id, CancellationToken.None)).Should().BeOfType<NoContentResult>();
-        (await handler.Handle(entity.Id, CancellationToken.None)).Should().BeOfType<NotFoundResult>();
+        await handler.Handle(entity.Id, CancellationToken.None);
+        var act = () => handler.Handle(entity.Id, CancellationToken.None);
+
+        (await FreshDb().AlloyMechanicalProperties.AnyAsync()).Should().BeFalse();
+        (await act.Should().ThrowAsync<BusinessException>()).WithMessage("Mechanical property not found*");
     }
 }

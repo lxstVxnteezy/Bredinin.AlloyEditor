@@ -1,3 +1,4 @@
+using System.Net;
 using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Identity.Service.Authentication;
 using Bredinin.AlloyEditor.Identity.Service.Contracts.Commands.Admin;
@@ -129,11 +130,11 @@ public class AdminHandlersTests : IdentityTestBase
     }
 
     [Fact]
-    public async Task DeleteUser_WhenMissing_ShouldNotThrow()
+    public async Task DeleteUser_WhenMissing_ShouldThrowNotFound()
     {
         var act = () => Mediator.Send(new DeleteUserCommand(Guid.NewGuid()));
 
-        await act.Should().NotThrowAsync();
+        (await act.Should().ThrowAsync<BusinessException>()).Which.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
     [Fact]

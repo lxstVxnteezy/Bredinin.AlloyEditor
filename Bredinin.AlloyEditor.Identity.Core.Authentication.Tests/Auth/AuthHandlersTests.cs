@@ -34,7 +34,7 @@ public class AuthHandlersTests : IdentityTestBase
 
         var act = () => Login(password: "wrong");
 
-        await act.Should().ThrowAsync<UnauthorizedAccessException>();
+        await act.Should().ThrowAsync<BusinessException>();
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public class AuthHandlersTests : IdentityTestBase
     {
         var act = () => Login("ghost");
 
-        await act.Should().ThrowAsync<UnauthorizedAccessException>();
+        await act.Should().ThrowAsync<BusinessException>();
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public class AuthHandlersTests : IdentityTestBase
 
         var act = () => Mediator.Send(new RefreshTokenQuery(login.RefreshToken));
 
-        await act.Should().ThrowAsync<UnauthorizedAccessException>();
+        await act.Should().ThrowAsync<BusinessException>();
     }
 
     [Fact]
@@ -87,7 +87,7 @@ public class AuthHandlersTests : IdentityTestBase
     {
         var act = () => Mediator.Send(new RefreshTokenQuery("unknown"));
 
-        await act.Should().ThrowAsync<UnauthorizedAccessException>();
+        await act.Should().ThrowAsync<BusinessException>();
     }
 
     [Fact]
@@ -99,7 +99,7 @@ public class AuthHandlersTests : IdentityTestBase
 
         var act = () => Mediator.Send(new RefreshTokenQuery("expired"));
 
-        await act.Should().ThrowAsync<UnauthorizedAccessException>();
+        await act.Should().ThrowAsync<BusinessException>();
     }
 
     [Fact]
@@ -110,7 +110,7 @@ public class AuthHandlersTests : IdentityTestBase
 
         var act = () => Mediator.Send(new RefreshTokenQuery("orphan"));
 
-        (await act.Should().ThrowAsync<UnauthorizedAccessException>()).WithMessage("User not found");
+        (await act.Should().ThrowAsync<BusinessException>()).WithMessage("User not found");
     }
 
     [Fact]

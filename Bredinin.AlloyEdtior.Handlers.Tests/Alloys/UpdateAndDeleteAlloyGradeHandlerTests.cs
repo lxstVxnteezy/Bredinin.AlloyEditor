@@ -64,22 +64,21 @@ public class DeleteAlloyGradeHandlerTests : HandlerTestBase
     private IDeleteAlloyGradeHandler Sut => Handler<IDeleteAlloyGradeHandler>();
 
     [Fact]
-    public async Task Handle_WhenExists_ShouldDeleteAndReturnNoContent()
+    public async Task Handle_WhenExists_ShouldDelete()
     {
         var grade = AddGrade(AddSystem(AddElement("Fe", true)));
 
-        var result = await Sut.Handle(grade.Id, CancellationToken.None);
+        await Sut.Handle(grade.Id, CancellationToken.None);
 
-        result.Should().BeOfType<NoContentResult>();
         (await FreshDb().AlloyGrades.AnyAsync()).Should().BeFalse();
     }
 
     [Fact]
-    public async Task Handle_WhenMissing_ShouldReturnNotFound()
+    public async Task Handle_WhenMissing_ShouldThrowNotFound()
     {
-        var result = await Sut.Handle(Guid.NewGuid(), CancellationToken.None);
+        var act = () => Sut.Handle(Guid.NewGuid(), CancellationToken.None);
 
-        result.Should().BeOfType<NotFoundResult>();
+        (await act.Should().ThrowAsync<BusinessException>()).WithMessage("Alloy grade not found*");
     }
 
     [Fact]
