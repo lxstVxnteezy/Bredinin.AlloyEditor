@@ -2,6 +2,7 @@ using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Contracts.Common.MechenicalProperties;
 using Bredinin.AlloyEditor.Domain.Alloys;
 using Bredinin.AlloyEditor.Domain.Dictionaries;
+using Bredinin.AlloyEditor.Contracts.Common.Dictionaries;
 using Bredinin.AlloyEditor.Handlers.Methods.Alloy.MechanicalProperties;
 using Bredinin.AlloyEdtior.Handlers.Tests.Infrastructure;
 using FluentAssertions;

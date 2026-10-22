@@ -1,5 +1,4 @@
-﻿using Bredinin.AlloyEditor.Domain.Dictionaries;
-
+﻿
 namespace Bredinin.AlloyEditor.Contracts.Common.Dictionaries;
 
 public record MechanicalPropertyTypeDto(

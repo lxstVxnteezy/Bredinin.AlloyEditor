@@ -1,4 +1,5 @@
 ﻿using Bredinin.AlloyEditor.Domain.Dictionaries;
+using Bredinin.AlloyEditor.Contracts.Common.Dictionaries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

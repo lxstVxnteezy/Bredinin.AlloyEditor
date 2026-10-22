@@ -2,6 +2,7 @@ using Bredinin.AlloyEditor.Common.Configurations;
 using Bredinin.AlloyEditor.DAL;
 using Bredinin.AlloyEditor.Domain.Alloys;
 using Bredinin.AlloyEditor.Domain.Dictionaries;
+using Bredinin.AlloyEditor.Contracts.Common.Dictionaries;
 using Bredinin.AlloyEditor.Handlers;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;

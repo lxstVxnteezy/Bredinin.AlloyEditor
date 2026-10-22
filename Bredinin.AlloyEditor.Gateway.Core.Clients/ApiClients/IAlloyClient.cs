@@ -1,6 +1,5 @@
 ﻿using Bredinin.AlloyEditor.Contracts.Common;
 using Bredinin.AlloyEditor.Contracts.Common.AlloyGrade;
-using Microsoft.AspNetCore.Mvc;
 using Refit;
 
 namespace Bredinin.AlloyEditor.Gateway.Core.Clients.ApiClients;
@@ -18,7 +17,7 @@ public interface IAlloyClient
     Task<Guid> CreateAlloyGrade(CreateAlloyGradeRequest request, CancellationToken ctn);
 
     [Delete("/api/alloys/{id}")]
-    Task<IActionResult> DeleteAlloyGrade(
+    Task DeleteAlloyGrade(
         [AliasAs("id")] Guid id,
         CancellationToken ctn = default);
 

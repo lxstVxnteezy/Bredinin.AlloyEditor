@@ -1,5 +1,6 @@
 using Bredinin.AlloyEditor.Common.Http;
 using Bredinin.AlloyEditor.Domain.Dictionaries;
+using Bredinin.AlloyEditor.Contracts.Common.Dictionaries;
 
 namespace Bredinin.AlloyEditor.Handlers.Helpers
 {
